@@ -1,0 +1,41 @@
+﻿@using System.Data;
+@using System.Data.SqlClient;
+@model IEnumerable<PumpTableClass>
+    <head>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" type="text/css" />
+</head>
+<div class="col-md-12" style="padding: 0px 0px 0px 0px !important;">
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    <div class="portlet light bordered">
+        <div class="portlet-body">
+
+            <table class="display"  style="text-align:center !important; width:100% !important" id="sample_4">
+                <thead>
+                    <tr style="background-color: #a8c9cd;">
+                        <th>Sr No</th>
+                        <th>Pump Location</th>
+                        <th>Running Pumps</th>
+                        <th>Inactive Pumps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.srNo</td>
+                            <td>@item.pumpLocation</td>
+                            <td>@item.runningPump</td>
+                            <td>@item.inactivePump</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+    <!-- END EXAMPLE TABLE PORTLET-->
+</div>
+

@@ -1,0 +1,87 @@
+﻿@using System.Data;
+@using System.Data.SqlClient;
+@model IEnumerable<PondingTableClass>
+
+
+
+<div class="col-md-12" style="padding: 0px 0px 0px 0px !important;">
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    <div class="portlet light bordered">
+        <div class="portlet-body">
+            <table class="table table-striped table-bordered table-hover" id="sample_1" style="text-align:center">
+                <thead>
+                    <tr>
+                        <th>Cone No.</th>
+                        <th>Ponding Location</th>
+                        <th>Curr. Level (inch)</th>
+                        <th>Curr. Level Time</th>
+                        <th>Max. Level (inch)</th>
+                        <th>Max. Level Time</th>
+                        @*<th style="text-align:center !important; width:10% !important">Clearance Time</th>
+        <th style="text-align:center !important; width:10% !important">Ponding Period</th>
+        <th style="text-align:center !important; width:6% !important">Flow Rate Up</th>
+        <th style="text-align:center !important; width:6% !important">Flow Rate Down</th>
+        <th style="text-align:center !important; width:10% !important">Expected Clearance Time</th>*@
+                        <th style="text-align:center !important; width:10% !important">Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model)
+                        {
+                            var maxThreshold = item.maxThr;
+                            if (maxThreshold == "")
+                            {
+                                maxThreshold = "10";
+                            }
+                    <tr>
+                        <td>@item.srNo</td>
+                        <td>@item.pondingLocation</td>
+                        @if (Convert.ToDouble(item.deltaTime) > 20 || item.currLevel == "-")
+                        {
+                            <td class="cell-inactive">@item.currLevel </td>
+                        }
+                        else
+                        {
+                            if (Convert.ToDouble(item.currLevel) <= 5)
+                            {
+                                <td class="cell-on">@item.currLevel  @item.pUnit</td>
+                            }
+                            else
+                            {
+                                <td class="cell-alarm">@item.currLevel  @item.pUnit</td>
+                            }
+                        }
+                        <td>@item.currTime</td>
+                        <td>@item.maxLevel  @item.pUnit</td>
+                        <td>@item.maxLevelTime</td>
+                        @*<td style="text-align:center !important; width:10% !important">@item.clearanceTime</td>
+        @if (item.maxLevelTime != "-" && item.maxLevelTime != "-")
+        {
+            <td style="text-align:center !important; width:10% !important">@item.pondingPeriod</td>
+        }
+        else
+        {
+            <td style="text-align:center !important; width:10% !important">@item.pondingPeriod</td>
+        }
+        <td style="text-align:center !important; width:6% !important">@item.flowRateUp</td>
+        <td style="text-align:center !important; width:6% !important">@item.flowRateDown</td>
+        <td style="text-align:center !important; width:10% !important">@item.estClTime</td>*@
+                        @if (item.comment == "" || item.comment == null)
+                        {
+                            <td style="text-align:center !important; width:10% !important">Continue...</td>
+                        }
+                        else
+                        {
+                            <td style="text-align:center !important; width:10% !important">@item.comment</td>
+                        }
+                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <!-- END EXAMPLE TABLE PORTLET-->
+</div>

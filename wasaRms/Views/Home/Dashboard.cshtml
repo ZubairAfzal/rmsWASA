@@ -1,0 +1,377 @@
+﻿@{
+    ViewBag.Title = "Home | Dashboard";
+}
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+@{ 
+    if (Session["UserName"].ToString() != "Administrator" && Session["UserName"].ToString() != "CMC")
+    {
+        Response.Redirect("~/Ponding/Dashboard");
+    }
+}
+<link href="../assets/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+
+
+<div class="page-wrapper-row full-height">
+    <div class="page-wrapper-middle">
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <!-- BEGIN PAGE HEAD-->
+                @*<div class="page-head">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="page-title" style="width:100%; padding:10px 0;">
+                                    <h1 style="color:white;">
+                                        Overview of the Wasa Resources
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                <!-- END PAGE HEAD-->
+                <!-- BEGIN PAGE CONTENT BODY -->
+                <div class="page-content">
+                    <div class="container">
+                        <!-- BEGIN PAGE CONTENT INNER -->
+                        <div class="page-content-inner">
+                            <div class="row widget-row">
+                                @if (Session["UserName"].ToString() == "Administrator")
+                                {
+
+                                    <div class="col-md-12">
+                                        <div class="col-md-3">
+                                            <!-- BEGIN WIDGET THUMB -->
+                                            <div style="text-align:center">
+                                                <img src="~/Assets/img/Ponding.png" style="height:64px; text-align:center; padding-bottom:10px;" />
+                                            </div>
+                                            <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background:linear-gradient(to bottom, #99ccff 0%, #ffcccc 100%); border-radius:10px !important; padding:12px; height:400px;">
+                                                <h4 class="widget-thumb-heading" style="color:#545454; text-align:center; margin:0 0 5px;">Ponding Points</h4>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Total Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.TotalPonding" style="color:steelblue;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Running Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.RunningPonding" style="color:#5b965b;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Inactive Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.InactivePonding" style="color:#ff7f7f;text-align:center">0</span>
+                                                    </div>
+                                                </div>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <button class="btn btn-mini" onclick="window.location.href='@Url.Action("../Ponding/Dashboard")'" style="border-radius:4px; border-color: #4a87db; background-color: #235395; color: white;">View Dashboard</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END WIDGET THUMB -->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!-- BEGIN WIDGET THUMB -->
+                                            <div style="text-align:center">
+                                                <img src="~/Assets/img/Rain.png" style="height:64px; text-align:center; padding-bottom:10px;" />
+                                            </div>
+                                            <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background:linear-gradient(to bottom, #99ccff 0%, #ffcccc 100%); border-radius:10px !important; padding:12px; height:400px;">
+                                                <h4 class="widget-thumb-heading" style="color:#545454; text-align:center; margin:0 0 5px;">Rain Gauges</h4>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Total Rain Gauges
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.TotalRain" style="color:steelblue;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Running Rain Gauges
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.RunningRain" style="color:#5b965b;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Inactive Rain Gauges
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.InactiveRain" style="color:#ff7f7f;text-align:center">0</span>
+                                                    </div>
+                                                </div>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <button class="btn btn-mini" onclick="window.location.href='@Url.Action("../Rain/Dashboard")'" style="border-radius:4px; border-color: #4a87db; background-color: #235395; color: white;">View Dashboard</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END WIDGET THUMB -->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <!-- BEGIN WIDGET THUMB -->
+                                            <div style="text-align:center">
+                                                <img src="~/Assets/img/sewage.png" style="height:64px; text-align:center; padding-bottom:10px;" />
+                                            </div>
+                                            <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background:linear-gradient(to bottom, #99ccff 0%, #ffcccc 100%); border-radius:10px !important; padding:12px; height:400px;">
+                                                <h4 class="widget-thumb-heading" style="color:#545454; text-align:center; margin:0 0 5px;">Disposal Stations</h4>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Total Disposal Stations
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.TotalDisposal" style="color:steelblue;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Active Disposal Stations
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.RunningDisposal" style="color:#5b965b;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Inactive Disposal Stations
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.InactiveDisposal" style="color:#ff7f7f;text-align:center">0</span>
+                                                    </div>
+                                                </div>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <button class="btn btn-mini" onclick="window.location.href='@Url.Action("../Disposal/Dashboard")'" style="border-radius:4px; border-color: #4a87db; background-color: #235395; color: white;">View Dashboard</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END WIDGET THUMB -->
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div style="text-align:center">
+                                                <img src="~/Assets/img/icons8-dam-30.png" style="height:64px; text-align:center; padding-bottom:10px;" />
+                                            </div>
+                                            <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background:linear-gradient(to bottom, #99ccff 0%, #ffcccc 100%); border-radius:10px !important; padding:12px; height:400px;">
+                                                <h4 class="widget-thumb-heading" style="color:#545454; text-align:center; margin:0 0 5px;">Storage Tanks</h4>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Total Storage Tanks
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.TotalStorageTank" style="color:steelblue;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Active Storage Tanks
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.ActiveStorageTank" style="color:#5b965b;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Inactive Storage Tanks
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.InactiveStorageTank" style="color:#ff7f7f;text-align:center">0</span>
+                                                    </div>
+                                                </div>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <button class="btn btn-mini" onclick="window.location.href='@Url.Action("../StorageTank/Dashboard")'" s style="border-radius:4px; border-color: #4a87db; background-color: #235395; color: white;">View Dashboard</button>
+                                                    </div>
+                                                </div>
+                                                <!-- END WIDGET THUMB -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if (Session["UserName"].ToString() == "CMC")
+                                {
+
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <!-- BEGIN WIDGET THUMB -->
+                                            <div style="text-align:center">
+                                                <img src="~/Assets/img/Ponding.png" style="height:64px; text-align:center; padding-bottom:10px;" />
+                                            </div>
+                                            <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background:linear-gradient(to bottom, #99ccff 0%, #ffcccc 100%); border-radius:10px !important; padding:12px; height:400px;">
+                                                <h4 class="widget-thumb-heading" style="color:#545454; text-align:center; margin:0 0 5px;">Ponding Points</h4>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Total Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.TotalPonding" style="color:steelblue;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Running Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.RunningPonding" style="color:#5b965b;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Inactive Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.InactivePonding" style="color:#ff7f7f;text-align:center">0</span>
+                                                    </div>
+                                                </div>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <button class="btn btn-mini" onclick="window.location.href='@Url.Action("../Ponding/Dashboard")'" style="border-radius:4px; border-color: #4a87db; background-color: #235395; color: white;">View Dashboard</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END WIDGET THUMB -->
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div style="text-align:center">
+                                                <img src="~/Assets/img/icons8-dam-30.png" style="height:64px; text-align:center; padding-bottom:10px;" />
+                                            </div>
+                                            <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background:linear-gradient(to bottom, #99ccff 0%, #ffcccc 100%); border-radius:10px !important; padding:12px; height:400px;">
+                                                <h4 class="widget-thumb-heading" style="color:#545454; text-align:center; margin:0 0 5px;">Storage Tanks</h4>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Total Storage Tanks
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.TotalStorageTank" style="color:steelblue;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Active Storage Tanks
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.ActiveStorageTank" style="color:#5b965b;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Inactive Storage Tanks
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.InactiveStorageTank" style="color:#ff7f7f;text-align:center">0</span>
+                                                    </div>
+                                                </div>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <button class="btn btn-mini" onclick="window.location.href='@Url.Action("../StorageTank/Dashboard")'" s style="border-radius:4px; border-color: #4a87db; background-color: #235395; color: white;">View Dashboard</button>
+                                                    </div>
+                                                </div>
+                                                <!-- END WIDGET THUMB -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+
+
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            <!-- BEGIN WIDGET THUMB -->
+                                            <div style="text-align:center">
+                                                <img src="~/Assets/img/Ponding.png" style="height:64px; text-align:center; padding-bottom:10px;" />
+                                            </div>
+                                            <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background:linear-gradient(to bottom, #99ccff 0%, #ffcccc 100%); border-radius:10px !important; padding:12px; height:400px;">
+                                                <h4 class="widget-thumb-heading" style="color:#545454; text-align:center; margin:0 0 5px;">Ponding Points</h4>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Total Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.TotalPonding" style="color:steelblue;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Running Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.RunningPonding" style="color:#5b965b;text-align:center">0</span>
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        &nbsp;
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        Inactive Ponding Points
+                                                    </div>
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.InactivePonding" style="color:#ff7f7f;text-align:center">0</span>
+                                                    </div>
+                                                </div>
+                                                <hr style="border-top:1px solid #545454" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body" style="text-align:center;">
+                                                        <button class="btn btn-mini" onclick="window.location.href='@Url.Action("../Ponding/Dashboard")'" style="border-radius:4px; border-color: #4a87db; background-color: #235395; color: white;">View Dashboard</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END WIDGET THUMB -->
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+                            <!-- END PAGE CONTENT INNER -->
+                        </div>
+                    </div>
+                    <!-- END PAGE CONTENT BODY -->
+                    <!-- END CONTENT BODY -->
+                </div>
+                <!-- END CONTENT -->
+            </div>
+            <!-- END CONTAINER -->
+        </div>
+    </div>
+</div>

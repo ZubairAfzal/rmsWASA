@@ -1,0 +1,62 @@
+﻿@model wasaRms.Models.tblResourceType
+
+@{
+    ViewBag.Title = "Details";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+<h2>Details</h2>
+
+<div>
+    <h4>tblResourceType</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceTypeDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceTypeDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.separator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.separator)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblCompany.companyName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.resourceTypeID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

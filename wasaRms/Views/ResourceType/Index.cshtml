@@ -1,0 +1,61 @@
+﻿@model IEnumerable<wasaRms.Models.tblResourceType>
+
+@{
+    ViewBag.Title = "Index";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceTypeDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.parameterCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.separator)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceTypeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceTypeDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.parameterCount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.separator)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblCompany.companyName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.resourceTypeID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.resourceTypeID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.resourceTypeID })
+        </td>
+    </tr>
+}
+
+</table>

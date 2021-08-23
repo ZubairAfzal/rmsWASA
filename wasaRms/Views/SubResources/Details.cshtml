@@ -1,0 +1,98 @@
+﻿@model wasaRms.Models.tblSubResource
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tblSubResource</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.subResourceID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.subResourceID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.subResourceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.subResourceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.subResourceLocationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.subResourceLocationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.subResourceDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.subResourceDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.subResourceCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.subResourceCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.subResourceNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.subResourceNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.subResourceGeoLocatin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.subResourceGeoLocatin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.subResourceStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.subResourceStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblCompany.companyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblResource.resourceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblResource.resourceName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.resourceID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

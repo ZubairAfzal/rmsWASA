@@ -1,0 +1,61 @@
+﻿@model IEnumerable<wasaRms.Models.tblParameter>
+
+@{
+    ViewBag.Title = "Index";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.parameterName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.parameterUnit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.parameterMinThr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.parameterMaxThr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.parameterName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.parameterUnit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.parameterMinThr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.parameterMaxThr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblCompany.companyName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.parameterID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.parameterID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.parameterID })
+        </td>
+    </tr>
+}
+
+</table>

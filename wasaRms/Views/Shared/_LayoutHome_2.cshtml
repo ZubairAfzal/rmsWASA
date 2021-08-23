@@ -1,0 +1,772 @@
+﻿<!DOCTYPE html>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.7
+Version: 4.7.5
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+
+<head>
+    <meta charset="utf-8" />
+    <title>WASA | RMS</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="Preview page of Metronic Admin Theme #3 for statistics, charts, recent events and reports" name="description" />
+    <meta content="" name="author" />
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href="../assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="../assets/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN THEME LAYOUT STYLES -->
+    <link href="../assets/layouts/layout3/css/layout.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/layouts/layout3/css/themes/default.min.css" rel="stylesheet" type="text/css" id="style_color" />
+    <link href="../assets/layouts/layout3/css/custom.min.css" rel="stylesheet" type="text/css" />
+    <!-- END THEME LAYOUT STYLES -->
+    <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
+
+
+    @section Styles{
+        <link rel="Stylesheet" href="@Href("~/Assets/site.css")" />
+    }
+    <style>
+        /* --- Background Image --- */
+        .bg-image {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-position: center;
+            background-size: cover;
+        }
+
+            .bg-image.bg-parallax {
+                background-attachment: fixed;
+            }
+
+            .bg-image.overlay:after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                background-image: -webkit-gradient(linear, left top, left bottom, from(#374050), to(#798696));
+                background-image: linear-gradient(to bottom, #374050 0%, #798696 100%);
+                opacity: 0.3;
+            }
+    </style>
+</head>
+<!-- END HEAD -->
+
+@if (string.IsNullOrEmpty(Session["UserName"] as string))
+{
+    Response.Redirect("~/Account/Login");
+}
+else
+{
+    <body class="page-container-bg-solid" style="position:absolute;">
+        <!-- Backgound Image -->
+        <div class="bg-image bg-parallax overlay" style="background-image:url(../../Assets/img/home-background6.jpg)"></div>
+        <!-- /Backgound Image -->
+        <div class="page-wrapper">
+            <div class="page-wrapper-row">
+                <div class="page-wrapper-top">
+                    <!-- BEGIN HEADER -->
+                    <div class="page-header page-header_2">
+                        <nav class="navbar navbar-inverse navbar-static-top example6 navbar_2">
+                            <div class="container">
+                                <div class="navbar-header" style="width:400px !important;">
+                                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar6">
+                                        <span class="sr-only">Toggle navigation</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                    <a class="navbar-brand navbar-brand navbar-brand_2" href="http://disputebills.com">
+                                        <div class="mytable">
+                                            <div>
+                                                <div style="width:20%;">
+                                                    <img class="imgLogo" src="../assets/img/sticker34.png" alt="logo">
+                                                </div>
+                                                <div style="width:80%;">
+                                                    <h4 class="headline1">WASA Remote Monitoring System</h4>
+                                                    <div style="width:80%;"><h5 class="headline2">Lahore Development Authority</h5></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div id="navbar6" class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav navbar-nav_2">
+
+                                        <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown ">
+                                            <a style="font-size:15px;font-weight:bold;color:white;padding: 3px 10px 3px 10px;/* padding-left: 10px; */">
+                                                <table>
+                                                    <tbody>
+                                                        <tr style="height: 10px;text-align: center;"><td><img src="../Assets/img/Ponding.png" style="height: 30px;"></td></tr>
+                                                        <tr><td>Ponding Points</td></tr>
+                                                    </tbody>
+                                                </table>
+                                                <span class="arrow"></span>
+                                            </a>
+                                            <ul class="dropdown-menu pull-left">
+                                                <li aria-haspopup="true" class=" ">
+
+                                                    <a href="/Ponding/Dashboard" class="nav-link  ">
+                                                        <i class="icon-bar-chart"></i> Dashboard
+                                                    </a>
+                                                </li>
+                                                <li class="divider"> </li>
+                                                <li aria-haspopup="true" class="dropdown-submenu ">
+                                                    <a href="#" class="nav-link  nav-toggle">
+                                                        <i class="icon-docs"></i> Reports
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li aria-haspopup="true" class=" ">
+                                                            <a href="/Ponding/PondingReport" class="nav-link ">
+                                                                Ponding Reports
+                                                            </a>
+                                                        </li>
+                                                        <li class="divider"> </li>
+                                                        <li aria-haspopup="true" class="disabled">
+                                                            <a href="#" class="nav-link ">
+                                                                Time Clearance Report
+                                                            </a>
+                                                        </li>
+                                                        <li class="divider"> </li>
+                                                        <li aria-haspopup="true" class="disabled">
+                                                            <a href="#" class="nav-link ">
+                                                                Flow Rate Report
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown ">
+                                            <a style="font-size:15px;font-weight:bold;color:white;padding: 3px 10px 3px 10px;">
+                                                <table>
+                                                    <tbody>
+                                                        <tr style="height: 10px;text-align: center;"><td><img src="../Assets/img/Rain.png" style="height: 30px;"></td></tr>
+                                                        <tr><td>Rain Guages</td></tr>
+                                                    </tbody>
+                                                </table>
+                                                <span class="arrow"></span>
+                                            </a>
+                                            <ul class="dropdown-menu pull-left">
+                                                <li aria-haspopup="true" class=" ">
+                                                    <a href="/Rain/Dashboard" class="nav-link  ">
+                                                        <i class="icon-bar-chart"></i> Dashboard
+                                                    </a>
+                                                </li>
+                                                <li class="divider"> </li>
+                                                <li aria-haspopup="true" class="dropdown-submenu ">
+                                                    <a href="#" class="nav-link  nav-toggle">
+                                                        <i class="icon-docs"></i> Reports
+                                                    </a>
+
+                                                    <ul class="dropdown-menu">
+                                                        <li aria-haspopup="true" class=" ">
+                                                            <a href="/Rain/IntesityReport" class="nav-link ">
+                                                                Intensity Reports
+                                                            </a>
+                                                        </li>
+                                                        <li class="divider"> </li>
+                                                        <li aria-haspopup="true" class="disabled">
+                                                            <a href="#" class="nav-link ">
+                                                                Spell Report
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="divider"></li>
+
+                                        <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown ">
+                                            <a style="font-size:15px;font-weight:bold;color:white;padding: 3px 10px 3px 10px;">
+                                                <table>
+                                                    <tbody>
+                                                        <tr style="height: 10px;text-align: center;"><td><img src="../Assets/img/sewage.png" style="height: 30px;"></td></tr>
+                                                        <tr><td>Disposal Stations</td></tr>
+                                                    </tbody>
+                                                </table>
+                                                <span class="arrow"></span>
+                                            </a>
+                                            <ul class="dropdown-menu pull-left">
+                                                <li aria-haspopup="true" class=" ">
+                                                    <a href="/Disposal/Dashboard" class="nav-link  ">
+                                                        <i class="icon-bar-chart"></i> Dashboard
+                                                    </a>
+                                                </li>
+                                                <li class="divider"> </li>
+                                                <li aria-haspopup="true" class="dropdown-submenu ">
+                                                    <a href="#" class="nav-link  nav-toggle">
+                                                        <i class="icon-docs"></i> Reports
+                                                    </a>
+
+                                                    <ul class="dropdown-menu">
+                                                        <li aria-haspopup="true" class=" ">
+                                                            <a href="/Disposal/DisposalLevelReport" class="nav-link ">
+                                                                Disposal Level Reports
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        @*admin*@
+                                        <li aria-haspopup="true" class="menu-dropdown classic-menu-dropdown ">
+                                            <a style="font-size:13px;color:white;padding: 3px 3px 3px 40px;">
+                                                <table>
+                                                    <tbody>
+                                                        <tr style="height: 10px;text-align: center;"><td><img alt="" class="img-circle" src="../assets/layouts/layout3/img/avatar.png" style="height: 30px;"></td></tr>
+                                                        <tr><td>@Session["UserName"].ToString()</td></tr>
+                                                    </tbody>
+                                                </table>
+                                                <span class="arrow"></span>
+                                            </a>
+                                            <ul class="dropdown-menu pull-left">
+                                                <li aria-haspopup="true" class=" ">
+                                                    <a href="/Account/ChangePassword">
+                                                        <i class="icon-lock"></i> Change Password
+                                                    </a>
+                                                </li>
+                                                <li class="divider"> </li>
+                                                <li aria-haspopup="true" class=" ">
+                                                    <a href="/Account/Logout">
+                                                        <i class="icon-key"></i> Log Out
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--/.nav-collapse -->
+                            </div>
+                            <!--/.container-fluid -->
+                        </nav>
+                    </div>
+                    <!-- END HEADER -->
+                </div>
+            </div>
+            <div>
+                @RenderSection("Scripts", false)
+            </div>
+            @RenderBody()
+            <div class="page-wrapper-row">
+                <div class="page-wrapper-bottom">
+                    <!-- BEGIN FOOTER -->
+                    <!-- BEGIN INNER FOOTER -->
+                    <div class="page-footer footclass">
+                        <div class="container" style="margin-top:12px;">
+                            2018 &copy; Water and Sanitation Agency, Lahore &nbsp;|&nbsp; Lahore Development Authority &nbsp;|&nbsp; Developed By:
+                            <a target="_blank" href="https://itu.edu.pk">ITU Lahore</a>
+                        </div>
+                    </div>
+                    <div class="scroll-to-top">
+                        <i class="icon-arrow-up"></i>
+                    </div>
+                    <!-- END INNER FOOTER -->
+                    <!-- END FOOTER -->
+                </div>
+            </div>
+        </div>
+
+        <script>
+    //session end
+    var sessionTimeoutWarning = @Session.Timeout- 1;
+
+    var sTimeout = parseInt(sessionTimeoutWarning) * 200000 * 1000;
+    setTimeout('SessionEnd()', sTimeout);
+
+    function SessionEnd() {
+        window.location = "/Account/Logout";
+    }
+        </script>
+
+
+        <script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/js.cookie.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+        <!-- END CORE PLUGINS -->
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
+        <script src="../assets/global/plugins/moment.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/morris/morris.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/morris/raphael-min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/counterup/jquery.waypoints.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/counterup/jquery.counterup.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/amcharts/amcharts.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/amcharts/serial.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/amcharts/pie.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/amcharts/radar.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/amcharts/themes/light.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/amcharts/themes/patterns.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/amcharts/themes/chalk.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/ammap/ammap.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/horizontal-timeline/horizontal-timeline.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
+        <!-- END PAGE LEVEL PLUGINS -->
+        <!-- BEGIN THEME GLOBAL SCRIPTS -->
+        <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
+        <!-- END THEME GLOBAL SCRIPTS -->
+        <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        <!-- END PAGE LEVEL SCRIPTS -->
+        <!-- BEGIN THEME LAYOUT SCRIPTS -->
+        <script src="../assets/layouts/layout3/scripts/layout.min.js" type="text/javascript"></script>
+        <script src="../assets/layouts/layout3/scripts/demo.min.js" type="text/javascript"></script>
+        <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+        <script src="../assets/layouts/global/scripts/quick-nav.min.js" type="text/javascript"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <!-- END THEME LAYOUT SCRIPTS -->
+        <!-- <script src="~/Assets/pages/scripts/dashboard.min.js" async defer></script>  -->
+        <script src="../assets/global/scripts/datatable.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+        <script src="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+        @*<script src="~/Scripts/wasa_dashboard.js"></script>*@
+        @*<script src="~/Scripts/wasa_Ponding_dashboard.js"></script>*@
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlT_-WIkJ_8eKmEGZZFOGzugRIHjviICI" async defer></script>
+
+        <script>
+            $(document).ready(function () {
+                //var parsedObj = "";
+                //Datatables$.getJSON('/Ponding/LoadPondingTableData/', function (data) {
+                //    parsedObj = $.parseJSON(data);
+                //});
+                var sample_1 = $('#sample_1').DataTable({
+                    columns: [
+                        { data: parsedObj.key },
+                        { data: "" },
+                        { data: "" },
+                        { data: "NAME" }
+                    ],
+                    data: parsedObj
+                });
+
+
+                var table1 = $('#sample_2').DataTable({
+                    colReorder: true,
+                    bPaginate: false,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'csv', 'excel', 'pdf', 'print', 'colvis'
+                    ]
+                });
+
+                var table2 = $('#sample_3').DataTable({
+                    colReorder: true,
+                    bPaginate: false,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'csv', 'excel', 'pdf', 'print', 'colvis'
+                    ]
+                });
+
+
+                // Carousel
+                // Activate Carousel
+                $('#myCarousel').carousel({
+                    interval: 10000,
+                    pause: true
+                })
+
+                // Enable Carousel Indicators
+                $(".item1").click(function () {
+                    $("#myCarousel").carousel(0);
+                });
+                $(".item2").click(function () {
+                    $("#myCarousel").carousel(1);
+                });
+                $(".item3").click(function () {
+                    $("#myCarousel").carousel(2);
+                });
+
+            });
+
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                var Dashboard = function () {
+
+                    return {
+
+                        initAmChart1: function () {
+                            if ("undefined" != typeof AmCharts && 0 !== $("#dashboard_amchart_1").size()) {
+                                var disposalChartData;
+                                var eArray = [];
+                                var pondingArr = [];
+                                $.getJSON('/Ponding/LoadPondingChartData/', function (data) {
+                                    var parsedObj = $.parseJSON(data);
+                                    //console.log(data);
+                                    $.each(parsedObj, function (key, obj) {
+                                        alert(key+1);
+                                        var eObj = {
+                                            category: obj.category,
+                                            ponding: Math.round((obj.ponding / 2.54), 1),
+                                            townName: obj.townName,
+                                            townName2: obj.townName2
+                                        };
+                                        eArray.push(eObj);
+                                        pondingArr.push(obj.ponding);
+                                    });
+                                    var e = eArray;
+                                    AmCharts.makeChart("dashboard_amchart_1", {
+                                        type: "serial",
+                                        fontSize: 12,
+                                        fontFamily: "Open Sans",
+                                        dataDateFormat: "YYYY-MM-DD JJ:NN:SS",
+                                        dataProvider: e,
+                                        addClassNames: !0,
+                                        startDuration: 1,
+                                        color: "#6c7b88",
+                                        marginLeft: 0,
+                                        categoryField: "category",
+                                        categoryAxis: {
+                                            equalSpacing: false,
+                                            labelRotation: 40,
+                                            autoGridCount: !1,
+                                            gridCount: 50,
+                                            gridAlpha: .1,
+                                            gridColor: "#FFFFFF",
+                                            axisColor: "#555555",
+                                        },
+                                        valueAxes: [{
+                                            id: "a1",
+                                            title: "Water Level",
+                                            gridAlpha: 0,
+                                            axisAlpha: 0
+                                        },],
+                                        graphs: [{
+                                            id: "g1",
+                                            valueField: "ponding",
+                                            title: "Water Level",
+                                            type: "column",
+                                            fillAlphas: .7,
+                                            valueAxis: "a1",
+                                            balloonText: "[[value]] inch",
+                                            legendValueText: "[[value]] inch",
+                                            legendPeriodValueText: "total: [[value.sum]] inch",
+                                            lineColor: "#08a3cc",
+                                            alphaField: "alpha"
+                                        }, {
+                                            id: "g2",
+                                            valueField: "ponding",
+                                            classNameField: "bulletClass",
+                                            title: "Water Level",
+                                            type: "line",
+                                            valueAxis: "a2",
+                                            lineColor: "#786c56",
+                                            lineThickness: 1,
+                                            legendValueText: "[[description]]/[[value]]",
+                                            descriptionField: "townName2",
+                                            bullet: "round",
+                                            bulletSizeField: "townSize",
+                                            bulletBorderColor: "#02617a",
+                                            bulletBorderAlpha: 1,
+                                            bulletBorderThickness: 2,
+                                            bulletColor: "#89c4f4",
+                                            //labelText: "[[townName2]]",
+                                            labelPosition: "right",
+                                            balloonText: "Ponding:[[value]]",
+                                            showBalloon: !0,
+                                            animationPlayed: !0
+                                        }],
+                                        chartCursor: {
+                                            zoomable: !1,
+                                            categoryBalloonDateFormat: "YYYY-MM-DD JJ:NN:SS",
+                                            cursorAlpha: 0,
+                                            categoryBalloonColor: "#e26a6a",
+                                            categoryBalloonAlpha: .8,
+                                            valueBalloonsEnabled: !1
+                                        },
+                                        legend: {
+                                            bulletType: "round",
+                                            equalWidths: !1,
+                                            valueWidth: 120,
+                                            useGraphSettings: !0,
+                                            color: "#6c7b88"
+                                        }
+                                    })
+                                });
+
+                            }
+                        },
+
+                        initAmChart2: function () {
+                            if ("undefined" != typeof AmCharts && 0 !== $("#dashboard_amchart_2").size()) {
+
+
+                                var disposalChartData;
+                                var eArray = [];
+                                var pondingArr = [];
+                                $.getJSON('/Rain/LoadRainChartData/', function (data) {
+                                    var parsedObj = $.parseJSON(data);
+                                    //alert(data);
+                                    $.each(parsedObj, function (key, obj) {
+                                        var eObj = {
+                                            category: obj.category,
+                                            ponding: obj.ponding,
+                                            townName: obj.townName,
+                                            townName2: obj.townName2
+                                        };
+                                        eArray.push(eObj);
+                                        pondingArr.push(obj.ponding);
+                                    });
+                                    var e = eArray;
+                                    AmCharts.makeChart("dashboard_amchart_2", {
+                                        type: "serial",
+                                        fontSize: 12,
+                                        fontFamily: "Open Sans",
+                                        dataDateFormat: "YYYY-MM-DD JJ:NN:SS",
+                                        dataProvider: e,
+                                        addClassNames: !0,
+                                        startDuration: 1,
+                                        color: "#6c7b88",
+                                        marginLeft: 0,
+                                        categoryField: "category",
+                                        categoryAxis: {
+                                            equalSpacing: false,
+                                            labelRotation: 40,
+                                            autoGridCount: !1,
+                                            gridCount: 50,
+                                            gridAlpha: .1,
+                                            gridColor: "#FFFFFF",
+                                            axisColor: "#555555",
+                                        },
+                                        valueAxes: [{
+                                            id: "a1",
+                                            title: "Rain Intensity",
+                                            gridAlpha: 0,
+                                            axisAlpha: 0
+                                        },],
+                                        graphs: [{
+                                            id: "g1",
+                                            valueField: "ponding",
+                                            title: "Rain Intensity",
+                                            type: "column",
+                                            fillAlphas: .7,
+                                            valueAxis: "a1",
+                                            balloonText: "[[value]] mm",
+                                            legendValueText: "[[value]] mm",
+                                            legendPeriodValueText: "total: [[value.sum]] mm",
+                                            lineColor: "#08a3cc",
+                                            alphaField: "alpha"
+                                        }, {
+                                            id: "g2",
+                                            valueField: "ponding",
+                                            classNameField: "bulletClass",
+                                            title: "Rain Intensity",
+                                            type: "line",
+                                            valueAxis: "a2",
+                                            lineColor: "#786c56",
+                                            lineThickness: 1,
+                                            legendValueText: "[[description]]/[[value]]",
+                                            descriptionField: "townName2",
+                                            bullet: "round",
+                                            bulletSizeField: "townSize",
+                                            bulletBorderColor: "#02617a",
+                                            bulletBorderAlpha: 1,
+                                            bulletBorderThickness: 2,
+                                            bulletColor: "#89c4f4",
+                                            //labelText: "[[townName2]]",
+                                            labelPosition: "right",
+                                            balloonText: "Rain Intensity:[[value]]",
+                                            showBalloon: !0,
+                                            animationPlayed: !0
+                                        }],
+                                        chartCursor: {
+                                            zoomable: !1,
+                                            categoryBalloonDateFormat: "YYYY-MM-DD JJ:NN:SS",
+                                            cursorAlpha: 0,
+                                            categoryBalloonColor: "#e26a6a",
+                                            categoryBalloonAlpha: .8,
+                                            valueBalloonsEnabled: !1
+                                        },
+                                        legend: {
+                                            bulletType: "round",
+                                            equalWidths: !1,
+                                            valueWidth: 120,
+                                            useGraphSettings: !0,
+                                            color: "#6c7b88"
+                                        }
+                                    })
+                                });
+
+                            }
+                        },
+
+                        initAmChart3: function () {
+                            if ("undefined" != typeof AmCharts && 0 !== $("#dashboard_amchart_3").size()) {
+
+
+                                var disposalChartData;
+                                var eArray = [];
+                                var pondingArr = [];
+                                $.getJSON('/Disposal/LoadDisposalChartData/', function (data) {
+                                    var parsedObj = $.parseJSON(data);
+                                    //alert(data);
+                                    $.each(parsedObj, function (key, obj) {
+                                        var eObj = {
+                                            category: obj.category,
+                                            ponding: obj.ponding,
+                                            townName: obj.townName,
+                                            townName2: obj.townName2
+                                        };
+                                        eArray.push(eObj);
+                                        pondingArr.push(obj.ponding);
+                                    });
+                                    var e = eArray;
+                                    AmCharts.makeChart("dashboard_amchart_3", {
+                                        type: "serial",
+                                        fontSize: 12,
+                                        fontFamily: "Open Sans",
+                                        dataDateFormat: "YYYY-MM-DD JJ:NN:SS",
+                                        dataProvider: e,
+                                        addClassNames: !0,
+                                        startDuration: 1,
+                                        color: "#6c7b88",
+                                        marginLeft: 0,
+                                        categoryField: "category",
+                                        categoryAxis: {
+                                            equalSpacing: false,
+                                            labelRotation: 40,
+                                            autoGridCount: !1,
+                                            gridCount: 50,
+                                            gridAlpha: .1,
+                                            gridColor: "#FFFFFF",
+                                            axisColor: "#555555",
+                                        },
+                                        valueAxes: [{
+                                            id: "a1",
+                                            title: "Water Level",
+                                            gridAlpha: 0,
+                                            axisAlpha: 0
+                                        },],
+                                        graphs: [{
+                                            id: "g1",
+                                            valueField: "ponding",
+                                            title: "Water Level",
+                                            type: "column",
+                                            fillAlphas: .7,
+                                            valueAxis: "a1",
+                                            balloonText: "[[value]] ft",
+                                            legendValueText: "[[value]] ft",
+                                            legendPeriodValueText: "total: [[value.sum]] ft",
+                                            lineColor: "#08a3cc",
+                                            alphaField: "alpha"
+                                        }, {
+                                            id: "g2",
+                                            valueField: "ponding",
+                                            classNameField: "bulletClass",
+                                            title: "Water Level",
+                                            type: "line",
+                                            valueAxis: "a2",
+                                            lineColor: "#786c56",
+                                            lineThickness: 1,
+                                            legendValueText: "[[description]]/[[value]]",
+                                            descriptionField: "townName2",
+                                            bullet: "round",
+                                            bulletSizeField: "townSize",
+                                            bulletBorderColor: "#02617a",
+                                            bulletBorderAlpha: 1,
+                                            bulletBorderThickness: 2,
+                                            bulletColor: "#89c4f4",
+                                            //labelText: "[[townName2]]",
+                                            labelPosition: "right",
+                                            balloonText: "Water Level:[[value]]",
+                                            showBalloon: !0,
+                                            animationPlayed: !0
+                                        }],
+                                        chartCursor: {
+                                            zoomable: !1,
+                                            categoryBalloonDateFormat: "YYYY-MM-DD JJ:NN:SS",
+                                            cursorAlpha: 0,
+                                            categoryBalloonColor: "#e26a6a",
+                                            categoryBalloonAlpha: .8,
+                                            valueBalloonsEnabled: !1
+                                        },
+                                        legend: {
+                                            bulletType: "round",
+                                            equalWidths: !1,
+                                            valueWidth: 120,
+                                            useGraphSettings: !0,
+                                            color: "#6c7b88"
+                                        }
+                                    })
+                                });
+
+                            }
+                        },
+                        init: function () {
+
+                            this.initAmChart1();
+                            this.initAmChart2();
+                            this.initAmChart3();
+                        }
+                    };
+
+                }();
+
+                if (App.isAngularJsApp() === false) {
+                    jQuery(document).ready(function () {
+                        Dashboard.init(); // init metronic core componets
+                    });
+                }
+            });
+
+        </script>
+
+    </body>
+
+}
+
+</html>

@@ -1,0 +1,129 @@
+﻿@model wasaRms.Models.tblResource
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>tblResource</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceLocationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceLocationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceGeoLocatin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceGeoLocatin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resourceStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resourceStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.minThr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.minThr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.maxThr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.maxThr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblCompany.companyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblResourceType.resourceTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblResourceType.resourceTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblSubResource.subResourceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblSubResource.subResourceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblUser.userFullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblUser.userFullName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,608 @@
+﻿@using System.Data;
+@using System.Data.SqlClient;
+@using Newtonsoft.Json;
+@{
+    ViewBag.Title = "Home Page";
+}
+@{ Response.Redirect("~/Home/Dashboard");}
+
+
+@*<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+
+<div class="page-wrapper-row full-height">
+    <div class="page-wrapper-middle">
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <!-- BEGIN PAGE HEAD-->
+                <div class="page-head">
+                    <div class="container">
+                        <!-- BEGIN PAGE TITLE -->
+                        <div class="page-title" style="">
+                            <h1>
+                                Dashboard
+                                <small>Overview of the WASA Services</small>
+                            </h1>
+                        </div>
+                        <!-- END PAGE TITLE -->
+                    </div>
+                </div>
+                <!-- END PAGE HEAD-->
+                <!-- BEGIN PAGE CONTENT BODY -->
+                <div class="page-content">
+                    <div class="container">
+                        <!-- BEGIN PAGE CONTENT INNER -->
+                        <div class="page-content-inner">
+                            <div class="row widget-row">
+                                <div class="col-md-3">
+                                    <!-- BEGIN WIDGET THUMB -->
+                                    <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background-image: url('../../Assets/img/Tile (1).png'); background-repeat:no-repeat; background-size:cover;background-position: center center;">
+                                        <h4 class="widget-thumb-heading" style="color:white; text-align:center">Total Ponding Points</h4>
+                                        <div class="widget-thumb-wrap">
+                                            <div class="widget-thumb-body">
+                                                <span class="widget-thumb-body-stat" data-counter="counterup" data-value="26" style="color:white;text-align:center">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END WIDGET THUMB -->
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- BEGIN WIDGET THUMB -->
+                                    <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background-image: url('../../Assets/img/Tile (2).png'); background-repeat:no-repeat; background-size:cover;background-position: center center;">
+                                        <h4 class="widget-thumb-heading" style="color:white; text-align:center">Total Rain Guages</h4>
+                                        <div class="widget-thumb-wrap">
+                                            <div class="widget-thumb-body">
+                                                <span class="widget-thumb-body-stat" data-counter="counterup" data-value="12" style="color:white;text-align:center">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END WIDGET THUMB -->
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- BEGIN WIDGET THUMB -->
+                                    <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background-image: url('../../Assets/img/Tile (3).png'); background-repeat:no-repeat; background-size:cover;background-position: center center;">
+                                        <h4 class="widget-thumb-heading" style="color:white; text-align:center">Total Disposal Stations</h4>
+                                        <div class="widget-thumb-wrap">
+                                            <div class="widget-thumb-body">
+                                                <span class="widget-thumb-body-stat" data-counter="counterup" data-value="34" style="color:white;text-align:center">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END WIDGET THUMB -->
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- BEGIN WIDGET THUMB -->
+                                    <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background-image: url('../../Assets/img/Tile (4).png'); background-repeat:no-repeat; background-size:cover;background-position: center center;">
+                                        <h4 class="widget-thumb-heading" style="color:white; text-align:center">Total Disposal Pumps</h4>
+                                        <div class="widget-thumb-wrap">
+                                            <div class="widget-thumb-body">
+                                                <span class="widget-thumb-body-stat" data-counter="counterup" data-value="124" style="color:white;text-align:center">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END WIDGET THUMB -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-xs-12 col-sm-12">
+                                    <div class="portlet light ">
+                                        <div class="portlet-body">
+                                            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+
+                                                <!-- Indicators -->
+                                                <ol class="carousel-indicators">
+                                                    <li data-target="#myCarousel" data-slide-to="0" class="active">Ponding Points</li>
+                                                    <li data-target="#myCarousel" data-slide-to="1">Rain Guages</li>
+                                                    <li data-target="#myCarousel" data-slide-to="2">Disposal Stations</li>
+                                                </ol>
+
+                                                <!-- Wrapper for slides -->
+                                                <div class="carousel-inner">
+                                                    <div class="item active">
+                                                        <h2 style="background-color: #234285;text-align: center;padding: 10px;color: white;font-weight: 500;">Ponding Points Dashboard</h2>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Area Wise Ponding</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <div id="dashboard_amchart_1" class="CSSAnimationChart"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Marker Map -->
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Live Location of Ponding Points</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <div id="ponding_map" class="gmaps"> </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- DataTable Row -->
+
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Listing of All Available Ponding Stats</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <table class="table table-striped table-bordered table-hover" id="sample_1" style="text-align:center">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Serial Number</th>
+                                                                                    <th>Sore Points/Ponding Location</th>
+                                                                                    <th>Current Level</th>
+                                                                                    <th>Flow Up</th>
+                                                                                    <th>Flow Down</th>
+                                                                                    <th>Estimated Clearance Time</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @{
+                                                                                    string query = ";WITH cte AS ( SELECT r.resourceName AS Location, '3' AS Min_Level, s.parameterValue AS Current_Level, p.parameterUnit as pUnit, CONVERT(float,s.parameterValue - LEAD(s.parameterValue) OVER (ORDER BY s.sheetInsertionDateTime DESC))/10 AS FLOW_RATE, s.parameterValue/(CONVERT(float,s.parameterValue - LEAD(s.parameterValue) OVER (ORDER BY s.sheetInsertionDateTime DESC))/10+0.0001) AS EstimatedTime, ROW_NUMBER() OVER (PARTITION BY s.resourceID ORDER BY s.sheetInsertionDateTime DESC) AS rn FROM tblSheet s inner join tblResource r on s.resourceID = r.resourceID inner join tblParameter p on s.parameterID = p.parameterID inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID where rt.resourceTypeName = 'Ponding Points' ) SELECT * FROM cte WHERE rn = 1";
+                                                                                    using (SqlConnection con1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                                                                                    {
+                                                                                        using (SqlCommand cmd = new SqlCommand(query))
+                                                                                        {
+                                                                                            cmd.Connection = con1;
+                                                                                            con1.Open();
+                                                                                            using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                                                                                            {
+                                                                                                DataTable dt = new DataTable();
+                                                                                                sda.Fill(dt);
+                                                                                                if (dt.Rows.Count > 0)
+                                                                                                {
+                                                                                                    for (int i = 0; i < dt.Rows.Count; i++)
+                                                                                                    {
+                                                                                                        <tr>
+                                                                                                            <td>@(i + 1)</td>
+                                                                                                            <td>@dt.Rows[i]["Location"]</td>
+                                                                                                            <td>@dt.Rows[i]["Current_Level"]  @dt.Rows[i]["pUnit"]</td>
+                                                                                                            @if (Convert.ToDouble(dt.Rows[i]["FLOW_RATE"]) > 0)
+                                                                                                            {
+                                                                                                                <td>@dt.Rows[i]["FLOW_RATE"] </td>
+                                                                                                                <td>-</td>
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                <td>-</td>
+                                                                                                                <td>@Math.Abs(Convert.ToDouble(dt.Rows[i]["FLOW_RATE"])) </td>
+                                                                                                            }
+                                                                                                            @if (Convert.ToDouble(dt.Rows[i]["EstimatedTime"]) < 0)
+                                                                                                            {
+                                                                                                                <td>@Math.Abs(Convert.ToDouble(dt.Rows[i]["EstimatedTime"])) minutes</td>
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                <td>Undefined</td>
+                                                                                                            }
+                                                                                                        </tr>
+                                                                                                    }
+
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="item">
+                                                        <h2 style="background-color: #234285;text-align: center;padding: 10px;color: white;font-weight: 500;">Rain Guages Dashboard</h2>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Area Wise Rain Recording</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <div id="dashboard_amchart_2" class="CSSAnimationChart"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+
+
+                                                        <!-- Marker Map -->
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Live Location of Rain Guages</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <div id="rain_map" class="gmaps"> </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Listing of All Available Rain Recording</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <table class="table table-striped table-bordered table-hover" id="sample_2" style="text-align:center">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Serial Number</th>
+                                                                                    <th>Location</th>
+                                                                                    <th>Current Rain Intensity</th>
+                                                                                    <th>Rain Flow Up</th>
+                                                                                    <th>Rain Flow Down</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @{
+                                                                                    string query1 = ";WITH cte AS ( SELECT r.resourceName AS Location, '3' AS Min_Level, s.parameterValue AS Current_Level, p.parameterUnit as pUnit, CONVERT(float,s.parameterValue - LEAD(s.parameterValue) OVER (ORDER BY s.sheetInsertionDateTime DESC))/10 AS FLOW_RATE, s.parameterValue/(CONVERT(float,s.parameterValue - LEAD(s.parameterValue) OVER (ORDER BY s.sheetInsertionDateTime DESC))/10+0.0001) AS EstimatedTime, ROW_NUMBER() OVER (PARTITION BY s.resourceID ORDER BY s.sheetInsertionDateTime DESC) AS rn FROM tblSheet s inner join tblResource r on s.resourceID = r.resourceID inner join tblParameter p on s.parameterID = p.parameterID inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID where rt.resourceTypeName = 'Rain Guages' ) SELECT * FROM cte WHERE rn = 1";
+                                                                                    using (SqlConnection con1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                                                                                    {
+                                                                                        using (SqlCommand cmd = new SqlCommand(query1))
+                                                                                        {
+                                                                                            cmd.Connection = con1;
+                                                                                            con1.Open();
+                                                                                            using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                                                                                            {
+                                                                                                DataTable dt = new DataTable();
+                                                                                                sda.Fill(dt);
+                                                                                                if (dt.Rows.Count > 0)
+                                                                                                {
+                                                                                                    for (int i = 0; i < dt.Rows.Count; i++)
+                                                                                                    {
+                                                                                                        <tr>
+                                                                                                            <td>@(i + 1)</td>
+                                                                                                            <td>@dt.Rows[i]["Location"]</td>
+                                                                                                            <td>@dt.Rows[i]["Current_Level"]  @dt.Rows[i]["pUnit"]</td>
+                                                                                                            @if (Convert.ToDouble(dt.Rows[i]["FLOW_RATE"]) > 0)
+                                                                                                            {
+                                                                                                                <td>@dt.Rows[i]["FLOW_RATE"] </td>
+                                                                                                                <td>-</td>
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                <td>-</td>
+                                                                                                                <td>@Math.Abs(Convert.ToDouble(dt.Rows[i]["FLOW_RATE"])) </td>
+                                                                                                            }
+                                                                                                        </tr>
+                                                                                                    }
+
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="item">
+                                                        <h2 style="background-color: #234285;text-align: center;padding: 10px;color: white;font-weight: 500;">Disposal Stations Dashboard</h2>
+
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Area Wise Disposal Stations</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <div id="dashboard_amchart_3" class="CSSAnimationChart"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Live Location of Disposal Stations</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <div id="disposal_map" class="gmaps"> </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                <div class="portlet light bordered">
+                                                                    <div class="portlet-title">
+                                                                        <div class="caption font-dark">
+                                                                            <i class="icon-settings font-dark"></i>
+                                                                            <span class="caption-subject bold uppercase">Listing of All Available Disposal Stations</span>
+                                                                        </div>
+                                                                        <div class="tools"> </div>
+                                                                    </div>
+                                                                    <div class="portlet-body">
+                                                                        <table class="table table-striped table-bordered table-hover" id="sample_3" style="text-align:center">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Serial Number</th>
+                                                                                    <th>Location</th>
+                                                                                    <th>Min Level</th>
+                                                                                    <th>Current Level</th>
+                                                                                    <th>Flow Up</th>
+                                                                                    <th>Flow Down</th>
+                                                                                    <th>Estimated Time as Normal</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @{
+                                                                                    string query2 = ";WITH cte AS ( SELECT r.resourceName AS Location, '3' AS Min_Level, s.parameterValue AS Current_Level, p.parameterUnit as pUnit, CONVERT(float,s.parameterValue - LEAD(s.parameterValue) OVER (ORDER BY s.sheetInsertionDateTime DESC))/10 AS FLOW_RATE, s.parameterValue/(CONVERT(float,s.parameterValue - LEAD(s.parameterValue) OVER (ORDER BY s.sheetInsertionDateTime DESC))/10+0.0001) AS EstimatedTime, ROW_NUMBER() OVER (PARTITION BY s.resourceID ORDER BY s.sheetInsertionDateTime DESC) AS rn FROM tblSheet s inner join tblResource r on s.resourceID = r.resourceID inner join tblParameter p on s.parameterID = p.parameterID inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID where rt.resourceTypeName = 'Disposal Stations' ) SELECT * FROM cte WHERE rn = 1";
+                                                                                    using (SqlConnection con1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+                                                                                    {
+                                                                                        using (SqlCommand cmd = new SqlCommand(query2))
+                                                                                        {
+                                                                                            cmd.Connection = con1;
+                                                                                            con1.Open();
+                                                                                            using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
+                                                                                            {
+                                                                                                DataTable dt = new DataTable();
+                                                                                                sda.Fill(dt);
+                                                                                                if (dt.Rows.Count > 0)
+                                                                                                {
+                                                                                                    for (int i = 0; i < dt.Rows.Count; i++)
+                                                                                                    {
+                                                                                                        <tr>
+                                                                                                            <td>@(i + 1)</td>
+                                                                                                            <td>@dt.Rows[i]["Location"]</td>
+                                                                                                            <td>10 @dt.Rows[i]["pUnit"]</td>
+                                                                                                            <td>@dt.Rows[i]["Current_Level"]  @dt.Rows[i]["pUnit"]</td>
+                                                                                                            @if (Convert.ToDouble(dt.Rows[i]["FLOW_RATE"]) > 0)
+                                                                                                            {
+                                                                                                                <td>@dt.Rows[i]["FLOW_RATE"] </td>
+                                                                                                                <td>-</td>
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                <td>-</td>
+                                                                                                                <td>@Math.Abs(Convert.ToDouble(dt.Rows[i]["FLOW_RATE"])) </td>
+                                                                                                            }
+                                                                                                            @if (Convert.ToDouble(dt.Rows[i]["EstimatedTime"]) < 0)
+                                                                                                            {
+                                                                                                                <td>@Math.Abs(Convert.ToDouble(dt.Rows[i]["EstimatedTime"])) minutes</td>
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                <td>Undefined</td>
+                                                                                                            }
+                                                                                                        </tr>
+                                                                                                    }
+
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                            </tbody>
+                                                                            
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PAGE CONTENT INNER -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT BODY -->
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+    </div>
+    <!-- END CONTAINER -->
+</div>
+
+@section scripts {
+    <script>
+        var markers = @Html.Raw(ViewBag.Markers);
+        var markers1 = @Html.Raw(ViewBag.RainMarkers);
+        var markers2 = @Html.Raw(ViewBag.PondingMarkers);
+
+    window.onload = function () {
+
+        var mapOptions = {
+            center: new google.maps.LatLng(31.479379, 74.339339),
+            zoom: 11,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var infoWindow = new google.maps.InfoWindow();
+        var map = new google.maps.Map(document.getElementById("disposal_map"), mapOptions);
+        var map1 = new google.maps.Map(document.getElementById("rain_map"), mapOptions);
+        var map2 = new google.maps.Map(document.getElementById("ponding_map"), mapOptions);
+        for (i = 0; i < markers.length; i++) {
+            var data = markers[i]
+            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: data.category,
+            });
+            var Status = false
+            if (data.ponding < 8) {
+                Status = true;
+            }
+            else {
+                Status = false;
+            }
+            var cityCircle = new google.maps.Circle({
+                cache: false,
+                strokeColor: Status ? '#00FF' : '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: Status ? '#0000FF' : '#FF0000',
+                fillOpacity: 0.35,
+                map: map,
+                title: data.category + "<br />" + data.time + "<br />" + data.ponding.toString(),
+                center: myLatlng,
+                radius: (data.ponding * data.ponding * 20),
+            });
+            (function (marker, data) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    infoWindow.setContent("<center><b>" + data.category + "</b>" + "<br />Time: " + data.time + "<br />" + data.pName +": "+ data.ponding + " " + data.pUnit +  "</center>");
+                    infoWindow.open(map, marker);
+                });
+            })(marker, data);
+        }
+
+        for (i = 0; i < markers1.length; i++) {
+            var data = markers1[i]
+            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map1,
+                title: data.category,
+            });
+            var Status = false
+            if (data.ponding < 8) {
+                Status = true;
+            }
+            else {
+                Status = false;
+            }
+            var cityCircle = new google.maps.Circle({
+                cache: false,
+                strokeColor: Status ? '#00FF' : '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: Status ? '#0000FF' : '#FF0000',
+                fillOpacity: 0.35,
+                map: map1,
+                title: data.category + "<br />" + data.time + "<br />" + data.ponding.toString(),
+                center: myLatlng,
+                radius: (data.ponding * data.ponding * 20),
+            });
+            (function (marker, data) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    infoWindow.setContent("<center><b>" + data.category + "</b>" + "<br />Time: " + data.time + "<br />" + data.pName + ": " + data.ponding + " " + data.pUnit + "</center>");
+                    infoWindow.open(map1, marker);
+                });
+            })(marker, data);
+        }
+
+        for (i = 0; i < markers2.length; i++) {
+            var data = markers2[i]
+            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map2,
+                title: data.category,
+            });
+            var Status = false
+            if (data.ponding < 8) {
+                Status = true;
+            }
+            else {
+                Status = false;
+            }
+            var cityCircle = new google.maps.Circle({
+                cache: false,
+                strokeColor: Status ? '#00FF' : '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: Status ? '#0000FF' : '#FF0000',
+                fillOpacity: 0.35,
+                map: map2,
+                title: data.category + "<br />" + data.time + "<br />" + data.ponding.toString(),
+                center: myLatlng,
+                radius: (data.ponding * data.ponding * 20),
+            });
+            (function (marker, data) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    infoWindow.setContent("<center><b>" + data.category + "</b>" + "<br />Time: " + data.time + "<br />" + data.pName + ": " + data.ponding + " " + data.pUnit + "</center>");
+                    infoWindow.open(map2, marker);
+                });
+            })(marker, data);
+        }
+    }
+    </script>
+}*@

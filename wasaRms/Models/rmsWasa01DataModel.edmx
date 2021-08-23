@@ -1,0 +1,846 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="rmsWasa01Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblCompany">
+          <Key>
+            <PropertyRef Name="companyID" />
+          </Key>
+          <Property Name="companyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="companyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="companyDescription" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblParameter">
+          <Key>
+            <PropertyRef Name="parameterID" />
+          </Key>
+          <Property Name="parameterID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="parameterName" Type="nvarchar" MaxLength="50" />
+          <Property Name="parameterUnit" Type="nvarchar" MaxLength="50" />
+          <Property Name="parameterMinThr" Type="float" />
+          <Property Name="parameterMaxThr" Type="float" />
+          <Property Name="companyID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblResource">
+          <Key>
+            <PropertyRef Name="resourceID" />
+          </Key>
+          <Property Name="resourceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="resourceName" Type="nvarchar" MaxLength="50" />
+          <Property Name="resourceLocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="resourceDescription" Type="nvarchar" MaxLength="50" />
+          <Property Name="resourceCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="resourceNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="resourceGeoLocatin" Type="nvarchar(max)" />
+          <Property Name="resourceTypeID" Type="int" Nullable="false" />
+          <Property Name="companyID" Type="int" Nullable="false" />
+          <Property Name="resourceStatus" Type="int" />
+          <Property Name="managedBy" Type="int" />
+          <Property Name="minThr" Type="float" />
+          <Property Name="maxThr" Type="float" />
+        </EntityType>
+        <EntityType Name="tblResourceType">
+          <Key>
+            <PropertyRef Name="resourceTypeID" />
+          </Key>
+          <Property Name="resourceTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="resourceTypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="resourceTypeDescription" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="parameterCount" Type="int" Nullable="false" />
+          <Property Name="separator" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="companyID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblResourceTypeParameter">
+          <Key>
+            <PropertyRef Name="resourceTypeParameterID" />
+          </Key>
+          <Property Name="resourceTypeParameterID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="resourceTypeID" Type="int" Nullable="false" />
+          <Property Name="parameterID" Type="int" Nullable="false" />
+          <Property Name="companyID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblSheet">
+          <Key>
+            <PropertyRef Name="sheetID" />
+          </Key>
+          <Property Name="sheetID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sheetInsertionDateTime" Type="datetime" Nullable="false" />
+          <Property Name="resourceID" Type="int" Nullable="false" />
+          <Property Name="parameterID" Type="int" Nullable="false" />
+          <Property Name="parameterValue" Type="float" Nullable="false" />
+          <Property Name="companyID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblSubResource">
+          <Key>
+            <PropertyRef Name="resourceID" />
+          </Key>
+          <Property Name="subResourceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="subResourceName" Type="nvarchar" MaxLength="50" />
+          <Property Name="subResourceLocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="subResourceDescription" Type="nvarchar" MaxLength="50" />
+          <Property Name="subResourceCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="subResourceNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="subResourceGeoLocatin" Type="nvarchar(max)" />
+          <Property Name="resourceID" Type="int" Nullable="false" />
+          <Property Name="companyID" Type="int" Nullable="false" />
+          <Property Name="subResourceStatus" Type="int" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userFullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="userLoginName" Type="nvarchar" MaxLength="100" />
+          <Property Name="userPassword" Type="nvarchar" MaxLength="50" />
+          <Property Name="userEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="userConfirmEmail" Type="bit" />
+          <Property Name="companyID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tblParameter_CompanyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblParameter" Type="Self.tblParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblParameter">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResource_companyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblResource">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResource_tblResourceType">
+          <End Role="tblResourceType" Type="Self.tblResourceType" Multiplicity="1" />
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblResourceType">
+              <PropertyRef Name="resourceTypeID" />
+            </Principal>
+            <Dependent Role="tblResource">
+              <PropertyRef Name="resourceTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResource_UserID">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1" />
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="tblResource">
+              <PropertyRef Name="managedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResourceType_CompanyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblResourceType" Type="Self.tblResourceType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblResourceType">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResourceTypeParameter_CompanyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblResourceTypeParameter" Type="Self.tblResourceTypeParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblResourceTypeParameter">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResourceTypeParameter_Parameter">
+          <End Role="tblParameter" Type="Self.tblParameter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblResourceTypeParameter" Type="Self.tblResourceTypeParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblParameter">
+              <PropertyRef Name="parameterID" />
+            </Principal>
+            <Dependent Role="tblResourceTypeParameter">
+              <PropertyRef Name="parameterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResourceTypeParameter_resourceType">
+          <End Role="tblResourceType" Type="Self.tblResourceType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblResourceTypeParameter" Type="Self.tblResourceTypeParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblResourceType">
+              <PropertyRef Name="resourceTypeID" />
+            </Principal>
+            <Dependent Role="tblResourceTypeParameter">
+              <PropertyRef Name="resourceTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSheet_companyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblSheet" Type="Self.tblSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblSheet">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSheet_Parameter">
+          <End Role="tblParameter" Type="Self.tblParameter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblSheet" Type="Self.tblSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblParameter">
+              <PropertyRef Name="parameterID" />
+            </Principal>
+            <Dependent Role="tblSheet">
+              <PropertyRef Name="parameterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSheet_Resource">
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblSheet" Type="Self.tblSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblResource">
+              <PropertyRef Name="resourceID" />
+            </Principal>
+            <Dependent Role="tblSheet">
+              <PropertyRef Name="resourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSubResource_companyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblSubResource" Type="Self.tblSubResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblSubResource">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSubResource_tblResource">
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="1" />
+          <End Role="tblSubResource" Type="Self.tblSubResource" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="tblResource">
+              <PropertyRef Name="resourceID" />
+            </Principal>
+            <Dependent Role="tblSubResource">
+              <PropertyRef Name="resourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUser_CompanyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblUser">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="rmsWasa01ModelStoreContainer">
+          <EntitySet Name="tblCompany" EntityType="Self.tblCompany" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblParameter" EntityType="Self.tblParameter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblResource" EntityType="Self.tblResource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblResourceType" EntityType="Self.tblResourceType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblResourceTypeParameter" EntityType="Self.tblResourceTypeParameter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSheet" EntityType="Self.tblSheet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSubResource" EntityType="Self.tblSubResource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUser" EntityType="Self.tblUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblParameter_CompanyID" Association="Self.FK_tblParameter_CompanyID">
+            <End Role="tblCompany" EntitySet="tblCompany" />
+            <End Role="tblParameter" EntitySet="tblParameter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResource_companyID" Association="Self.FK_tblResource_companyID">
+            <End Role="tblCompany" EntitySet="tblCompany" />
+            <End Role="tblResource" EntitySet="tblResource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResource_tblResourceType" Association="Self.FK_tblResource_tblResourceType">
+            <End Role="tblResourceType" EntitySet="tblResourceType" />
+            <End Role="tblResource" EntitySet="tblResource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResource_UserID" Association="Self.FK_tblResource_UserID">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblResource" EntitySet="tblResource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResourceType_CompanyID" Association="Self.FK_tblResourceType_CompanyID">
+            <End Role="tblCompany" EntitySet="tblCompany" />
+            <End Role="tblResourceType" EntitySet="tblResourceType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResourceTypeParameter_CompanyID" Association="Self.FK_tblResourceTypeParameter_CompanyID">
+            <End Role="tblCompany" EntitySet="tblCompany" />
+            <End Role="tblResourceTypeParameter" EntitySet="tblResourceTypeParameter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResourceTypeParameter_Parameter" Association="Self.FK_tblResourceTypeParameter_Parameter">
+            <End Role="tblParameter" EntitySet="tblParameter" />
+            <End Role="tblResourceTypeParameter" EntitySet="tblResourceTypeParameter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResourceTypeParameter_resourceType" Association="Self.FK_tblResourceTypeParameter_resourceType">
+            <End Role="tblResourceType" EntitySet="tblResourceType" />
+            <End Role="tblResourceTypeParameter" EntitySet="tblResourceTypeParameter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSheet_companyID" Association="Self.FK_tblSheet_companyID">
+            <End Role="tblCompany" EntitySet="tblCompany" />
+            <End Role="tblSheet" EntitySet="tblSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSheet_Parameter" Association="Self.FK_tblSheet_Parameter">
+            <End Role="tblParameter" EntitySet="tblParameter" />
+            <End Role="tblSheet" EntitySet="tblSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSheet_Resource" Association="Self.FK_tblSheet_Resource">
+            <End Role="tblResource" EntitySet="tblResource" />
+            <End Role="tblSheet" EntitySet="tblSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSubResource_companyID" Association="Self.FK_tblSubResource_companyID">
+            <End Role="tblCompany" EntitySet="tblCompany" />
+            <End Role="tblSubResource" EntitySet="tblSubResource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSubResource_tblResource" Association="Self.FK_tblSubResource_tblResource">
+            <End Role="tblResource" EntitySet="tblResource" />
+            <End Role="tblSubResource" EntitySet="tblSubResource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUser_CompanyID" Association="Self.FK_tblUser_CompanyID">
+            <End Role="tblCompany" EntitySet="tblCompany" />
+            <End Role="tblUser" EntitySet="tblUser" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="rmsWasa01Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblCompany">
+          <Key>
+            <PropertyRef Name="companyID" />
+          </Key>
+          <Property Name="companyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="companyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="companyDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblParameters" Relationship="Self.FK_tblParameter_CompanyID" FromRole="tblCompany" ToRole="tblParameter" />
+          <NavigationProperty Name="tblResources" Relationship="Self.FK_tblResource_companyID" FromRole="tblCompany" ToRole="tblResource" />
+          <NavigationProperty Name="tblResourceTypes" Relationship="Self.FK_tblResourceType_CompanyID" FromRole="tblCompany" ToRole="tblResourceType" />
+          <NavigationProperty Name="tblResourceTypeParameters" Relationship="Self.FK_tblResourceTypeParameter_CompanyID" FromRole="tblCompany" ToRole="tblResourceTypeParameter" />
+          <NavigationProperty Name="tblSheets" Relationship="Self.FK_tblSheet_companyID" FromRole="tblCompany" ToRole="tblSheet" />
+          <NavigationProperty Name="tblSubResources" Relationship="Self.FK_tblSubResource_companyID" FromRole="tblCompany" ToRole="tblSubResource" />
+          <NavigationProperty Name="tblUsers" Relationship="Self.FK_tblUser_CompanyID" FromRole="tblCompany" ToRole="tblUser" />
+        </EntityType>
+        <EntityType Name="tblParameter">
+          <Key>
+            <PropertyRef Name="parameterID" />
+          </Key>
+          <Property Name="parameterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="parameterName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parameterUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="parameterMinThr" Type="Double" />
+          <Property Name="parameterMaxThr" Type="Double" />
+          <Property Name="companyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblCompany" Relationship="Self.FK_tblParameter_CompanyID" FromRole="tblParameter" ToRole="tblCompany" />
+          <NavigationProperty Name="tblResourceTypeParameters" Relationship="Self.FK_tblResourceTypeParameter_Parameter" FromRole="tblParameter" ToRole="tblResourceTypeParameter" />
+          <NavigationProperty Name="tblSheets" Relationship="Self.FK_tblSheet_Parameter" FromRole="tblParameter" ToRole="tblSheet" />
+        </EntityType>
+        <EntityType Name="tblResource">
+          <Key>
+            <PropertyRef Name="resourceID" />
+          </Key>
+          <Property Name="resourceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="resourceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="resourceLocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="resourceDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="resourceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="resourceNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="resourceGeoLocatin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="resourceTypeID" Type="Int32" Nullable="false" />
+          <Property Name="companyID" Type="Int32" Nullable="false" />
+          <Property Name="resourceStatus" Type="Int32" />
+          <NavigationProperty Name="tblCompany" Relationship="Self.FK_tblResource_companyID" FromRole="tblResource" ToRole="tblCompany" />
+          <NavigationProperty Name="tblResourceType" Relationship="Self.FK_tblResource_tblResourceType" FromRole="tblResource" ToRole="tblResourceType" />
+          <NavigationProperty Name="tblSheets" Relationship="Self.FK_tblSheet_Resource" FromRole="tblResource" ToRole="tblSheet" />
+          <NavigationProperty Name="tblSubResource" Relationship="Self.FK_tblSubResource_tblResource" FromRole="tblResource" ToRole="tblSubResource" />
+          <Property Name="managedBy" Type="Int32" />
+          <NavigationProperty Name="tblUser" Relationship="rmsWasa01Model.FK_tblResource_UserID" FromRole="tblResource" ToRole="tblUser" />
+          <Property Name="minThr" Type="Double" />
+          <Property Name="maxThr" Type="Double" />
+        </EntityType>
+        <EntityType Name="tblResourceType">
+          <Key>
+            <PropertyRef Name="resourceTypeID" />
+          </Key>
+          <Property Name="resourceTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="resourceTypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="resourceTypeDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="parameterCount" Type="Int32" Nullable="false" />
+          <Property Name="separator" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="companyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblCompany" Relationship="Self.FK_tblResourceType_CompanyID" FromRole="tblResourceType" ToRole="tblCompany" />
+          <NavigationProperty Name="tblResources" Relationship="Self.FK_tblResource_tblResourceType" FromRole="tblResourceType" ToRole="tblResource" />
+          <NavigationProperty Name="tblResourceTypeParameters" Relationship="Self.FK_tblResourceTypeParameter_resourceType" FromRole="tblResourceType" ToRole="tblResourceTypeParameter" />
+        </EntityType>
+        <EntityType Name="tblResourceTypeParameter">
+          <Key>
+            <PropertyRef Name="resourceTypeParameterID" />
+          </Key>
+          <Property Name="resourceTypeParameterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="resourceTypeID" Type="Int32" Nullable="false" />
+          <Property Name="parameterID" Type="Int32" Nullable="false" />
+          <Property Name="companyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblCompany" Relationship="Self.FK_tblResourceTypeParameter_CompanyID" FromRole="tblResourceTypeParameter" ToRole="tblCompany" />
+          <NavigationProperty Name="tblParameter" Relationship="Self.FK_tblResourceTypeParameter_Parameter" FromRole="tblResourceTypeParameter" ToRole="tblParameter" />
+          <NavigationProperty Name="tblResourceType" Relationship="Self.FK_tblResourceTypeParameter_resourceType" FromRole="tblResourceTypeParameter" ToRole="tblResourceType" />
+        </EntityType>
+        <EntityType Name="tblSheet">
+          <Key>
+            <PropertyRef Name="sheetID" />
+          </Key>
+          <Property Name="sheetID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sheetInsertionDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="resourceID" Type="Int32" Nullable="false" />
+          <Property Name="parameterID" Type="Int32" Nullable="false" />
+          <Property Name="parameterValue" Type="Double" Nullable="false" />
+          <Property Name="companyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblCompany" Relationship="Self.FK_tblSheet_companyID" FromRole="tblSheet" ToRole="tblCompany" />
+          <NavigationProperty Name="tblParameter" Relationship="Self.FK_tblSheet_Parameter" FromRole="tblSheet" ToRole="tblParameter" />
+          <NavigationProperty Name="tblResource" Relationship="Self.FK_tblSheet_Resource" FromRole="tblSheet" ToRole="tblResource" />
+        </EntityType>
+        <EntityType Name="tblSubResource">
+          <Key>
+            <PropertyRef Name="resourceID" />
+          </Key>
+          <Property Name="subResourceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="subResourceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="subResourceLocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="subResourceDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="subResourceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="subResourceNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="subResourceGeoLocatin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="resourceID" Type="Int32" Nullable="false" />
+          <Property Name="companyID" Type="Int32" Nullable="false" />
+          <Property Name="subResourceStatus" Type="Int32" />
+          <NavigationProperty Name="tblCompany" Relationship="Self.FK_tblSubResource_companyID" FromRole="tblSubResource" ToRole="tblCompany" />
+          <NavigationProperty Name="tblResource" Relationship="Self.FK_tblSubResource_tblResource" FromRole="tblSubResource" ToRole="tblResource" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userFullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="userLoginName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="userPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userConfirmEmail" Type="Boolean" />
+          <Property Name="companyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblCompany" Relationship="Self.FK_tblUser_CompanyID" FromRole="tblUser" ToRole="tblCompany" />
+          <NavigationProperty Name="tblResources" Relationship="rmsWasa01Model.FK_tblResource_UserID" FromRole="tblUser" ToRole="tblResource" />
+        </EntityType>
+        <Association Name="FK_tblParameter_CompanyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblParameter" Type="Self.tblParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblParameter">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResource_companyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblResource">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResourceType_CompanyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblResourceType" Type="Self.tblResourceType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblResourceType">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResourceTypeParameter_CompanyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblResourceTypeParameter" Type="Self.tblResourceTypeParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblResourceTypeParameter">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSheet_companyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblSheet" Type="Self.tblSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblSheet">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSubResource_companyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblSubResource" Type="Self.tblSubResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblSubResource">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblUser_CompanyID">
+          <End Role="tblCompany" Type="Self.tblCompany" Multiplicity="1" />
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCompany">
+              <PropertyRef Name="companyID" />
+            </Principal>
+            <Dependent Role="tblUser">
+              <PropertyRef Name="companyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResourceTypeParameter_Parameter">
+          <End Role="tblParameter" Type="Self.tblParameter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblResourceTypeParameter" Type="Self.tblResourceTypeParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblParameter">
+              <PropertyRef Name="parameterID" />
+            </Principal>
+            <Dependent Role="tblResourceTypeParameter">
+              <PropertyRef Name="parameterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSheet_Parameter">
+          <End Role="tblParameter" Type="Self.tblParameter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblSheet" Type="Self.tblSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblParameter">
+              <PropertyRef Name="parameterID" />
+            </Principal>
+            <Dependent Role="tblSheet">
+              <PropertyRef Name="parameterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResource_tblResourceType">
+          <End Role="tblResourceType" Type="Self.tblResourceType" Multiplicity="1" />
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblResourceType">
+              <PropertyRef Name="resourceTypeID" />
+            </Principal>
+            <Dependent Role="tblResource">
+              <PropertyRef Name="resourceTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSheet_Resource">
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblSheet" Type="Self.tblSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblResource">
+              <PropertyRef Name="resourceID" />
+            </Principal>
+            <Dependent Role="tblSheet">
+              <PropertyRef Name="resourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblSubResource_tblResource">
+          <End Role="tblResource" Type="Self.tblResource" Multiplicity="1" />
+          <End Role="tblSubResource" Type="Self.tblSubResource" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="tblResource">
+              <PropertyRef Name="resourceID" />
+            </Principal>
+            <Dependent Role="tblSubResource">
+              <PropertyRef Name="resourceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblResourceTypeParameter_resourceType">
+          <End Role="tblResourceType" Type="Self.tblResourceType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblResourceTypeParameter" Type="Self.tblResourceTypeParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblResourceType">
+              <PropertyRef Name="resourceTypeID" />
+            </Principal>
+            <Dependent Role="tblResourceTypeParameter">
+              <PropertyRef Name="resourceTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="rmsWasa01Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblCompanies" EntityType="Self.tblCompany" />
+          <EntitySet Name="tblParameters" EntityType="Self.tblParameter" />
+          <EntitySet Name="tblResources" EntityType="Self.tblResource" />
+          <EntitySet Name="tblResourceTypes" EntityType="Self.tblResourceType" />
+          <EntitySet Name="tblResourceTypeParameters" EntityType="Self.tblResourceTypeParameter" />
+          <EntitySet Name="tblSheets" EntityType="Self.tblSheet" />
+          <EntitySet Name="tblSubResources" EntityType="Self.tblSubResource" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
+          <AssociationSet Name="FK_tblParameter_CompanyID" Association="Self.FK_tblParameter_CompanyID">
+            <End Role="tblCompany" EntitySet="tblCompanies" />
+            <End Role="tblParameter" EntitySet="tblParameters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResource_companyID" Association="Self.FK_tblResource_companyID">
+            <End Role="tblCompany" EntitySet="tblCompanies" />
+            <End Role="tblResource" EntitySet="tblResources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResourceType_CompanyID" Association="Self.FK_tblResourceType_CompanyID">
+            <End Role="tblCompany" EntitySet="tblCompanies" />
+            <End Role="tblResourceType" EntitySet="tblResourceTypes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResourceTypeParameter_CompanyID" Association="Self.FK_tblResourceTypeParameter_CompanyID">
+            <End Role="tblCompany" EntitySet="tblCompanies" />
+            <End Role="tblResourceTypeParameter" EntitySet="tblResourceTypeParameters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSheet_companyID" Association="Self.FK_tblSheet_companyID">
+            <End Role="tblCompany" EntitySet="tblCompanies" />
+            <End Role="tblSheet" EntitySet="tblSheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSubResource_companyID" Association="Self.FK_tblSubResource_companyID">
+            <End Role="tblCompany" EntitySet="tblCompanies" />
+            <End Role="tblSubResource" EntitySet="tblSubResources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblUser_CompanyID" Association="Self.FK_tblUser_CompanyID">
+            <End Role="tblCompany" EntitySet="tblCompanies" />
+            <End Role="tblUser" EntitySet="tblUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResourceTypeParameter_Parameter" Association="Self.FK_tblResourceTypeParameter_Parameter">
+            <End Role="tblParameter" EntitySet="tblParameters" />
+            <End Role="tblResourceTypeParameter" EntitySet="tblResourceTypeParameters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSheet_Parameter" Association="Self.FK_tblSheet_Parameter">
+            <End Role="tblParameter" EntitySet="tblParameters" />
+            <End Role="tblSheet" EntitySet="tblSheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResource_tblResourceType" Association="Self.FK_tblResource_tblResourceType">
+            <End Role="tblResourceType" EntitySet="tblResourceTypes" />
+            <End Role="tblResource" EntitySet="tblResources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSheet_Resource" Association="Self.FK_tblSheet_Resource">
+            <End Role="tblResource" EntitySet="tblResources" />
+            <End Role="tblSheet" EntitySet="tblSheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblSubResource_tblResource" Association="Self.FK_tblSubResource_tblResource">
+            <End Role="tblResource" EntitySet="tblResources" />
+            <End Role="tblSubResource" EntitySet="tblSubResources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResourceTypeParameter_resourceType" Association="Self.FK_tblResourceTypeParameter_resourceType">
+            <End Role="tblResourceType" EntitySet="tblResourceTypes" />
+            <End Role="tblResourceTypeParameter" EntitySet="tblResourceTypeParameters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblResource_UserID" Association="rmsWasa01Model.FK_tblResource_UserID">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblResource" EntitySet="tblResources" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_tblResource_UserID">
+          <End Type="rmsWasa01Model.tblUser" Role="tblUser" Multiplicity="0..1" />
+          <End Type="rmsWasa01Model.tblResource" Role="tblResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="tblResource">
+              <PropertyRef Name="managedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="rmsWasa01ModelStoreContainer" CdmEntityContainer="rmsWasa01Entities">
+          <EntitySetMapping Name="tblCompanies">
+            <EntityTypeMapping TypeName="rmsWasa01Model.tblCompany">
+              <MappingFragment StoreEntitySet="tblCompany">
+                <ScalarProperty Name="companyID" ColumnName="companyID" />
+                <ScalarProperty Name="companyName" ColumnName="companyName" />
+                <ScalarProperty Name="companyDescription" ColumnName="companyDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblParameters">
+            <EntityTypeMapping TypeName="rmsWasa01Model.tblParameter">
+              <MappingFragment StoreEntitySet="tblParameter">
+                <ScalarProperty Name="parameterID" ColumnName="parameterID" />
+                <ScalarProperty Name="parameterName" ColumnName="parameterName" />
+                <ScalarProperty Name="parameterUnit" ColumnName="parameterUnit" />
+                <ScalarProperty Name="parameterMinThr" ColumnName="parameterMinThr" />
+                <ScalarProperty Name="parameterMaxThr" ColumnName="parameterMaxThr" />
+                <ScalarProperty Name="companyID" ColumnName="companyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblResources">
+            <EntityTypeMapping TypeName="rmsWasa01Model.tblResource">
+              <MappingFragment StoreEntitySet="tblResource">
+                <ScalarProperty Name="maxThr" ColumnName="maxThr" />
+                <ScalarProperty Name="minThr" ColumnName="minThr" />
+                <ScalarProperty Name="managedBy" ColumnName="managedBy" />
+                <ScalarProperty Name="resourceID" ColumnName="resourceID" />
+                <ScalarProperty Name="resourceName" ColumnName="resourceName" />
+                <ScalarProperty Name="resourceLocationName" ColumnName="resourceLocationName" />
+                <ScalarProperty Name="resourceDescription" ColumnName="resourceDescription" />
+                <ScalarProperty Name="resourceCode" ColumnName="resourceCode" />
+                <ScalarProperty Name="resourceNumber" ColumnName="resourceNumber" />
+                <ScalarProperty Name="resourceGeoLocatin" ColumnName="resourceGeoLocatin" />
+                <ScalarProperty Name="resourceTypeID" ColumnName="resourceTypeID" />
+                <ScalarProperty Name="companyID" ColumnName="companyID" />
+                <ScalarProperty Name="resourceStatus" ColumnName="resourceStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblResourceTypes">
+            <EntityTypeMapping TypeName="rmsWasa01Model.tblResourceType">
+              <MappingFragment StoreEntitySet="tblResourceType">
+                <ScalarProperty Name="resourceTypeID" ColumnName="resourceTypeID" />
+                <ScalarProperty Name="resourceTypeName" ColumnName="resourceTypeName" />
+                <ScalarProperty Name="resourceTypeDescription" ColumnName="resourceTypeDescription" />
+                <ScalarProperty Name="parameterCount" ColumnName="parameterCount" />
+                <ScalarProperty Name="separator" ColumnName="separator" />
+                <ScalarProperty Name="companyID" ColumnName="companyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblResourceTypeParameters">
+            <EntityTypeMapping TypeName="rmsWasa01Model.tblResourceTypeParameter">
+              <MappingFragment StoreEntitySet="tblResourceTypeParameter">
+                <ScalarProperty Name="resourceTypeParameterID" ColumnName="resourceTypeParameterID" />
+                <ScalarProperty Name="resourceTypeID" ColumnName="resourceTypeID" />
+                <ScalarProperty Name="parameterID" ColumnName="parameterID" />
+                <ScalarProperty Name="companyID" ColumnName="companyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSheets">
+            <EntityTypeMapping TypeName="rmsWasa01Model.tblSheet">
+              <MappingFragment StoreEntitySet="tblSheet">
+                <ScalarProperty Name="sheetID" ColumnName="sheetID" />
+                <ScalarProperty Name="sheetInsertionDateTime" ColumnName="sheetInsertionDateTime" />
+                <ScalarProperty Name="resourceID" ColumnName="resourceID" />
+                <ScalarProperty Name="parameterID" ColumnName="parameterID" />
+                <ScalarProperty Name="parameterValue" ColumnName="parameterValue" />
+                <ScalarProperty Name="companyID" ColumnName="companyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSubResources">
+            <EntityTypeMapping TypeName="rmsWasa01Model.tblSubResource">
+              <MappingFragment StoreEntitySet="tblSubResource">
+                <ScalarProperty Name="subResourceID" ColumnName="subResourceID" />
+                <ScalarProperty Name="subResourceName" ColumnName="subResourceName" />
+                <ScalarProperty Name="subResourceLocationName" ColumnName="subResourceLocationName" />
+                <ScalarProperty Name="subResourceDescription" ColumnName="subResourceDescription" />
+                <ScalarProperty Name="subResourceCode" ColumnName="subResourceCode" />
+                <ScalarProperty Name="subResourceNumber" ColumnName="subResourceNumber" />
+                <ScalarProperty Name="subResourceGeoLocatin" ColumnName="subResourceGeoLocatin" />
+                <ScalarProperty Name="resourceID" ColumnName="resourceID" />
+                <ScalarProperty Name="companyID" ColumnName="companyID" />
+                <ScalarProperty Name="subResourceStatus" ColumnName="subResourceStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="rmsWasa01Model.tblUser">
+              <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="userFullName" ColumnName="userFullName" />
+                <ScalarProperty Name="userLoginName" ColumnName="userLoginName" />
+                <ScalarProperty Name="userPassword" ColumnName="userPassword" />
+                <ScalarProperty Name="userEmail" ColumnName="userEmail" />
+                <ScalarProperty Name="userConfirmEmail" ColumnName="userConfirmEmail" />
+                <ScalarProperty Name="companyID" ColumnName="companyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,106 @@
+﻿@model IEnumerable<wasaRms.Models.tblResource>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceLocationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceGeoLocatin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.resourceStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.minThr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.maxThr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblResourceType.resourceTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblSubResource.subResourceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblUser.userFullName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceLocationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceGeoLocatin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.resourceStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.minThr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.maxThr)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblCompany.companyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblResourceType.resourceTypeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblSubResource.subResourceName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblUser.userFullName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.resourceID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.resourceID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.resourceID })
+        </td>
+    </tr>
+}
+
+</table>

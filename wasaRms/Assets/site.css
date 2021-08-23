@@ -1,0 +1,246 @@
+body {
+}
+
+#block {
+    background-color: #296eb4;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.carousel-indicators {
+    position: unset;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-left: 0;
+}
+
+
+    .carousel-indicators li, .carousel-indicators .active {
+        text-indent: 0;
+        width: 125px;
+        height: 40px;
+        border: none;
+        border-radius: 10%;
+        background-color: #52bedb;
+        color: white;
+        font-weight: bold;
+        padding-top: 10px;
+    }
+
+.tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.thead {
+    background-color: grey;
+}
+
+.table thead tr th {
+    font-size: 12px !important;
+    text-align: center;
+}
+
+.table tbody tr td {
+    font-size: 12px !important;
+}
+
+
+.gmaps {
+    height: 500px !important;
+}
+
+/**
+    AB added CSS
+*/
+.page-header-top {
+    /*background-color: rgb(35, 66, 133);*/
+}
+
+.page-header-menu {
+    /*background-color: rgb(35, 66, 133) !important;*/
+    display: block;
+    margin-top: -40px;
+}
+
+.page-logo {
+    float: left;
+}
+
+    /*.page-logo img {
+        background-image: url(../assets/img/sticker34.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        cursor: pointer;
+        display: block;
+        height: 96px;
+        width: 62px;
+    }*/
+
+.wasa-slogan {
+    width: 30%;
+    float: left;
+    text-align: left;
+    color: #fff;
+    padding-left: 20px;
+}
+
+    .wasa-slogan .headline1, .wasa-slogan .headline2 {
+        font-weight: bold;
+    }
+
+.menu-handler {
+    width: 63%;
+    float: left;
+}
+
+    .menu-handler .hor-menu {
+        /*width: 75%;*/
+        float: right !important;
+        margin: 0 auto !important;
+        padding-left: 25px;
+    }
+
+    .menu-handler .top-menu {
+        width: 25%;
+        float: right;
+        margin-top: 6px;
+    }
+
+        .menu-handler .top-menu .dropdown-toggle {
+            padding: 0 !important;
+        }
+
+.page-header {
+    /*background-color: rgb(35, 66, 133) !important;*/
+}
+
+.page-header_2 {
+    background-color: transparent !important;
+    height: 110px !important;
+}
+
+
+@media screen and (max-width: 991px) {
+    .page-logo, .wasa-slogan, .menu-handler .top-menu {
+        display: inline;
+        padding-left: 30px;
+        padding-right: 20px;
+        width: 100%;
+        background-color: transparent;
+    }
+    .wasa-slogan {
+        padding-top:0px !important;
+    }
+    .menu-handler {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+        .menu-handler .hor-menu {
+            width: 100%;
+        }
+    .caption-subject {
+        font-size:smaller !important;
+    }
+    .panel-heading {
+        padding: 10px 0px !important;
+    }
+}
+
+.amcharts-chart-div a {
+    display: none !important;
+}
+
+
+
+.footclass {
+    position: absolute;
+    width: 100%;
+    height: 50px !important;
+    padding: 6px 0 !important;
+}
+
+.navbar_2 {
+    min-height: 100px !important;
+    min-width: 400px !important;
+}
+
+.example6 .navbar-brand {
+    /*background: url(../assets/img/sticker34.png) center / contain no-repeat;*/
+    width: 100px;
+}
+
+.navbar-brand_2 {
+    min-height: 90px !important;
+    width: 400px !important;
+}
+
+.navbar-brand text-hide_2 {
+    height: 80px;
+}
+
+
+
+@media (min-width: 768px) {
+    .navbar-nav_2 {
+        float: right !important;
+        padding: 30px 10px 10px 10px !important;
+        max-height: 100px;
+    }
+}
+
+@media (max-width: 500px) {
+    .navbar-nav_2 {
+        float: right !important;
+        padding: 5px 0px 0px 0px !important;
+        max-height: 100px;
+    }
+}
+
+/*@media (min-width: 1200px) {
+    .container {
+    width: 90% !important;
+    }
+}
+
+.menu-handler {
+    min-width: 65% !important;
+}*/
+
+.imgLogo {
+    height: 80px;
+}
+
+div.mytable {
+    display: table;
+    width: 100%;
+}
+
+    div.mytable > div {
+        display: table-row;
+        width: 100%;
+    }
+
+        div.mytable > div > div {
+            display: table-cell;
+        }

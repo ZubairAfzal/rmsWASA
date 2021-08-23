@@ -1,0 +1,44 @@
+﻿@using System.Data;
+@using System.Data.SqlClient;
+@model IEnumerable<RainTableClass>
+<div class="col-md-12" style="padding: 0px 0px 0px 0px !important;">
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    <div class="portlet light bordered">
+        <div class="portlet-body">
+            <table class="table table-striped table-bordered table-hover" id="sample_2" style="text-align:center">
+                <thead>
+                    <tr style="background-color: #a8c9cd;">
+                        <th>Serial No.</th>
+                        <th>Location</th>
+                        <th>Current Rain (mm)</th>
+                        <th>Current Rain (inch)</th>
+                        <th>Time</th>
+                        <th>Rain Flow Rate Up</th>
+                        <th>Rain Flow Rate Down</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model)
+                        {
+                    <tr>
+                        <td>@item.srNo</td>
+                        <td>@item.pondingLocation</td>
+                        <td>@item.currLevel &nbsp;  @item.pUnit</td>
+                        <td>@(0.04*(Convert.ToDouble(item.currLevel))) &nbsp;  inch</td>
+                        <td>@item.RecTime</td>
+                        <td>@item.flowRateUp</td>
+                        <td>@item.flowRateDown</td>
+                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+    <!-- END EXAMPLE TABLE PORTLET-->
+</div>
+

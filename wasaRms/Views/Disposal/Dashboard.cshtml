@@ -1,0 +1,268 @@
+﻿@using System.Data.SqlClient;
+
+@{
+    ViewBag.Title = "Disposal Stations | Dashboard";
+}
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+
+<div class="page-wrapper-row full-height">
+    <div class="page-wrapper-middle">
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <!-- BEGIN PAGE HEAD-->
+                <div class="page-head">
+                    <div class="container">
+                        <!-- BEGIN PAGE TITLE -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="page-title" style="width:100%; padding:10px 0;">
+                                    <h1 style="color:white;">
+                                        Overview of the Disposals Stations
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END PAGE TITLE -->
+                    </div>
+                </div>
+                <!-- END PAGE HEAD-->
+                <!-- BEGIN PAGE CONTENT BODY -->
+                <div class="page-content">
+                    <div class="container">
+                        <!-- BEGIN PAGE CONTENT INNER -->
+                        <div class="page-content-inner">
+                            <div class="row widget-row">
+                                <div class="col-md-1">
+                                    <img src="~/Assets/img/sewage.png" style="width:90px;" />
+                                </div>
+                                <div class="col-md-11">
+                                    <div class="col-md-4 col-sm-12">
+                                        <!-- BEGIN WIDGET THUMB -->
+                                        <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background-color:transparent; border-radius:10px !important; height: 100px; padding: 0px !important; ">
+                                            <div class="col-md-3 col-sm-3 col-xs-3" style="background:linear-gradient(to right, #8ac340 0%, #31ab46 100%); height:100px; line-height:100px;border-right:2px solid green;border-radius: 10px 0px 0px 10px !important;text-align: center; opacity:0.8; ">
+                                                <img src="~/Assets/img/gol.png" style="width:50px;" />
+                                            </div>
+                                            <div class="col-md-9 col-sm-9 col-xs-9" style="text-align: center; padding-top: 20px;height: 100px;line-height: 40px;background-color: #5dabdc;border-radius: 0px 10px 10px 0px !important; opacity:0.8;">
+                                                <h4 class="widget-thumb-heading" style="color:white; text-align:center; margin:0 0 5px;">Total Disposal Stations</h4>
+                                                <hr style="border-top:3px solid white; margin: 10px 4px 4px 4px;" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body">
+                                                        <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.TotalDisposal" style="color:white;text-align:center">0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END WIDGET THUMB -->
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <!-- BEGIN WIDGET THUMB -->
+                                        <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background-color:transparent; border-radius:10px !important;  height: 100px; padding: 0px !important; ">
+                                            <div class="col-md-3 col-sm-3 col-xs-3" style="background:linear-gradient(to right, #8ac340 0%, #31ab46 100%); height:100px; line-height:100px;border-right:2px solid green;border-radius: 10px 0px 0px 10px !important;text-align: center; opacity:0.8; ">
+                                                <img src="~/Assets/img/2959838-128.png" style="width:50px;" />
+                                            </div>
+                                            <div class="col-md-9 col-sm-9 col-xs-9" style="text-align: center; padding-top: 20px;height: 100px;line-height: 40px;background-color:#6d5da4;border-radius: 0px 10px 10px 0px !important; opacity:0.8; padding-left: 10px !important; padding-right: 10px !important;">
+                                                <h4 class="widget-thumb-heading" style="color:white;  text-align:center; margin:0 0 5px;">Running Disposal Stations</h4>
+                                                <hr style="border-top:3px solid white; margin: 10px 4px 4px 4px;" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body">
+                                                        <div class="widget-thumb-wrap">
+                                                            <div class="widget-thumb-body">
+                                                                <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.RunningDisposal" style="color:white;text-align:center">0</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- END WIDGET THUMB -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <!-- BEGIN WIDGET THUMB -->
+                                        <div class="widget-thumb widget-bg-color-white text-uppercase margin-bottom-20 " style="background-color:transparent; border-radius:10px !important;  height: 100px; padding: 0px !important; ">
+                                            <div class="col-md-3 col-sm-3 col-xs-3" style="background:linear-gradient(to right, #8ac340 0%, #31ab46 100%); height:100px; line-height:100px;border-right:2px solid green;border-radius: 10px 0px 0px 10px !important;text-align: center; opacity:0.8; ">
+                                                <img src="~/Assets/img/PondingOff.png" style="width:50px;" />
+                                            </div>
+                                            <div class="col-md-9 col-sm-9 col-xs-9" style="text-align: center; padding-top: 20px;height: 100px;line-height: 40px;background-color:#f7941c;border-radius: 0px 10px 10px 0px !important; opacity:0.8;">
+                                                <h4 class="widget-thumb-heading" style="color:white;  text-align:center; margin:0 0 5px;">Inactive Disposal Stations</h4>
+                                                <hr style="border-top:3px solid white; margin: 10px 4px 4px 4px;" />
+                                                <div class="widget-thumb-wrap">
+                                                    <div class="widget-thumb-body">
+                                                        <div class="widget-thumb-wrap">
+                                                            <div class="widget-thumb-body">
+                                                                <span class="widget-thumb-body-stat" data-counter="counterup" data-value="@ViewBag.InactiveDisposal" style="color:white;text-align:center">0</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- END WIDGET THUMB -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-xs-12 col-sm-12">
+                                    <div class="portlet light " style="background-color:transparent;">
+                                        <div class="portlet-title" style="border-width:0px;margin-bottom:0px;min-height:20px;">
+                                            <div class="caption">
+                                                <span class="caption-subject bold uppercase font-dark" style="color:white !important;">Disposal Stations Dashboard</span>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div class="row">
+                                                <div class="panel panel-info" style="margin-bottom:5px;">
+                                                    <div class="panel-heading">
+                                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                            <div class="portlet-title">
+                                                                <div class="caption font-dark">
+                                                                    <i class="font-dark"><img src="~/Assets/img/graph1.png" style="width:28px;vertical-align:baseline; margin-right:5px;" /></i>
+                                                                    <span class="caption-subject bold uppercase" style="vertical-align:bottom;">Area Wise Disposal Stations</span>
+                                                                </div>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                                        <div class="card-body">
+                                                            @Html.Partial("_DisposalDashboardTop")
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Marker Map -->
+                                            <div class="row">
+                                                <div class="panel panel-warning" style="margin-bottom:5px;">
+                                                    <div class="panel-heading">
+                                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                            <div class="portlet-title">
+                                                                <div class="caption font-dark">
+                                                                    <i class="font-dark"><img src="~/Assets/img/location1.png" style="width:28px;vertical-align:baseline; margin-right:5px;" /></i>
+                                                                    <span class="caption-subject bold uppercase" style="vertical-align:bottom;">Live Location of Disposal Stations</span>
+                                                                </div>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                                        <div class="card-body">
+                                                            @Html.Partial("_DisposalDashboardMid")
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- DataTable Row -->
+                                            <div class="row">
+                                                <div class="panel panel-success" style="margin-bottom:5px;">
+                                                    <div class="panel-heading">
+                                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                            <div class="portlet-title">
+                                                                <div class="caption font-dark">
+                                                                    <i class="font-dark"><img src="~/Assets/img/report1.png" style="width:28px;vertical-align:baseline; margin-right:5px;" /></i>
+                                                                    <span class="caption-subject bold uppercase" style="vertical-align:bottom;">Listing of All Available Disposal Stations</span>
+                                                                </div>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                                        <div class="card-body">
+                                                            @Html.Partial("_DisposalDashboardBottom")
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END PAGE CONTENT INNER -->
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT BODY -->
+                <!-- END CONTENT BODY -->
+            </div>
+            <!-- END CONTENT -->
+        </div>
+        <!-- END CONTAINER -->
+    </div>
+</div>
+
+<script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            $('#collapseTwo').collapse('show');
+            setTimeout(function () {
+                $('#collapseTwo').collapse('hide');
+            }, 500);
+        });
+    var markers = @Html.Raw(ViewBag.Markers);
+    window.onload = function () {
+
+        var mapOptions = {
+            center: new google.maps.LatLng(31.479379, 74.339339),
+            zoom: 11,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var infoWindow = new google.maps.InfoWindow();
+        var map = new google.maps.Map(document.getElementById("disposal_map"), mapOptions);
+        for (i = 0; i < markers.length; i++) {
+            var data = markers[i]
+            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            var iconcolor = "";
+			console.log(data.Delta);
+            if (parseInt(data.Delta) > 30) {
+                iconcolor = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=";
+                iconcolor = iconcolor + "";
+                iconcolor = iconcolor + " |FF0000|000000";
+            }
+            else {
+                iconcolor = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=";
+                iconcolor = iconcolor + "";
+                iconcolor = iconcolor + " |00FF00|000000";
+            }
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: data.category,
+                icon: { url: iconcolor, origin: { x: 0, y: 0 } }
+            });
+            var col = '';
+            var Status = false
+            if (data.ponding < 5) {
+                Status = true;
+                col = '#008000';
+            }
+            else if (data.ponding > 5 && data.ponding <20){
+                Status = false;
+                col = '#ffa500';
+            }
+                else {
+                col = '#FF0000';
+            }
+            var cityCircle = new google.maps.Circle({
+                cache: false,
+                strokeColor: col,
+                strokeOpacity: 1,
+                strokeWeight: 2,
+                fillColor: col,
+                fillOpacity: 0.5,
+                map: map,
+                title: data.category + "<br />" + data.time + "<br />" + data.ponding.toString(),
+                center: myLatlng,
+                radius: Math.sqrt((data.ponding * data.ponding * data.ponding)) * 100,
+            });
+            (function (marker, data) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    infoWindow.setContent("<center><b>" + data.category + "</b>" + "<br />Time: " + data.time + "<br />" + data.pName +": "+ data.ponding + " " + data.pUnit +  "</center>");
+                    infoWindow.open(map, marker);
+                });
+            })(marker, data);
+        }
+    }
+    </script>

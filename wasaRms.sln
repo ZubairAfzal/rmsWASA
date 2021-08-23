@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wasaRms.Web", "wasaRms\wasaRms.Web.csproj", "{E7124FEB-C3C6-4685-9F9D-73D971100B9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wasaRms.Common", "wasaRms.Common\wasaRms.Common.csproj", "{FB0A24F1-F2AB-40AE-843F-843197228FE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wasaRms.Models", "wasaRms.Models\wasaRms.Models.csproj", "{59EA2C21-2A24-4EE8-A4B7-F8C0C87F9553}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wasaRms.Service", "wasaRms.Services\wasaRms.Service.csproj", "{EC7245A9-C307-4B06-AC42-0BFFEF622F99}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7124FEB-C3C6-4685-9F9D-73D971100B9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7124FEB-C3C6-4685-9F9D-73D971100B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7124FEB-C3C6-4685-9F9D-73D971100B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7124FEB-C3C6-4685-9F9D-73D971100B9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB0A24F1-F2AB-40AE-843F-843197228FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB0A24F1-F2AB-40AE-843F-843197228FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB0A24F1-F2AB-40AE-843F-843197228FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB0A24F1-F2AB-40AE-843F-843197228FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59EA2C21-2A24-4EE8-A4B7-F8C0C87F9553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EA2C21-2A24-4EE8-A4B7-F8C0C87F9553}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EA2C21-2A24-4EE8-A4B7-F8C0C87F9553}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EA2C21-2A24-4EE8-A4B7-F8C0C87F9553}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC7245A9-C307-4B06-AC42-0BFFEF622F99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC7245A9-C307-4B06-AC42-0BFFEF622F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC7245A9-C307-4B06-AC42-0BFFEF622F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC7245A9-C307-4B06-AC42-0BFFEF622F99}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC0B696A-F5A3-41A2-B398-1499B585A3F1}
+	EndGlobalSection
+EndGlobal

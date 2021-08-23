@@ -1,0 +1,49 @@
+﻿@model IEnumerable<wasaRms.Models.tblResourceTypeParameter>
+
+@{
+    ViewBag.Title = "Index";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblParameter.parameterName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblResourceType.resourceTypeName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblCompany.companyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblParameter.parameterName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblResourceType.resourceTypeName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.resourceTypeParameterID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.resourceTypeParameterID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.resourceTypeParameterID })
+        </td>
+    </tr>
+}
+
+</table>

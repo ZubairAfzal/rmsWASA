@@ -1,0 +1,87 @@
+﻿@model IEnumerable<wasaRms.Models.tblSubResource>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.subResourceID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.subResourceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.subResourceLocationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.subResourceDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.subResourceCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.subResourceNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.subResourceGeoLocatin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.subResourceStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tblResource.resourceName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.subResourceID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.subResourceName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.subResourceLocationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.subResourceDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.subResourceCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.subResourceNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.subResourceGeoLocatin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.subResourceStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblCompany.companyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tblResource.resourceName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.resourceID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.resourceID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.resourceID })
+        </td>
+    </tr>
+}
+
+</table>

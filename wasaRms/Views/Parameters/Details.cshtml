@@ -1,0 +1,62 @@
+﻿@model wasaRms.Models.tblParameter
+
+@{
+    ViewBag.Title = "Details";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+<h2>Details</h2>
+
+<div>
+    <h4>tblParameter</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterUnit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterUnit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterMinThr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterMinThr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterMaxThr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterMaxThr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblCompany.companyName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.parameterID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

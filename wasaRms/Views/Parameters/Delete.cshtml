@@ -1,0 +1,68 @@
+﻿@model wasaRms.Models.tblParameter
+
+@{
+    ViewBag.Title = "Delete";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>tblParameter</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterUnit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterUnit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterMinThr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterMinThr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.parameterMaxThr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameterMaxThr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tblCompany.companyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tblCompany.companyName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "Tank Threshold";
+}
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+<link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" type="text/css" />
+<link href="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
+<link href="../assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="../assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="../assets/global/plugins/clockface/css/clockface.css" rel="stylesheet" type="text/css" />
+<link href="~/Assets/site.css" rel="stylesheet" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js" type="text/javascript"></script>
+
+
+<div class="page-wrapper-row full-height">
+    <div class="page-wrapper-middle">
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <!-- BEGIN PAGE HEAD-->
+                <div class="page-head">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="page-title" style="width:100%; padding:10px 0;">
+                                    <h1 style="color:white !important;">
+                                        Storage Tank Threshold 
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END PAGE TITLE -->
+                    </div>
+                </div>
+                <!-- END PAGE HEAD-->
+                <!-- BEGIN PAGE CONTENT BODY -->
+                <div class="page-content">
+                    <div class="container">
+                        <!-- BEGIN PAGE CONTENT INNER -->
+                        <div class="page-content-inner">
+                            <div class="row">
+                                <div class="col-lg-12 col-xs-12 col-sm-12">
+                                    <div class="portlet light bordered">
+                                        <div class="tabbable-line boxless tabbable-reversed">
+                                            <div class="tab-content from-data ">
+                                                <div class="tab-pane active">
+                                                    <div class="portlet box blue" style="border: none !important; background-color: white !important;">
+                                                        <div class="portlet-title">
+                                                            <div class="caption">
+                                                                <i class="fa icon-settings"></i>
+                                                                <span style="font-family:Open Sans,sans-serif;">Set Tank Threshold for Pumps Operation</span>
+                                                            </div>
+                                                        </div>
+                                                        @using (Html.BeginForm("TankThreshold", "StorageTank"))
+                                                        {
+                                                            <div class="row">
+                                                                <div class="widget stacked">
+                                                                    <div class="form-group">
+                                                                        <center>
+                                                                            <div class=" col-lg-12 col-xs-12 col-md-12 portlet light">
+                                                                                <div class="col-lg-offset-4 col-md-offset-3 col-lg-4 col-xs-12 col-md-6" style="text-align:center">
+                                                                                    @if (ViewBag.SelectedResource != null)
+                                                                                    {
+                                                                                        @Html.DropDownList("resource", new SelectList(ViewBag.ResourceList, ViewBag.SelectedResource), new { @class = "span6 form-control", @style = " color:black;" })
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        @Html.DropDownList("resource", new SelectList(ViewBag.ResourceList), new { @class = "span6 form-control", @style = " color:black;" })
+                                                                                    }
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class=" col-lg-12 col-xs-12 col-md-12 portlet light bordered">
+                                                                                <div class="col-lg-offset-2 col-md-offset-2 col-lg-2 col-xs-12 col-md-2" style="border-bottom: 1px solid #d9dde1;">
+                                                                                    <label class="form-control caption-subject bold uppercase" style="border:0px;">Threshold</label>
+                                                                                </div>
+                                                                                <div class="col-lg-offset-2 col-md-offset-2 col-lg-2 col-xs-12 col-md-2">
+                                                                                    <label class="form-control" style="border:0px">Value in ft:</label>
+                                                                                </div>
+                                                                                <div class="col-lg-2 col-xs-12 col-md-2">
+                                                                                    @if (ViewBag.threshold != null)
+                                                                                    {
+                                                                                        string abc = ViewBag.threshold.ToString();
+                                                                                        <select name="threshold" id="threshold" class="form-control" style="text-align:center !important">
+                                                                                            <option value="1" @if (abc == "1") { <text> selected="selected" </text> }>1</option>
+                                                                                            <option value="1.5" @if (abc == "1.5") { <text> selected="selected" </text> }>1.5</option>
+                                                                                            <option value="2" @if (abc == "2") { <text> selected="selected" </text> }>2</option>
+                                                                                            <option value="2.5" @if (abc == "2.5") { <text> selected="selected" </text> }>2.5</option>
+                                                                                            <option value="3" @if (abc == "3") { <text> selected="selected" </text> }>3</option>
+                                                                                            <option value="3.5" @if (abc == "3.5") { <text> selected="selected" </text> }>3.5</option>
+                                                                                            <option value="4" @if (abc == "4") { <text> selected="selected" </text> }>4</option>
+                                                                                            <option value="4.5" @if (abc == "4.5") { <text> selected="selected" </text> }>4.5</option>
+                                                                                            <option value="5" @if (abc == "5") { <text> selected="selected" </text> }>5</option>
+                                                                                            <option value="5.5" @if (abc == "5.5") { <text> selected="selected" </text> }>5.5</option>
+                                                                                            <option value="6" @if (abc == "6") { <text> selected="selected" </text> }>6</option>
+                                                                                            <option value="6.5" @if (abc == "6.5") { <text> selected="selected" </text> }>6.5</option>
+                                                                                            <option value="7" @if (abc == "7") { <text> selected="selected" </text> }>7</option>
+                                                                                            <option value="7.5" @if (abc == "7.5") { <text> selected="selected" </text> }>7.5</option>
+                                                                                            <option value="8" @if (abc == "8") { <text> selected="selected" </text> }>8</option>
+                                                                                            <option value="8.5" @if (abc == "8.5") { <text> selected="selected" </text> }>8.5</option>
+                                                                                            <option value="9" @if (abc == "9") { <text> selected="selected" </text> }>9</option>
+                                                                                            <option value="9.5" @if (abc == "9.5") { <text> selected="selected" </text> }>9.5</option>
+                                                                                            <option value="10" @if (abc == "10") { <text> selected="selected" </text> }>10</option>
+                                                                                            <option value="10.5" @if (abc == "10.5") { <text> selected="selected" </text> }>10.5</option>
+                                                                                            <option value="11" @if (abc == "11") { <text> selected="selected" </text> }>11</option>
+                                                                                            <option value="11.5" @if (abc == "11.5") { <text> selected="selected" </text> }>11.5</option>
+                                                                                            <option value="12" @if (abc == "12") { <text> selected="selected" </text> }>12</option>
+                                                                                            <option value="12.5" @if (abc == "12.5") { <text> selected="selected" </text> }>12.5</option>
+                                                                                            <option value="13" @if (abc == "13") { <text> selected="selected" </text> }>13</option>
+                                                                                            <option value="13.5" @if (abc == "13.5") { <text> selected="selected" </text> }>13.5</option>
+                                                                                            <option value="14" @if (abc == "14") { <text> selected="selected" </text> }>14</option>
+                                                                                            <option value="14.5" @if (abc == "14.5") { <text> selected="selected" </text> }>14.5</option>
+                                                                                            <option value="15" @if (abc == "15") { <text> selected="selected" </text> }>15</option>
+                                                                                            <option value="15.5" @if (abc == "15.5") { <text> selected="selected" </text> }>15.5</option>
+                                                                                            <option value="16" @if (abc == "16") { <text> selected="selected" </text> }>16</option>
+                                                                                        </select>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-12 col-xs-12 col-lg-12" style="margin-top:20px">
+                                                                                <button type="submit" class="btn-success" style="height: 40px;width: 200px;border-radius: 5px !important;">
+                                                                                    Update
+                                                                                </button>
+                                                                            </div>
+                                                                        </center>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <!-- END EXAMPLE TABLE PORTLET-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END PAGE CONTENT INNER -->
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT BODY -->
+                <!-- END CONTENT BODY -->
+            </div>
+            <!-- END CONTENT -->
+        </div>
+        <!-- END CONTAINER -->
+    </div>
+</div>
+
+
+

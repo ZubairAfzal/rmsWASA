@@ -1,0 +1,10 @@
+MYSQL STRESS TESTING
+
+1. Connections (Maximum number of connections)
+2. Caching capability (For respondig with cache version of data)
+3. Connections per user (should be 1)
+4. Optimization of DB
+5. Machine Capability (Architecture, Cores, Threads)
+6. RAM (Allocated to Machine)
+7. Memory per connection (Allocation of RAM per connection)
+8. Response time (Must be carefully selected, more the worse)
