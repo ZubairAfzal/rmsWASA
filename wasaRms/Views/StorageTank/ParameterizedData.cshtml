@@ -1,6 +1,197 @@
 ﻿﻿@using System.Data;
 @using System.Data.SqlClient;
 @using Newtonsoft.Json;
+@model IEnumerable<StorageParameterChartClass>
+
+<style>
+    .chartdiv {
+        height: 500px;
+    }
+
+    #eee;
+    float: left;
+    }
+
+    #legend1 {
+        width: 330px;
+        height: 450px;
+        border: 1px solid #eee;
+        margin-left: 10px;
+        float: left;
+        text-align: left;
+    }
+
+        #legend1 .legend1-item {
+            margin: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 330px !important;
+            text-align: left;
+        }
+
+            #legend1 .legend1-item .legend1-value {
+                font-size: 11px;
+                font-weight: normal;
+                margin-left: 10px;
+            }
+
+            #legend1 .legend1-item .legend1-marker {
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                border: 1px solid #ccc;
+                margin-right: 10px;
+            }
+
+            #legend1 .legend1-item.disabled .legend1-marker {
+                opacity: 0.5;
+                background: #ddd;
+            }
+
+
+
+    #legend2 {
+        width: 250px;
+        height: 450px;
+        border: none;
+        margin-left: 10px;
+        text-align: center;
+    }
+
+        #legend2 .legend2-item {
+            margin: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            #legend2 .legend2-item .legend2-value {
+                font-size: 12px;
+                font-weight: normal;
+                margin-left: 22px;
+            }
+
+            #legend2 .legend2-item .legend2-marker {
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                border: 1px solid #ccc;
+                margin-right: 10px;
+            }
+
+            #legend2 .legend2-item.disabled .legend2-marker {
+                opacity: 0.5;
+                background: #ddd;
+            }
+
+
+    #legend3 {
+        width: 250px;
+        height: 450px;
+        border: none;
+        margin-left: 10px;
+        text-align: center;
+    }
+
+        #legend3 .legend3-item {
+            margin: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            #legend3 .legend3-item .legend3-value {
+                font-size: 12px;
+                font-weight: normal;
+                margin-left: 22px;
+            }
+
+            #legend3 .legend3-item .legend3-marker {
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                border: 1px solid #ccc;
+                margin-right: 10px;
+            }
+
+            #legend3 .legend3-item.disabled .legend3-marker {
+                opacity: 0.5;
+                background: #ddd;
+            }
+
+
+    #legend4 {
+        width: 260px;
+        height: 450px;
+        border: none;
+        margin-left: 10px;
+        text-align: center;
+    }
+
+        #legend4 .legend4-item {
+            margin: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+            #legend4 .legend4-item .legend4-value {
+                font-size: 12px;
+                font-weight: normal;
+                margin-left: 22px;
+            }
+
+            #legend4 .legend4-item .legend4-marker {
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                border: 1px solid #ccc;
+                margin-right: 10px;
+            }
+
+            #legend4 .legend4-item.disabled .legend4-marker {
+                opacity: 0.5;
+                background: #ddd;
+            }
+
+    #legend5 {
+        width: 250px;
+        height: 450px;
+        border: none;
+        margin-left: 10px;
+        float: left;
+        text-align: left;
+    }
+
+        #legend5 .legend5-item {
+            margin: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 330px;
+        }
+
+            #legend5 .legend5-item .legend5-value {
+                font-size: 12px;
+                font-weight: normal;
+                margin-left: 22px;
+            }
+
+            #legend5 .legend5-item .legend5-marker {
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                border: 1px solid #ccc;
+                margin-right: 10px;
+            }
+
+            #legend5 .legend5-item.disabled .legend5-marker {
+                opacity: 0.5;
+                background: #ddd;
+            }
+</style>
+
 @{
     ViewBag.Title = "Storage Tank | Parameterwise Report";
 }
@@ -88,7 +279,7 @@
                                                                             </div>
                                                                             <div class="col-md-2">
                                                                                 <div style="margin-bottom: 15px">
-                                                                                    <label style="margin-top: 1px; font-weight: 400; float:left;">Location Name:</label>
+                                                                                    <label style="margin-top: 1px; font-weight: 400; float:left;">Parameter:</label>
                                                                                     @if (ViewBag.SelectedParameter != null)
                                                                                     {
                                                                                         @Html.DropDownList("parameter", new SelectList(ViewBag.ParameterList, ViewBag.SelectedParameter), new { @class = "form-control", @style = "color:black;" })
@@ -226,9 +417,9 @@
                                                                                 </div>
                                                                             </div>
                                                                             @*
-        <div class="col-md-1">
-           <label class="form-control" style="border:0px">To</label>
-        </div>
+                                                                                <div class="col-md-1">
+                                                                                   <label class="form-control" style="border:0px">To</label>
+                                                                                </div>
                                                                             *@
                                                                             <div class="col-md-2">
                                                                                 <div style="margin-bottom: 15px">
@@ -380,12 +571,169 @@
                                                     <div id="chartContainer1" style="width: 95%; height: 500px"></div>
                                                 </center>
                                             </div>
+                                            <div style="opacity: 0.99; margin: 0px !important; background: white; min-height: 525px !important;">
+                                                <center>
+                                                    @if (Model.First().parameterName == "P1 Status" ||
+                                                        Model.First().parameterName == "P2 Status" ||
+                                                        Model.First().parameterName == "P3 Status" ||
+                                                        Model.First().parameterName == "P4 Status" ||
+                                                        Model.First().parameterName == "P1 Mode" ||
+                                                        Model.First().parameterName == "P2 Mode" ||
+                                                        Model.First().parameterName == "P3 Mode" ||
+                                                        Model.First().parameterName == "P4 Mode")
+                                                    {
+
+
+                                                        <div class="col-md-4 col-sm-12 col-lg-4 chartdiv">
+
+                                                            <div id="chartdiv1" style="display:block !important; height:300px !important; width: auto"></div>
+                                                            <div id="legend1" style="display:block !important; height:100px !important"></div>
+                                                        </div>
+
+                                                        <div class="col-md-4 col-sm-12 col-lg-4 chartdiv">
+
+                                                            <div id="chartdiv2" style="display:block !important; height:300px !important; width: auto"></div>
+                                                            <div id="legend2" style="display:block !important; height:100px !important"></div>
+                                                        </div>
+
+                                                        <div class="col-md-4 col-sm-12 col-lg-4 chartdiv">
+
+                                                            <div id="chartdiv3" style="display:block !important; height:300px !important; width: auto"></div>
+                                                            <div id="legend3" style="display:block !important; height:100px !important"></div>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv4" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv5" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv6" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv7" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9" style="display:none !important"></div>
+
+                                                    }
+                                                    else if (Model.First().parameterName == "V12 (V)" ||
+                                                        Model.First().parameterName == "V13 (V)" ||
+                                                        Model.First().parameterName == "V23 (V)" ||
+                                                        Model.First().parameterName == "V1N (V)" ||
+                                                        Model.First().parameterName == "V2N (V)" ||
+                                                        Model.First().parameterName == "V3N (V)" ||
+                                                        Model.First().parameterName == "I1 (A)" ||
+                                                        Model.First().parameterName == "I2 (A)" ||
+                                                        Model.First().parameterName == "I3 (A)" ||
+                                                        Model.First().parameterName == "Power Factor" ||
+                                                        Model.First().parameterName == "PKVA" ||
+                                                        Model.First().parameterName == "PKW" ||
+                                                        Model.First().parameterName == "PKVAR" ||
+                                                        Model.First().parameterName == "VA-SM" ||
+                                                        Model.First().parameterName == "V1 THD (%)" ||
+                                                        Model.First().parameterName == "V1 THD (%)" ||
+                                                        Model.First().parameterName == "V1 THD (%)")
+                                                    {
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv3" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv4" style="display:none !important"></div>
+                                                        <div class="col-md-8 col-sm-12 col-lg-8 chartdiv">
+                                                            <div id="chartdiv5" style="display:block !important; height:400px !important; width: auto"></div>
+                                                            <div id="legend5" style="display:block !important; height:100px !important; float: none !important"></div>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-12 col-lg-4 chartdiv" id="chartdiv6"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv7" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9" style="display:none !important"></div>
+                                                    }
+                                                    else if (Model.First().parameterName == "Voltage Trip" ||
+                                                        Model.First().parameterName == "Current Trip" ||
+                                                        Model.First().parameterName == "Priming Level" ||
+                                                        Model.First().parameterName == "Chlorine Level" ||
+                                                        Model.First().parameterName == "Indoor Lights" ||
+                                                        Model.First().parameterName == "Outdoor Lights" ||
+                                                        Model.First().parameterName == "Exhaust Fan")
+                                                    {
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv3" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv4" style="display:none !important"></div>
+                                                        <div class="col-md-12 col-sm-12 col-lg-12 chartdiv">
+
+                                                            <div id="chartdiv5" style="display:block !important; height:400px !important; width: auto"></div>
+                                                            <div id="legend5" style="display:block !important; height:100px !important; float: none !important"></div>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv6" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv7" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9" style="display:none !important"></div>
+                                                    }
+                                                    else if (Model.First().parameterName == "Vibration Velocity in (mm/s)")
+                                                    {
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv3" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv4" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv5" style="display:none !important"></div>
+                                                        <div class="col-md-12 col-sm-12 col-lg-12 chartdiv" id="chartdiv6"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv7" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9" style="display:none !important"></div>
+                                                    }
+                                                    else if (Model.First().parameterName == "Vibration Acceleration in (m/s2)")
+                                                    {
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv3" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv4" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv5" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv6" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv7" style="display:none !important"></div>
+                                                        <div class="col-md-12 col-sm-12 col-lg-12 chartdiv" id="chartdiv8"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9" style="display:none !important"></div>
+                                                    }
+                                                    else if (Model.First().parameterName == "Vibration Displacement in (um)")
+                                                    {
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv3" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv4" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv5" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv6" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv7" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8" style="display:none !important"></div>
+                                                        <div class="col-md-12 col-sm-12 col-lg-12 chartdiv" id="chartdiv9"></div>
+                                                    }
+                                                    else if (Model.First().parameterName == "Frequency" || Model.First().parameterName == "Tank Level (ft)")
+                                                    {
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv3" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv4" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv5" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv6" style="display:none !important"></div>
+                                                        <div class="col-md-12 col-sm-12 col-lg-12 chartdiv" id="chartdiv7"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9" style="display:none !important"></div>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv3"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv4"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv5"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv6"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv7"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9"></div>
+                                                    }
+                                                </center>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- END PAGE CONTENT INNER -->
+                        
                     </div>
                 </div>
                 <!-- END PAGE CONTENT BODY -->
@@ -435,4 +783,503 @@
         </script>
     </section>
 }
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script>
+    am4core.ready(function () {
 
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart1 = am4core.create("chartdiv1", am4charts.PieChart);
+        var chart2 = am4core.create("chartdiv2", am4charts.PieChart);
+        var chart3 = am4core.create("chartdiv3", am4charts.PieChart);
+        var chart4 = am4core.create("chartdiv4", am4charts.PieChart);
+
+        var chart5 = am4core.create("chartdiv5", am4charts.PieChart);
+        var chart6 = am4core.create("chartdiv6", am4charts.PieChart);
+        var chart7 = am4core.create("chartdiv7", am4charts.PieChart);
+
+        var chart8 = am4core.create("chartdiv8", am4charts.PieChart);
+        var chart9 = am4core.create("chartdiv9", am4charts.PieChart);
+
+		chart1.data = [{
+		"mode": "Working Hours",
+		"Hours": @Model.First().workingInHours
+		}, {
+		"mode": "Non-Working Hours",
+		"Hours": @Model.First().nonWorkingInHours
+		}, {
+		"mode": "Total Hours",
+		"Hours": @Model.First().totalHours
+		}];
+
+
+		var pieSeries1 = chart1.series.push(new am4charts.PieSeries());
+		pieSeries1.dataFields.value = "Hours";
+		pieSeries1.dataFields.category = "mode";
+		//pieSeries1.labels.template.disabled = true;
+		pieSeries1.alignLabels = false;
+        pieSeries1.labels.template.bent = true;
+        pieSeries1.labels.template.radius = 3;
+        pieSeries1.labels.template.padding(0, 0, 0, 0);
+		//pieSeries2.ticks.template.disabled = true;
+		pieSeries1.labels.template.text = "{category}: {value.value}";
+        pieSeries1.slices.template.tooltipText = "{category}: {value.value}";
+		chart1.innerRadius = am4core.percent(30);
+
+		// Create custom legend
+		chart1.events.on("ready", function(event) {
+		  // populate our custom legend when chart renders
+		  chart1.customLegend = document.getElementById('legend1');
+		  pieSeries1.dataItems.each(function(row, i) {
+			var color = chart1.colors.getIndex(i);
+			var percent = Math.round(row.values.value.percent * 100) / 100;
+			var value = row.value;
+			legend1.innerHTML += '<div class="legend1-item" id="legend1-item-' + i + '" onclick="toggleSlice(' + i + ');" onmouseover="hoverSlice(' + i + ');" onmouseout="blurSlice(' + i + ');" style="color: ' + color + ';"><div class="legend1-marker" style="background: ' + color + '"></div>' + row.category + ': ' + hoursToTime(value) + ' </div>';
+		  });
+		});
+
+		function toggleSlice(item) {
+		  var slice = pieSeries.dataItems.getIndex(item);
+		  if (slice.visible) {
+			slice.hide();
+		  }
+		  else {
+			slice.show();
+		  }
+		}
+
+		function hoverSlice(item) {
+		  var slice = pieSeries.slices.getIndex(item);
+		  slice.isHover = true;
+		}
+
+		function blurSlice(item) {
+		  var slice = pieSeries.slices.getIndex(item);
+		  slice.isHover = false;
+		}
+		function hoursToTime(num) {
+            //console.log(num);
+            num = num * 60;
+            var hours = Math.floor(num / 60);
+            var minutes = Math.round(num % 60);
+            return hours + " Hours, " + minutes + " Minutes";
+        }
+
+
+		chart2.data = [{
+            "mode": "Working Hours in Manual",
+            "Hours": @Model.First().workingInHoursManual
+        }, {
+            "mode": "Total Hours",
+            "Hours": @Model.First().totalHours
+        }];
+
+
+		var pieSeries2 = chart2.series.push(new am4charts.PieSeries());
+		pieSeries2.dataFields.value = "Hours";
+		pieSeries2.dataFields.category = "mode";
+		//pieSeries1.labels.template.disabled = true;
+		pieSeries2.alignLabels = false;
+        pieSeries2.labels.template.bent = true;
+        pieSeries2.labels.template.radius = 3;
+        pieSeries2.labels.template.padding(0, 0, 0, 0);
+		//pieSeries2.ticks.template.disabled = true;
+		pieSeries2.labels.template.text = "{category}: {value.value}";
+        pieSeries2.slices.template.tooltipText = "{category}: {value.value}";
+		chart2.innerRadius = am4core.percent(30);
+
+		// Create custom legend
+		chart2.events.on("ready", function(event) {
+		  // populate our custom legend when chart renders
+		  chart2.customLegend = document.getElementById('legend1');
+		  pieSeries2.dataItems.each(function(row, i) {
+			var color = chart2.colors.getIndex(i);
+			var percent = Math.round(row.values.value.percent * 100) / 100;
+			var value = row.value;
+			legend2.innerHTML += '<div class="legend2-item" id="legend2-item-' + i + '" onclick="toggleSlice(' + i + ');" onmouseover="hoverSlice(' + i + ');" onmouseout="blurSlice(' + i + ');" style="color: ' + color + ';"><div class="legend2-marker" style="background: ' + color + '"></div>' + row.category + '<div class="legend2-value">' + hoursToTime(value) + ' </div></div>';
+		  });
+		});
+
+
+		chart3.data = [{
+            "mode": "Working Hours in Auto",
+            "Hours": @Model.First().workingInHoursRemote
+        }, {
+            "mode": "Total Hours",
+            "Hours": @Model.First().totalHours
+        }];
+
+
+		var pieSeries3 = chart3.series.push(new am4charts.PieSeries());
+		pieSeries3.dataFields.value = "Hours";
+		pieSeries3.dataFields.category = "mode";
+		//pieSeries1.labels.template.disabled = true;
+		pieSeries3.alignLabels = false;
+        pieSeries3.labels.template.bent = true;
+        pieSeries3.labels.template.radius = 3;
+        pieSeries3.labels.template.padding(0, 0, 0, 0);
+		//pieSeries3.ticks.template.disabled = true;
+		pieSeries3.labels.template.text = "{category}: {value.value}";
+        pieSeries3.slices.template.tooltipText = "{category}: {value.value}";
+		chart3.innerRadius = am4core.percent(30);
+
+		// Create custom legend
+		chart3.events.on("ready", function(event) {
+		  // populate our custom legend when chart renders
+		  chart3.customLegend = document.getElementById('legend1');
+		  pieSeries3.dataItems.each(function(row, i) {
+			var color = chart3.colors.getIndex(i);
+			var percent = Math.round(row.values.value.percent * 100) / 100;
+			var value = row.value;
+			legend3.innerHTML += '<div class="legend3-item" id="legend3-item-' + i + '" onclick="toggleSlice(' + i + ');" onmouseover="hoverSlice(' + i + ');" onmouseout="blurSlice(' + i + ');" style="color: ' + color + ';"><div class="legend3-marker" style="background: ' + color + '"></div>' + row.category + '<div class="legend3-value">' + hoursToTime(value) + ' </div></div>';
+		  });
+		});
+
+
+        chart4.data = [{
+            "mode": "Working Hours in Scheduling",
+            "Hours": @Model.First().workingInHoursScheduling
+        }, {
+            "mode": "Total Hours",
+            "Hours": @Model.First().totalHours
+        }];
+
+
+		var pieSeries4 = chart4.series.push(new am4charts.PieSeries());
+		pieSeries4.dataFields.value = "Hours";
+		pieSeries4.dataFields.category = "mode";
+		//pieSeries1.labels.template.disabled = true;
+		pieSeries4.alignLabels = false;
+        pieSeries4.labels.template.bent = true;
+        pieSeries4.labels.template.radius = 3;
+        pieSeries4.labels.template.padding(0, 0, 0, 0);
+		//pieSeries4.ticks.template.disabled = true;
+		pieSeries4.labels.template.text = "{category}: {value.value}";
+        pieSeries4.slices.template.tooltipText = "{category}: {value.value}";
+		chart4.innerRadius = am4core.percent(30);
+
+		// Create custom legend
+		chart4.events.on("ready", function(event) {
+		  // populate our custom legend when chart renders
+		  chart4.customLegend = document.getElementById('legend1');
+		  pieSeries4.dataItems.each(function(row, i) {
+			var color = chart4.colors.getIndex(i);
+			var percent = Math.round(row.values.value.percent * 100) / 100;
+			var value = row.value;
+			legend4.innerHTML += '<div class="legend4-item" id="legend4-item-' + i + '" onclick="toggleSlice(' + i + ');" onmouseover="hoverSlice(' + i + ');" onmouseout="blurSlice(' + i + ');" style="color: ' + color + ';"><div class="legend4-marker" style="background: ' + color + '"></div>' + row.category + '<div class="legend4-value">' + hoursToTime(value) + ' </div></div>';
+		  });
+		});
+
+
+        @*chart5 = AmCharts.makeChart("chartdiv5", {
+            "type": "pie",
+            "theme": "light",
+            "legend": {
+                "position": "bottom",
+                "marginBottom": 50,
+                "marginLeft": 70,
+                "autoMargins": false
+            },
+            "dataProvider": [{ "title": "Available Hours", "value": @Model.First().availableHours, "Color": "#67b7dc" }, { "title": "Non-Available Hours", "value": 8, "Color": "orange" }, { "title": "Total Hours", "value": @Model.First().totalHours, "Color": "green" }],
+            "valueField": "value",
+            "titleField": "title",
+            "colorField": "Color",
+            "balloon": {
+                "fixedPosition": true
+            },
+            "export": {
+                "enabled": true
+            },
+            "listeners": [{
+                "event": "clickSlice",
+                "method": function (e) {
+                    var dp = e.dataItem.dataContext;
+                    var title = dp.title;
+                    if (title == "Operations") {
+                        location.href = "https://wasacms.pitb.gov.pk/complaint/0/0/1";
+                    } else if (title == "Revenue") {
+                        location.href = "https://wasacms.pitb.gov.pk/complaint/0/0/2";
+                    }
+                }
+            }]
+        });*@
+
+        chart5.data = [{
+            "mode": "Available Hours",
+            "Hours": @Model.First().availableHours
+        }, {
+            "mode": "Non-Available Hours",
+            "Hours": @Model.First().nonAvailableHours
+        }, {
+		"mode": "Total Hours",
+		"Hours": @Model.First().totalHours
+		}];
+
+
+		var pieSeries5 = chart5.series.push(new am4charts.PieSeries());
+		pieSeries5.dataFields.value = "Hours";
+		pieSeries5.dataFields.category = "mode";
+		//pieSeries1.labels.template.disabled = true;
+		//pieSeries5.alignLabels = false;
+        //pieSeries5.labels.template.bent = true;
+        //pieSeries5.labels.template.radius = 3;
+        //pieSeries5.labels.template.padding(0, 0, 0, 0);
+		//pieSeries5.ticks.template.disabled = true;
+		pieSeries5.labels.template.text = "{category}: {value.value}";
+        pieSeries5.slices.template.tooltipText = "{category}: {value.value}";
+		chart5.innerRadius = am4core.percent(30);
+
+		// Create custom legend
+		chart5.events.on("ready", function(event) {
+		  // populate our custom legend when chart renders
+		  chart5.customLegend = document.getElementById('legend1');
+		  pieSeries5.dataItems.each(function(row, i) {
+			var color = chart5.colors.getIndex(i);
+			var percent = Math.round(row.values.value.percent * 100) / 100;
+			var value = row.value;
+			legend5.innerHTML += '<div class="legend5-item" id="legend5-item-' + i + '" onclick="toggleSlice(' + i + ');" onmouseover="hoverSlice(' + i + ');" onmouseout="blurSlice(' + i + ');" style="color: ' + color + ';"><div class="legend5-marker" style="background: ' + color + '"></div>' + row.category + ':  ' + hoursToTime(value) + ' </div>';
+		  });
+		});
+
+
+        var pieSeries6 = chart6.series.push(new am4charts.PieSeries());
+        pieSeries6.dataFields.value = "Hours";
+        pieSeries6.dataFields.category = "mode";
+
+        // Let's cut a hole in our Pie chart the size of 30% the radius
+        chart6.innerRadius = am4core.percent(30);
+
+
+        // Put a thick white border around each Slice
+        pieSeries6.slices.template.stroke = am4core.color("#fff");
+        pieSeries6.slices.template.strokeWidth = 2;
+        pieSeries6.slices.template.strokeOpacity = 1;
+        pieSeries6.slices.template
+            // change the cursor on hover to make it apparent the object can be interacted with
+            .cursorOverStyle = [
+                {
+                    "property": "cursor",
+                    "value": "pointer"
+                }
+            ];
+
+        pieSeries6.alignLabels = false;
+        pieSeries6.labels.template.bent = true;
+        pieSeries6.labels.template.radius = 3;
+        pieSeries6.labels.template.padding(0, 0, 0, 0);
+
+        pieSeries6.ticks.template.disabled = true;
+
+        pieSeries6.labels.template.text = "{category} {value.value}";
+        pieSeries6.slices.template.tooltipText = "{category} {value.value}";
+
+        // Create a base filter effect (as if it's not there) for the hover to return to
+        var shadow6 = pieSeries6.slices.template.filters.push(new am4core.DropShadowFilter);
+        shadow6.opacity = 0;
+
+        // Create hover state
+        var hoverState6 = pieSeries6.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
+
+        // Slightly shift the shadow and make it more prominent on hover
+        var hoverShadow6 = hoverState6.filters.push(new am4core.DropShadowFilter);
+        hoverShadow6.opacity = 0.7;
+        hoverShadow6.blur = 5;
+
+        // Add a legend
+        chart6.legend = new am4charts.Legend();
+
+        chart6.legend.valueLabels.template.text = "{value.value}";
+
+        chart6.data = [{
+            "mode": "Average @Model.First().parameterName of Working Hours: ",
+            "Hours": @Model.First().avgOfAvailableHours
+        }, {
+            "mode": "Average @Model.First().parameterName of Non-Working Hours: ",
+            "Hours": @Model.First().avgOfNonAvailableHours
+        }];
+
+
+        var pieSeries7 = chart7.series.push(new am4charts.PieSeries());
+        pieSeries7.dataFields.value = "Hours";
+        pieSeries7.dataFields.category = "mode";
+
+        // Let's cut a hole in our Pie chart the size of 30% the radius
+        chart7.innerRadius = am4core.percent(30);
+
+
+        // Put a thick white border around each Slice
+        pieSeries7.slices.template.stroke = am4core.color("#fff");
+        pieSeries7.slices.template.strokeWidth = 2;
+        pieSeries7.slices.template.strokeOpacity = 1;
+        pieSeries7.slices.template
+            // change the cursor on hover to make it apparent the object can be interacted with
+            .cursorOverStyle = [
+                {
+                    "property": "cursor",
+                    "value": "pointer"
+                }
+            ];
+
+        pieSeries7.alignLabels = false;
+        pieSeries7.labels.template.bent = true;
+        pieSeries7.labels.template.radius = 3;
+        pieSeries7.labels.template.padding(0, 0, 0, 0);
+
+        pieSeries7.ticks.template.disabled = true;
+
+        pieSeries7.labels.template.text = "{category} {value.value}";
+        pieSeries7.slices.template.tooltipText = "{category} {value.value}";
+
+        // Create a base filter effect (as if it's not there) for the hover to return to
+        var shadow7 = pieSeries7.slices.template.filters.push(new am4core.DropShadowFilter);
+        shadow7.opacity = 0;
+
+        // Create hover state
+        var hoverState7 = pieSeries7.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
+
+        // Slightly shift the shadow and make it more prominent on hover
+        var hoverShadow7 = hoverState7.filters.push(new am4core.DropShadowFilter);
+        hoverShadow7.opacity = 0.7;
+        hoverShadow7.blur = 5;
+
+        // Add a legend
+        chart7.legend = new am4charts.Legend();
+
+        chart7.legend.valueLabels.template.text = "{value.value}";
+
+        chart7.data = [{
+            "mode": "Minimun @Model.First().parameterName: ",
+            "Hours": @Model.First().minValue
+        }, {
+            "mode": "Maximum @Model.First().parameterName: ",
+            "Hours": @Model.First().maxValue
+        }, {
+            "mode": "Average @Model.First().parameterName: ",
+            "Hours": @Model.First().avgVale
+        }];
+
+
+        var pieSeries8 = chart8.series.push(new am4charts.PieSeries());
+        pieSeries8.dataFields.value = "Hours";
+        pieSeries8.dataFields.category = "mode";
+
+        // Let's cut a hole in our Pie chart the size of 30% the radius
+        chart8.innerRadius = am4core.percent(30);
+
+
+        // Put a thick white border around each Slice
+        pieSeries8.slices.template.stroke = am4core.color("#fff");
+        pieSeries8.slices.template.strokeWidth = 2;
+        pieSeries8.slices.template.strokeOpacity = 1;
+        pieSeries8.slices.template
+            // change the cursor on hover to make it apparent the object can be interacted with
+            .cursorOverStyle = [
+                {
+                    "property": "cursor",
+                    "value": "pointer"
+                }
+            ];
+
+        pieSeries8.alignLabels = false;
+        pieSeries8.labels.template.bent = true;
+        pieSeries8.labels.template.radius = 3;
+        pieSeries8.labels.template.padding(0, 0, 0, 0);
+
+        pieSeries8.ticks.template.disabled = true;
+
+        pieSeries8.labels.template.text = "{category} {value.value}";
+        pieSeries8.slices.template.tooltipText = "{category} {value.value}";
+
+        // Create a base filter effect (as if it's not there) for the hover to return to
+        var shadow8 = pieSeries8.slices.template.filters.push(new am4core.DropShadowFilter);
+        shadow8.opacity = 0;
+
+        // Create hover state
+        var hoverState8 = pieSeries8.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
+
+        // Slightly shift the shadow and make it more prominent on hover
+        var hoverShadow8 = hoverState8.filters.push(new am4core.DropShadowFilter);
+        hoverShadow8.opacity = 0.7;
+        hoverShadow8.blur = 5;
+
+        // Add a legend
+        chart8.legend = new am4charts.Legend();
+
+        chart8.legend.valueLabels.template.text = "{value.value}";
+
+        chart8.data = [{
+            "mode": "Average @Model.First().parameterName of Working Hours: ",
+            "Hours": @Math.Round((Model.First().avgOfAvailableHours * 0.3), 2)
+        }, {
+            "mode": "Average @Model.First().parameterName of Non-Working Hours: ",
+            "Hours": @Math.Round((Model.First().avgOfNonAvailableHours * 0.3), 2)
+        }];
+
+
+        var pieSeries9 = chart9.series.push(new am4charts.PieSeries());
+        pieSeries9.dataFields.value = "Hours";
+        pieSeries9.dataFields.category = "mode";
+
+        // Let's cut a hole in our Pie chart the size of 30% the radius
+        chart9.innerRadius = am4core.percent(30);
+
+
+        // Put a thick white border around each Slice
+        pieSeries9.slices.template.stroke = am4core.color("#fff");
+        pieSeries9.slices.template.strokeWidth = 2;
+        pieSeries9.slices.template.strokeOpacity = 1;
+        pieSeries9.slices.template
+            // change the cursor on hover to make it apparent the object can be interacted with
+            .cursorOverStyle = [
+                {
+                    "property": "cursor",
+                    "value": "pointer"
+                }
+            ];
+
+        pieSeries9.alignLabels = false;
+        pieSeries9.labels.template.bent = true;
+        pieSeries9.labels.template.radius = 3;
+        pieSeries9.labels.template.padding(0, 0, 0, 0);
+
+        pieSeries9.ticks.template.disabled = true;
+
+        pieSeries9.labels.template.text = "{category} {value.value}";
+        pieSeries9.slices.template.tooltipText = "{category} {value.value}";
+
+        // Create a base filter effect (as if it's not there) for the hover to return to
+        var shadow9 = pieSeries9.slices.template.filters.push(new am4core.DropShadowFilter);
+        shadow9.opacity = 0;
+
+        // Create hover state
+        var hoverState9 = pieSeries9.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
+
+        // Slightly shift the shadow and make it more prominent on hover
+        var hoverShadow9 = hoverState9.filters.push(new am4core.DropShadowFilter);
+        hoverShadow9.opacity = 0.7;
+        hoverShadow9.blur = 5;
+
+        // Add a legend
+        chart9.legend = new am4charts.Legend();
+
+        chart9.legend.valueLabels.template.text = "{value.value}";
+
+        chart9.data = [{
+            "mode": "Average @Model.First().parameterName of Working Hours: ",
+            "Hours": @Math.Round((Model.First().avgOfAvailableHours / 0.3), 2)
+        }, {
+            "mode": "Average @Model.First().parameterName of Non-Working Hours: ",
+            "Hours": @Math.Round((Model.First().avgOfNonAvailableHours / 0.3), 2)
+        }];
+
+
+
+
+
+    }); // end am4core.ready()
+</script>

@@ -1408,6 +1408,7 @@ namespace wasaRms.Controllers
             rmsWasa01Entities db = new rmsWasa01Entities();
             IList<string> parameterList = new List<string>();
             IList<string> resourceList = new List<string>();
+            DataTable dtVal = new DataTable();
             string paramsListQuery = "select p.parameterDescription from tblParameter p inner join tblResourceTypeParameter tp on tp.parameterID = p.ParameterID where tp.resourceTypeID = 1002 order by p.parameterMaxThr";
             using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
@@ -1480,20 +1481,51 @@ namespace wasaRms.Controllers
                         foreach (DataRow drPar in dtPar.Rows)
                         {
                             //string parName = drPar["parameterName"].ToString();
-                            string aquery = ";WITH CTE AS ( ";
-                            aquery += "SELECT e.parameterID, e.parameterValue, e.sheetInsertionDateTime,  ";
-                            aquery += " RN = ROW_NUMBER() OVER(PARTITION BY e.parameterID ";
-                            aquery += "ORDER BY e.sheetInsertionDateTime DESC) ";
-                            aquery += "FROM tblSheet e ";
-                            aquery += "inner join tblResource r on e.resourceID = r.resourceID ";
-                            aquery += "WHERE e.resourceID = " + Convert.ToInt32(drPar["resourceID"]) + " and e.parameterValue >= 0 and e.parameterID = " + Convert.ToInt32(drRes["parameterID"]) + " ";
-                            //aquery += " and e.sheetInsertionDateTime >= DATEADD(day,-2,GETDATE()) ";
-                            aquery += " and e.sheetInsertionDateTime >= CONVERT(CHAR(24), CONVERT(DATETIME, '" + fromDt + "', 103), 121) ";
-                            aquery += ") ";
-                            aquery += "SELECT top 144000 parameterID, parameterValue, sheetInsertionDateTime FROM CTE WHERE RN < 144001 Order by sheetInsertionDateTime ASC";
+                            //string aquery = ";WITH CTE AS ( ";
+                            //aquery += "SELECT e.parameterID, e.parameterValue, e.sheetInsertionDateTime,  ";
+                            //aquery += " RN = ROW_NUMBER() OVER(PARTITION BY e.parameterID ";
+                            //aquery += "ORDER BY e.sheetInsertionDateTime DESC) ";
+                            //aquery += "FROM tblSheet e ";
+                            //aquery += "inner join tblResource r on e.resourceID = r.resourceID ";
+                            //aquery += "WHERE e.resourceID = " + Convert.ToInt32(drPar["resourceID"]) + " and e.parameterValue >= 0 and e.parameterID IN (1026,1027,1028,1029,1030,1031,1032,1033, " + Convert.ToInt32(drRes["parameterID"]) + " )";
+                            ////aquery += " and e.sheetInsertionDateTime >= DATEADD(day,-2,GETDATE()) ";
+                            //aquery += " and e.sheetInsertionDateTime >= CONVERT(CHAR(24), CONVERT(DATETIME, '" + fromDt + "', 103), 121) and e.sheetInsertionDateTime <= CONVERT(CHAR(24), CONVERT(DATETIME, '" + toDt + "', 103), 121) ";
+                            //aquery += ") ";
+                            //aquery += "SELECT top 144000 parameterID, parameterValue, sheetInsertionDateTime FROM CTE WHERE RN < 144001 Order by sheetInsertionDateTime ASC";
+
+                            string aquery = "";
+                            aquery += " WITH cte AS(";
+                            aquery += " SELECT * FROM";
+                            aquery += " (";
+                            aquery += " SELECT DISTINCT r.resourceName AS Location,";
+                            aquery += " r.ResourceID, p.parameterDescription AS pID,";
+                            aquery += " CAST(s.ParameterValue AS NUMERIC(18, 2)) AS pVal,";
+                            aquery += " s.sheetInsertionDateTime as tim";
+                            aquery += " FROM tblSheet s";
+                            aquery += " inner join tblResource r on s.ResourceID = r.ResourceID";
+                            aquery += " inner join tblParameter p on s.ParameterID = p.ParameterID";
+                            aquery += " inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID";
+                            aquery += " where";
+                            aquery += " r.ResourceID = " + Convert.ToInt32(drPar["resourceID"]) + " and";
+                            aquery += " sheetInsertionDateTime >= CONVERT(CHAR(24), CONVERT(DATETIME, '" + fromDt + "', 103), 121) and sheetInsertionDateTime <= CONVERT(CHAR(24), CONVERT(DATETIME, '" + toDt + "', 103), 121)";
+                            aquery += " )";
+                            aquery += " AS SourceTable";
+                            aquery += " PIVOT";
+                            aquery += " (";
+                            aquery += " SUM(pVal) FOR pID";
+                            aquery += " IN";
+                            aquery += " ( [P1 Status],[P2 Status],[P3 Status],[P4 Status],[P1 Mode],[P2 Mode],[P3 Mode],[P4 Mode]";
+                            aquery += " )";
+                            aquery += " )";
+                            aquery += " AS PivotTable";
+                            aquery += " )  ";
+                            aquery += " SELECT* FROM cte";
+                            aquery += " order by cast(ResourceID as INT) ASC, ";
+                            aquery += " tim DESC"; 
+
+
                             string theQuery = aquery;
                             SqlDataAdapter sdaVal = new SqlDataAdapter(theQuery, conn);
-                            DataTable dtVal = new DataTable();
                             sdaVal.Fill(dtVal);
                             //scriptString += "{ type: \"area\", name: \"" + rs.parameterID + "\", showInLegend: true,  markerSize: 0, xValueType: \"dateTime\", xValueFormatString: \"DD-MM-YYYY hh:mm:ss TT\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} </strong> at {x}\", ";
                             scriptString += "{ type: \"area\", name: \"" + rs.parameterID + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  ";
@@ -1501,26 +1533,48 @@ namespace wasaRms.Controllers
                             DateTime dt = DateTime.Now;
                             foreach (DataRow drVal in dtVal.Rows)
                             {
+                                //if (dtVal.Rows.IndexOf(drVal) != 0)
+                                //{
+                                //    if (Convert.ToDateTime(drVal["sheetInsertionDateTime"]).Subtract(dt).TotalSeconds < 6000)
+                                //    {
+                                //        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1), 1)));
+                                //        dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                //    }
+                                //    else
+                                //    {
+                                //        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(dt).AddHours(-5).AddMinutes(1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
+                                //        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5).AddMinutes(-1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
+                                //        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1), 1)));
+                                //        dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                //    }
+                                //}
+                                //else
+                                //{
+                                //    dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal["parameterValue"]) / 1));
+                                //    dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                //}
+
                                 if (dtVal.Rows.IndexOf(drVal) != 0)
                                 {
-                                    if (Convert.ToDateTime(drVal["sheetInsertionDateTime"]).Subtract(dt).TotalSeconds < 6000)
+                                    if (Convert.ToDateTime(drVal["tim"]).Subtract(dt).TotalSeconds < 6000)
                                     {
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1), 1)));
-                                        dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["P1 Status"]) / 1), 1)));
+                                        dt = Convert.ToDateTime(drVal["tim"]);
                                     }
                                     else
                                     {
                                         dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(dt).AddHours(-5).AddMinutes(1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5).AddMinutes(-1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1), 1)));
-                                        dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5).AddMinutes(-1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["P1 Status"]) / 1), 1)));
+                                        dt = Convert.ToDateTime(drVal["tim"]);
                                     }
                                 }
                                 else
                                 {
-                                    dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal["parameterValue"]) / 1));
-                                    dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                    dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal["P1 Status"]) / 1));
+                                    dt = Convert.ToDateTime(drVal["tim"]);
                                 }
+
                                 //dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["InsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal["ParameterValue"])));
                             }
                             scriptString += "dataPoints: " + Newtonsoft.Json.JsonConvert.SerializeObject(dataPoints) + "";
@@ -1540,7 +1594,45 @@ namespace wasaRms.Controllers
             string NewscripString = scriptString;
             ViewData["chartData"] = NewscripString;
             ////////////////////////////////////////////////////////////////
-            return View(rs);
+            var storageDataList = new List<StorageParameterChartClass>();
+            StorageParameterChartClass tableData = new StorageParameterChartClass();
+            string parameterName = "P1 Status";
+            DateTime FinalTimeFrom = fromDt;
+            DateTime FinalTimeTo = toDt;
+            string resources = "Lawrence Road Storage Tank";
+            string parameter = "P1 Status";
+            if (dtVal.Rows.Count > 0)
+            {
+                try
+                {
+                    tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 1);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            else
+            {
+                tableData.locationName = resources;
+                tableData.parameterName = parameter;
+                tableData.workingInHours = 0;
+                tableData.totalHours = 0;
+                tableData.availableHours = 0;
+                tableData.nonAvailableHours = 0;
+                tableData.workingInHoursManual = 0;
+                tableData.workingInHoursRemote = 0;
+                tableData.workingInHoursScheduling = 0;
+                tableData.minValue = 0;
+                tableData.maxValue = 0;
+                tableData.avgVale = 0;
+                tableData.avgOfAvailableHours = 0;
+                tableData.avgOfNonAvailableHours = 0;
+            }
+            tableData.parameterName = parameter;
+            storageDataList.Add(tableData);
+            ////////////////////////////////////////////////////////////////
+            return View(storageDataList);
         }
 
         [HttpPost]
@@ -1586,6 +1678,7 @@ namespace wasaRms.Controllers
             DateTime toDt = FinalTimeTo;
             IList<string> parameterList = new List<string>();
             IList<string> resourceList = new List<string>();
+            DataTable dtVal = new DataTable();
             string paramsListQuery = "select p.parameterDescription from tblParameter p inner join tblResourceTypeParameter tp on tp.parameterID = p.ParameterID where tp.resourceTypeID = 1002 order by p.parameterMaxThr";
             using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
@@ -1673,20 +1766,46 @@ namespace wasaRms.Controllers
                         foreach (DataRow drPar in dtPar.Rows)
                         {
                             //string parName = drPar["parameterName"].ToString();
-                            string aquery = ";WITH CTE AS ( ";
-                            aquery += "SELECT e.parameterID, e.parameterValue, e.sheetInsertionDateTime,  ";
-                            aquery += " RN = ROW_NUMBER() OVER(PARTITION BY e.parameterID ";
-                            aquery += "ORDER BY e.sheetInsertionDateTime DESC) ";
-                            aquery += "FROM tblSheet e ";
-                            aquery += "inner join tblResource r on e.resourceID = r.resourceID ";
-                            aquery += "WHERE e.resourceID = " + Convert.ToInt32(drPar["resourceID"]) + " and e.parameterValue >= 0 and e.parameterID = " + Convert.ToInt32(drRes["parameterID"]) + " ";
-                            //aquery += " and e.sheetInsertionDateTime >= DATEADD(day,-2,GETDATE()) ";
-                            aquery += " and e.sheetInsertionDateTime >= CONVERT(CHAR(24), CONVERT(DATETIME, '" + fromDt + "', 103), 121) and e.sheetInsertionDateTime <= CONVERT(CHAR(24), CONVERT(DATETIME, '" + toDt + "', 103), 121) ";
-                            aquery += ") ";
-                            aquery += "SELECT top 144000 parameterID, parameterValue, sheetInsertionDateTime FROM CTE WHERE RN < 144001 Order by sheetInsertionDateTime ASC";
-                            string theQuery = aquery;
+                            string aquery = "";
+                            aquery += " WITH cte AS(";
+                            aquery += " SELECT * FROM";
+                            aquery += " (";
+                            aquery += " SELECT DISTINCT r.resourceName AS Location,";
+                            aquery += " r.ResourceID, p.parameterDescription AS pID,";
+                            aquery += " CAST(s.ParameterValue AS NUMERIC(18, 2)) AS pVal,";
+                            aquery += " s.sheetInsertionDateTime as tim";
+                            aquery += " FROM tblSheet s";
+                            aquery += " inner join tblResource r on s.ResourceID = r.ResourceID";
+                            aquery += " inner join tblParameter p on s.ParameterID = p.ParameterID";
+                            aquery += " inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID";
+                            aquery += " where";
+                            aquery += " r.ResourceID = " + Convert.ToInt32(drPar["resourceID"]) + " and";
+                            aquery += " sheetInsertionDateTime >= CONVERT(CHAR(24), CONVERT(DATETIME, '" + fromDt + "', 103), 121) and sheetInsertionDateTime <= CONVERT(CHAR(24), CONVERT(DATETIME, '" + toDt + "', 103), 121)";
+                            aquery += " )";
+                            aquery += " AS SourceTable";
+                            aquery += " PIVOT";
+                            aquery += " (";
+                            aquery += " SUM(pVal) FOR pID";
+                            aquery += " IN ( ";
+                            aquery += "[P1 Status],[P2 Status],[P3 Status],[P4 Status],[P1 Mode],[P2 Mode],[P3 Mode],[P4 Mode]";
+                            if (rs.parameterID == "P1 Status" || rs.parameterID == "P2 Status" || rs.parameterID == "P3 Status" || rs.parameterID == "P4 Status" || rs.parameterID == "P1 Mode" || rs.parameterID == "P2 Mode" || rs.parameterID == "P3 Mode" || rs.parameterID == "P4 Mode")
+                            {
+
+                            }
+                            else
+                            {
+                                aquery += ",["+rs.parameterID+"] ";
+                            }
+                            
+                            aquery += " )";
+                            aquery += " )";
+                            aquery += " AS PivotTable";
+                            aquery += " )  ";
+                            aquery += " SELECT* FROM cte";
+                            aquery += " order by cast(ResourceID as INT) ASC, ";
+                            aquery += " tim DESC"; string theQuery = aquery;
                             SqlDataAdapter sdaVal = new SqlDataAdapter(theQuery, conn);
-                            DataTable dtVal = new DataTable();
+                           
                             sdaVal.Fill(dtVal);
                             if (rs.parameterID == "P1 Status" || rs.parameterID == "P2 Status" || rs.parameterID == "P3 Status" || rs.parameterID == "P4 Status" || rs.parameterID == "P1 Mode" || rs.parameterID == "P2 Mode" || rs.parameterID == "P3 Mode" || rs.parameterID == "P4 Mode")
                             {
@@ -1710,23 +1829,23 @@ namespace wasaRms.Controllers
                             {
                                 if (dtVal.Rows.IndexOf(drVal) != 0)
                                 {
-                                    if (Convert.ToDateTime(drVal["sheetInsertionDateTime"]).Subtract(dt).TotalSeconds < 6000)
+                                    if (Convert.ToDateTime(drVal["tim"]).Subtract(dt).TotalSeconds < 6000)
                                     {
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1), 1)));
-                                        dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal[rs.parameterID]) / 1), 1)));
+                                        dt = Convert.ToDateTime(drVal["tim"]);
                                     }
                                     else
                                     {
                                         dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(dt).AddHours(-5).AddMinutes(1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5).AddMinutes(-1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1), 1)));
-                                        dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5).AddMinutes(-1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal[rs.parameterID]) / 1), 1)));
+                                        dt = Convert.ToDateTime(drVal["tim"]);
                                     }
                                 }
                                 else
                                 {
-                                    dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal["parameterValue"]) / 1));
-                                    dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
+                                    dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal[rs.parameterID]) / 1));
+                                    dt = Convert.ToDateTime(drVal["tim"]);
                                 }
                                 //dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["InsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal["ParameterValue"])));
                             }
@@ -1747,7 +1866,64 @@ namespace wasaRms.Controllers
             string NewscripString = scriptString;
             ViewData["chartData"] = NewscripString;
 
-            //////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////
+            var storageDataList = new List<StorageParameterChartClass>();
+            StorageParameterChartClass tableData = new StorageParameterChartClass();
+            string parameterName = rs.parameterID;
+            if (dtVal.Rows.Count > 0)
+            {
+                try
+                {
+                    if (rs.parameterID == "P1 Status" || rs.parameterID == "P2 Status" || rs.parameterID == "P3 Status" || rs.parameterID == "P4 Status" || rs.parameterID == "P1 Mode" || rs.parameterID == "P2 Mode" || rs.parameterID == "P3 Mode" || rs.parameterID == "P4 Mode")
+                    {
+                        if (rs.parameterID == "P1 Status" || rs.parameterID == "P1 Mode")
+                        {
+                            tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 1);
+                        }
+                        else if (rs.parameterID == "P2 Status" || rs.parameterID == "P2 Mode")
+                        {
+                            tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 2);
+                        }
+                        else if (rs.parameterID == "P3 Status" || rs.parameterID == "P3 Mode")
+                        {
+                            tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 3);
+                        }
+                        else if (rs.parameterID == "P4 Status" || rs.parameterID == "P4 Mode")
+                        {
+                            tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 4);
+                        }
+                    }
+                    else
+                    {
+                        tableData = getAllSpellsForStorageParameterizedChart(dtVal, parameterName, FinalTimeFrom, FinalTimeTo);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+            else
+            {
+                tableData.locationName = resource;
+                tableData.parameterName = parameter;
+                tableData.workingInHours = 0;
+                tableData.totalHours = 0;
+                tableData.availableHours = 0;
+                tableData.nonAvailableHours = 0;
+                tableData.workingInHoursManual = 0;
+                tableData.workingInHoursRemote = 0;
+                tableData.workingInHoursScheduling = 0;
+                tableData.minValue = 0;
+                tableData.maxValue = 0;
+                tableData.avgVale = 0;
+                tableData.avgOfAvailableHours = 0;
+                tableData.avgOfNonAvailableHours = 0;
+            }
+            tableData.parameterName = parameter;
+            storageDataList.Add(tableData);
+            ////////////////////////////////////////////////////////////////
+            
             ViewBag.SelectedTimeFrom = TF;
             ViewBag.SelectedTimeTo = TT;
             ViewBag.SelectedTimeFrom = TF.ToString();
@@ -1756,7 +1932,7 @@ namespace wasaRms.Controllers
             ViewBag.timeTo = TT;
             ViewBag.dateFrom = df_date;
             ViewBag.dateTo = dt_date;
-            return View(rs);
+            return View(storageDataList);
         }
         public ActionResult TankStorageReport()
         {
@@ -3464,6 +3640,1062 @@ namespace wasaRms.Controllers
                 //return tableData;
             }
             return tableData;
+        }
+        public StorageParameterChartClass getAllSpellsForStorageParameterizedChartPumps(DataTable dt, string ParameterName, DateTime timeFrom, DateTime timeTo, int pumpNumber)
+        {
+            var tableData = new StorageParameterChartClass();
+            var spelldata = new StoragePump1SpellData();
+            string pumpNumberName = "";
+            string pumpModeName = "";
+            string location = dt.Rows[0]["Location"].ToString();
+            if (pumpNumber == 1)
+            {
+                pumpNumberName = "P1 Status";
+                pumpModeName = "P1 Mode";
+            }
+            else if (pumpNumber == 2)
+            {
+                pumpNumberName = "P2 Status";
+                pumpModeName = "P2 Mode";
+            }
+            else if (pumpNumber == 3)
+            {
+                pumpNumberName = "P3 Status";
+                pumpModeName = "P3 Mode";
+            }
+            else 
+            {
+                pumpNumberName = "P4 Status";
+                pumpModeName = "P4 Mode";
+            }
+            var cms = dt.Rows[0][pumpNumberName];
+            double currentMotorStatus = 0;
+            if (cms == DBNull.Value)
+            {
+                currentMotorStatus = 0;
+            }
+            else
+            {
+                currentMotorStatus = Math.Round((Convert.ToDouble(dt.Rows[0][pumpNumberName])), 2);
+            }
+            string currentTime = dt.Rows[0]["tim"].ToString();
+            timeFrom = Convert.ToDateTime(dt.Rows[dt.Rows.Count-1]["tim"].ToString());
+            timeTo = Convert.ToDateTime(dt.Rows[0]["tim"].ToString());
+
+            bool S = false;
+            bool E = false;
+            bool T = true;
+            bool F = false;
+            int spell = 0;
+            List<StoragePump1SpellData> spellDataList = new List<StoragePump1SpellData>();
+            string curtm = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                var currV = dr[pumpNumberName];
+                var currVR = dr[pumpModeName];
+                var wf = dr[ParameterName];
+                double currValue = 0;
+                double currValueRemote = 0;
+                double FlowRate = 0;
+                if (currV == DBNull.Value)
+                { }
+                else
+                {
+                    currValue = Math.Round((Convert.ToDouble(dr[pumpNumberName])), 2);
+                }
+                if (currVR == DBNull.Value)
+                { }
+                else
+                {
+                    currValueRemote = Math.Round((Convert.ToDouble(dr[pumpModeName])), 2);
+                }
+                if (wf == DBNull.Value)
+                { }
+                else
+                {
+                    FlowRate = Math.Round((Convert.ToDouble(dr[ParameterName])), 2);
+                }
+                string currTime = dr["tim"].ToString();
+                string clearaceTime = "";
+                //start scenario 3 (inactive)
+                if (0 > 1)
+                {
+
+                }
+                // end  scenario 3 (inactive)
+                else
+                {
+                    //start scenario 1 (No Ponding since many time/cleared/ zero received (find out what is the last ponding time if any))
+                    if (currentMotorStatus < 1)
+                    {
+                        if (E == F && S == F)
+                        {
+                            if (currValue < 1)
+                            {
+                                if (spelldata.SpellDataArray.Count > 0)
+                                {
+                                    string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                    double lastvalue = spelldata.SpellDataArray.LastOrDefault();
+                                    E = T;
+                                    S = T;
+                                    spelldata.SpellDataArray.Add(lastvalue);
+                                    spelldata.SpellTimeArray.Add(lastTime);
+                                    spelldata.SpellEndTime = currTime;
+                                    if (currValueRemote == 0 )
+                                    {
+                                        spelldata.spellMode = 1;
+                                    }
+                                    else
+                                    {
+                                        spelldata.spellMode = 2;
+                                    }
+                                    clearaceTime = currTime;
+                                }
+
+                            }
+                            else
+                            {
+                                E = T;
+                                spell = spell + 1;
+                                spelldata.SpellNumber = spell;
+                                spelldata.SpellDataArray.Add(FlowRate);
+                                spelldata.SpellTimeArray.Add(currTime);
+                                spelldata.SpellEndTime = currTime;
+                                if (currValueRemote == 0)
+                                {
+                                    spelldata.spellMode = 1;
+                                }
+                                else
+                                {
+                                    spelldata.spellMode = 2;
+                                }
+                                clearaceTime = currTime;
+
+                            }
+                        }
+                        else if (E == T && S == F)
+                        {
+                            if (currValue < 1 || dr == dt.Rows[dt.Rows.Count - 1])
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = lastTime;
+                                    S = T;
+                                }
+                                else
+                                {
+
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                            }
+                            else
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                                else
+                                {
+                                    spelldata.SpellDataArray.Add(FlowRate);
+                                    spelldata.SpellTimeArray.Add(currTime);
+                                }
+                            }
+                        }
+                        if (E == T && S == T)
+                        {
+                            E = F;
+                            S = F;
+                            if (spelldata.SpellDataArray.Count > 1 )
+                            {
+                                spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                                if (spelldata.spellPeriod == 0)
+                                {
+                                    spelldata.spellPeriod = 1;
+                                }
+                                spellDataList.Add(spelldata);
+                                spelldata = new StoragePump1SpellData();
+                            }
+                        }
+                    }
+                    // end  scenario 1 (No Ponding since many time/cleared/ zero received)
+                    //////////////////////////////////////////////////////////////////////
+                    //start scenario 2 (uncleared/ ponding continues (find out when the ponding is started))
+                    else
+                    {
+                        if (E == F && S == F)
+                        {
+                            if (currValue < 1)
+                            {
+                                if (spelldata.SpellDataArray.Count > 0)
+                                {
+                                    string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                    double lastvalue = spelldata.SpellDataArray.LastOrDefault();
+                                    E = T;
+                                    S = T;
+                                    spelldata.SpellDataArray.Add(lastvalue);
+                                    spelldata.SpellTimeArray.Add(lastTime);
+                                    spelldata.SpellEndTime = currTime;
+                                    if (currValueRemote == 0)
+                                    {
+                                        spelldata.spellMode = 1;
+                                    }
+                                    else
+                                    {
+                                        spelldata.spellMode = 2;
+                                    }
+                                    clearaceTime = currTime;
+                                }
+
+                            }
+                            else
+                            {
+                                E = T;
+                                spell = spell + 1;
+                                spelldata.SpellNumber = spell;
+                                spelldata.SpellDataArray.Add(FlowRate);
+                                spelldata.SpellTimeArray.Add(currTime);
+                                spelldata.SpellEndTime = currTime;
+                                if (currValueRemote == 0)
+                                {
+                                    spelldata.spellMode = 1;
+                                }
+                                else
+                                {
+                                    spelldata.spellMode = 2;
+                                }
+                                clearaceTime = currTime;
+
+                            }
+                        }
+                        else if (E == T && S == F)
+                        {
+                            if (currValue < 1 || dr == dt.Rows[dt.Rows.Count - 1])
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = lastTime;
+                                    S = T;
+                                }
+                                else
+                                {
+
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                            }
+                            else
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                                else
+                                {
+                                    spelldata.SpellDataArray.Add(FlowRate);
+                                    spelldata.SpellTimeArray.Add(currTime);
+                                }
+                            }
+                        }
+                        if (E == T && S == T)
+                        {
+                            E = F;
+                            S = F;
+                            if (spelldata.SpellDataArray.Count > 1 /*&& spelldata.SpellDataArray.Sum() > 0*/)
+                            {
+                                //int indexMax = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value > b.Value) ? a : b).Index;
+                                //int indexMin = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value < b.Value) ? a : b).Index;
+                                //spelldata.spellMaxTime = spelldata.SpellTimeArray.ElementAt(indexMax);
+                                //spelldata.spellMinTime = spelldata.SpellTimeArray.ElementAt(indexMin);
+                                //spelldata.SpellMax = spelldata.SpellDataArray.DefaultIfEmpty().Max();
+                                spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                                if (spelldata.spellPeriod == 0)
+                                {
+                                    spelldata.spellPeriod = 1;
+                                }
+                                //spelldata.spellFlowDown = Math.Round(spelldata.SpellMax / spelldata.spellPeriod, 2);
+                                //spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes), 2);
+                                spellDataList.Add(spelldata);
+                                spelldata = new StoragePump1SpellData();
+                                string s = JsonConvert.SerializeObject(spellDataList);
+                            }
+                        }
+                    }
+                    // end  scenario 2 (uncleared/ ponding continues)
+                }
+                curtm = currTime;
+            }
+            if (spellDataList.Count < 1)
+            {
+                if (spelldata.SpellDataArray.Count > 0)
+                {
+                    spelldata.SpellStartTime = curtm;
+                    spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                    if (spelldata.spellPeriod == 0)
+                    {
+                        spelldata.spellPeriod = 1;
+                    }
+                    spellDataList.Add(spelldata);
+                }
+            }
+            if (spellDataList.Count == 0)
+            {
+                tableData.locationName = location;
+                tableData.workingInHours = 0;
+                tableData.totalHours = 0;
+                tableData.availableHours = 0;
+                tableData.nonAvailableHours = 0;
+                tableData.workingInHoursManual = 0;
+                tableData.workingInHoursRemote = 0;
+                tableData.workingInHoursScheduling = 0;
+                tableData.minValue = 0;
+                tableData.maxValue = 0;
+                tableData.avgVale = 0;
+                tableData.avgOfAvailableHours = 0;
+                tableData.avgOfNonAvailableHours = 0;
+            }
+            else
+            {
+                tableData.locationName = location;
+                if (timeTo > DateTime.Now)
+                {
+                    timeTo = DateTime.Now;
+                }
+                tableData.totalHours = Math.Round((((timeTo-timeFrom).TotalMinutes)/60),2) ;
+                if (tableData.totalHours == 23.98)
+                {
+                    tableData.totalHours = 24;
+                }
+                tableData.workingInHoursManual = Math.Round(((spellDataList.Where(r => r.spellMode == 1).Sum(i => i.spellPeriod) )/60), 2);
+                tableData.workingInHoursRemote = Math.Round(((spellDataList.Where(r => r.spellMode == 2).Sum(i => i.spellPeriod))/60), 2);
+                tableData.workingInHoursScheduling = Math.Round(((spellDataList.Where(r => r.spellMode == 3).Sum(i => i.spellPeriod))/60), 2);
+                tableData.workingInHours = Math.Round(((Convert.ToDouble(tableData.workingInHoursManual) +
+                Convert.ToDouble(tableData.workingInHoursRemote) +
+                Convert.ToDouble(tableData.workingInHoursScheduling))), 2);
+                tableData.nonWorkingInHours = Math.Round((tableData.totalHours - tableData.workingInHours), 2);
+                tableData.availableHours = Math.Round((getAvailableHours(dt, ParameterName)), 2);
+                tableData.nonAvailableHours = Math.Round((tableData.totalHours - tableData.availableHours), 2);
+                if (tableData.nonAvailableHours == 0.02 && tableData.availableHours > 1)
+                {
+                    tableData.nonAvailableHours = 0;
+                }
+                if (tableData.availableHours == 23.98)
+                {
+                    tableData.availableHours = 24;
+                }
+                double availableSum = 0;
+                double unavailableSum = 0;
+                int availableCount = 0;
+                int unavailableCount = 0;
+                List<double> valList = new List<double>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (Convert.ToInt32(dr[pumpNumberName]) == 0)
+                    {
+                        unavailableSum += Convert.ToDouble(dr[ParameterName]);
+                        unavailableCount += 1;
+                        valList.Add(Convert.ToDouble(dr[ParameterName]));
+                    }
+                    else
+                    {
+                        availableSum += Convert.ToDouble(dr[ParameterName]);
+                        availableCount += 1;
+                        valList.Add(Convert.ToDouble(dr[ParameterName]));
+                    }
+                }
+                if (availableCount == 0)
+                {
+                    availableCount = 1;
+                }
+                if (unavailableCount == 0)
+                {
+                    unavailableCount = 1;
+                }
+                tableData.avgOfAvailableHours = Math.Round((availableSum / availableCount), 2);
+                tableData.avgOfNonAvailableHours = Math.Round((unavailableSum / unavailableCount), 2);
+
+
+                if (ParameterName == "WaterFlow(Cusec).")
+                {
+                    tableData.avgOfAvailableHours = Math.Round((tableData.avgOfAvailableHours/101.94), 2);
+                    tableData.avgOfNonAvailableHours = Math.Round((tableData.avgOfNonAvailableHours/101.94), 2);
+                }
+
+                tableData.minValue = Math.Round((valList.Min()), 2);
+                tableData.maxValue = Math.Round((valList.Max()), 2);
+                tableData.avgVale = Math.Round((valList.Average()), 2);
+
+                tableData.totalHoursString = minutesToTime(tableData.totalHours*60);
+                tableData.workingInHoursString = minutesToTime(tableData.workingInHours*60);
+                tableData.nonWorkingInHoursString = minutesToTime(tableData.nonWorkingInHours*60);
+                tableData.workingInHoursRemoteString = minutesToTime(tableData.workingInHoursRemote*60);
+                tableData.workingInHoursManualString = minutesToTime(tableData.workingInHoursManual*60);
+                tableData.workingInHoursSchedulingString = minutesToTime(tableData.workingInHoursScheduling*60);
+                tableData.availableHoursString = minutesToTime(tableData.availableHours*60);
+                tableData.nonAvailableHoursString = minutesToTime(tableData.nonAvailableHours*60);
+                tableData.parameterName = ParameterName;
+            }
+            return tableData;
+        }
+
+        public StorageParameterChartClass getAllSpellsForStorageParameterizedChart(DataTable dt, string ParameterName, DateTime timeFrom, DateTime timeTo)
+        {
+            var tableData = new StorageParameterChartClass();
+            var spelldata = new StoragePump1SpellData();
+            
+            string location = dt.Rows[0]["Location"].ToString();
+            var cms1 = dt.Rows[0]["P1 Status"];
+            var cms2 = dt.Rows[0]["P2 Status"];
+            var cms3 = dt.Rows[0]["P3 Status"];
+            var cms4 = dt.Rows[0]["P4 Status"];
+            double currentMotorStatus = 0;
+            double currentMotorStatus1 = 0;
+            double currentMotorStatus2 = 0;
+            double currentMotorStatus3 = 0;
+            double currentMotorStatus4 = 0;
+            if (cms1 == DBNull.Value)
+            {
+                currentMotorStatus1 = 0;
+            }
+            else
+            {
+                currentMotorStatus1 = Math.Round((Convert.ToDouble(dt.Rows[0]["P1 Status"])), 2);
+            }
+            if (cms2 == DBNull.Value)
+            {
+                currentMotorStatus2 = 0;
+            }
+            else
+            {
+                currentMotorStatus2 = Math.Round((Convert.ToDouble(dt.Rows[0]["P2 Status"])), 2);
+            }
+            if (cms3 == DBNull.Value)
+            {
+                currentMotorStatus3 = 0;
+            }
+            else
+            {
+                currentMotorStatus3 = Math.Round((Convert.ToDouble(dt.Rows[0]["P3 Status"])), 2);
+            }
+            if (cms4 == DBNull.Value)
+            {
+                currentMotorStatus4 = 0;
+            }
+            else
+            {
+                currentMotorStatus4 = Math.Round((Convert.ToDouble(dt.Rows[0]["P4 Status"])), 2);
+            }
+            currentMotorStatus = currentMotorStatus1 + currentMotorStatus2 + currentMotorStatus3 + currentMotorStatus4;
+            string currentTime = dt.Rows[0]["tim"].ToString();
+            timeFrom = Convert.ToDateTime(dt.Rows[dt.Rows.Count - 1]["tim"].ToString());
+            timeTo = Convert.ToDateTime(dt.Rows[0]["tim"].ToString());
+
+            bool S = false;
+            bool E = false;
+            bool T = true;
+            bool F = false;
+            int spell = 0;
+            List<StoragePump1SpellData> spellDataList = new List<StoragePump1SpellData>();
+            string curtm = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                var currV = dr["P1 Status"];
+                var currVR = dr["P1 Mode"];
+                var wf = dr[ParameterName];
+                double currValue = 0;
+                double currValueRemote = 0;
+                double FlowRate = 0;
+                if (currV == DBNull.Value)
+                { }
+                else
+                {
+                    currValue = Math.Round((Convert.ToDouble(dr["P1 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P2 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P3 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P4 Status"])), 2);
+                }
+                if (currVR == DBNull.Value)
+                { }
+                else
+                {
+                    currValueRemote = Math.Round((Convert.ToDouble(dr["P1 Mode"])), 2);
+                }
+                if (wf == DBNull.Value)
+                { }
+                else
+                {
+                    FlowRate = Math.Round((Convert.ToDouble(dr[ParameterName])), 2);
+                }
+                string currTime = dr["tim"].ToString();
+                string clearaceTime = "";
+                //start scenario 3 (inactive)
+                if (0 > 1)
+                {
+
+                }
+                // end  scenario 3 (inactive)
+                else
+                {
+                    //start scenario 1 (No Ponding since many time/cleared/ zero received (find out what is the last ponding time if any))
+                    if (currentMotorStatus < 1)
+                    {
+                        if (E == F && S == F)
+                        {
+                            if (currValue < 1)
+                            {
+                                if (spelldata.SpellDataArray.Count > 0)
+                                {
+                                    string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                    double lastvalue = spelldata.SpellDataArray.LastOrDefault();
+                                    E = T;
+                                    S = T;
+                                    spelldata.SpellDataArray.Add(lastvalue);
+                                    spelldata.SpellTimeArray.Add(lastTime);
+                                    spelldata.SpellEndTime = currTime;
+                                    if (currValueRemote == 0)
+                                    {
+                                        spelldata.spellMode = 1;
+                                    }
+                                    else
+                                    {
+                                        spelldata.spellMode = 2;
+                                    }
+                                    clearaceTime = currTime;
+                                }
+
+                            }
+                            else
+                            {
+                                E = T;
+                                spell = spell + 1;
+                                spelldata.SpellNumber = spell;
+                                spelldata.SpellDataArray.Add(FlowRate);
+                                spelldata.SpellTimeArray.Add(currTime);
+                                spelldata.SpellEndTime = currTime;
+                                if (currValueRemote == 0)
+                                {
+                                    spelldata.spellMode = 1;
+                                }
+                                else
+                                {
+                                    spelldata.spellMode = 2;
+                                }
+                                clearaceTime = currTime;
+
+                            }
+                        }
+                        else if (E == T && S == F)
+                        {
+                            if (currValue < 1 || dr == dt.Rows[dt.Rows.Count - 1])
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = lastTime;
+                                    S = T;
+                                }
+                                else
+                                {
+
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                            }
+                            else
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                                else
+                                {
+                                    spelldata.SpellDataArray.Add(FlowRate);
+                                    spelldata.SpellTimeArray.Add(currTime);
+                                }
+                            }
+                        }
+                        if (E == T && S == T)
+                        {
+                            E = F;
+                            S = F;
+                            if (spelldata.SpellDataArray.Count > 1)
+                            {
+                                spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                                if (spelldata.spellPeriod == 0)
+                                {
+                                    spelldata.spellPeriod = 1;
+                                }
+                                spellDataList.Add(spelldata);
+                                spelldata = new StoragePump1SpellData();
+                            }
+                        }
+                    }
+                    // end  scenario 1 (No Ponding since many time/cleared/ zero received)
+                    //////////////////////////////////////////////////////////////////////
+                    //start scenario 2 (uncleared/ ponding continues (find out when the ponding is started))
+                    else
+                    {
+                        if (E == F && S == F)
+                        {
+                            if (currValue < 1)
+                            {
+                                if (spelldata.SpellDataArray.Count > 0)
+                                {
+                                    string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                    double lastvalue = spelldata.SpellDataArray.LastOrDefault();
+                                    E = T;
+                                    S = T;
+                                    spelldata.SpellDataArray.Add(lastvalue);
+                                    spelldata.SpellTimeArray.Add(lastTime);
+                                    spelldata.SpellEndTime = currTime;
+                                    if (currValueRemote == 0)
+                                    {
+                                        spelldata.spellMode = 1;
+                                    }
+                                    else
+                                    {
+                                        spelldata.spellMode = 2;
+                                    }
+                                    clearaceTime = currTime;
+                                }
+
+                            }
+                            else
+                            {
+                                E = T;
+                                spell = spell + 1;
+                                spelldata.SpellNumber = spell;
+                                spelldata.SpellDataArray.Add(FlowRate);
+                                spelldata.SpellTimeArray.Add(currTime);
+                                spelldata.SpellEndTime = currTime;
+                                if (currValueRemote == 0)
+                                {
+                                    spelldata.spellMode = 1;
+                                }
+                                else
+                                {
+                                    spelldata.spellMode = 2;
+                                }
+                                clearaceTime = currTime;
+
+                            }
+                        }
+                        else if (E == T && S == F)
+                        {
+                            if (currValue < 1 || dr == dt.Rows[dt.Rows.Count - 1])
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = lastTime;
+                                    S = T;
+                                }
+                                else
+                                {
+
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                            }
+                            else
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                                else
+                                {
+                                    spelldata.SpellDataArray.Add(FlowRate);
+                                    spelldata.SpellTimeArray.Add(currTime);
+                                }
+                            }
+                        }
+                        if (E == T && S == T)
+                        {
+                            E = F;
+                            S = F;
+                            if (spelldata.SpellDataArray.Count > 1 /*&& spelldata.SpellDataArray.Sum() > 0*/)
+                            {
+                                //int indexMax = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value > b.Value) ? a : b).Index;
+                                //int indexMin = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value < b.Value) ? a : b).Index;
+                                //spelldata.spellMaxTime = spelldata.SpellTimeArray.ElementAt(indexMax);
+                                //spelldata.spellMinTime = spelldata.SpellTimeArray.ElementAt(indexMin);
+                                //spelldata.SpellMax = spelldata.SpellDataArray.DefaultIfEmpty().Max();
+                                spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                                if (spelldata.spellPeriod == 0)
+                                {
+                                    spelldata.spellPeriod = 1;
+                                }
+                                //spelldata.spellFlowDown = Math.Round(spelldata.SpellMax / spelldata.spellPeriod, 2);
+                                //spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes), 2);
+                                spellDataList.Add(spelldata);
+                                spelldata = new StoragePump1SpellData();
+                                string s = JsonConvert.SerializeObject(spellDataList);
+                            }
+                        }
+                    }
+                    // end  scenario 2 (uncleared/ ponding continues)
+                }
+                curtm = currTime;
+            }
+            if (spellDataList.Count < 1)
+            {
+                if (spelldata.SpellDataArray.Count > 0)
+                {
+                    spelldata.SpellStartTime = curtm;
+                    spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                    if (spelldata.spellPeriod == 0)
+                    {
+                        spelldata.spellPeriod = 1;
+                    }
+                    spellDataList.Add(spelldata);
+                }
+            }
+            if (spellDataList.Count == 0)
+            {
+                tableData.locationName = location;
+                tableData.workingInHours = 0;
+                tableData.totalHours = 0;
+                tableData.availableHours = 0;
+                tableData.nonAvailableHours = 0;
+                tableData.workingInHoursManual = 0;
+                tableData.workingInHoursRemote = 0;
+                tableData.workingInHoursScheduling = 0;
+                tableData.minValue = 0;
+                tableData.maxValue = 0;
+                tableData.avgVale = 0;
+                tableData.avgOfAvailableHours = 0;
+                tableData.avgOfNonAvailableHours = 0;
+            }
+            else
+            {
+                tableData.locationName = location;
+                if (timeTo > DateTime.Now)
+                {
+                    timeTo = DateTime.Now;
+                }
+                tableData.totalHours = Math.Round((((timeTo - timeFrom).TotalMinutes) / 60), 2);
+                if (tableData.totalHours == 23.98)
+                {
+                    tableData.totalHours = 24;
+                }
+                tableData.workingInHoursManual = Math.Round(((spellDataList.Where(r => r.spellMode == 1).Sum(i => i.spellPeriod)) / 60), 2);
+                tableData.workingInHoursRemote = Math.Round(((spellDataList.Where(r => r.spellMode == 2).Sum(i => i.spellPeriod)) / 60), 2);
+                tableData.workingInHoursScheduling = Math.Round(((spellDataList.Where(r => r.spellMode == 3).Sum(i => i.spellPeriod)) / 60), 2);
+                tableData.workingInHours = Math.Round(((Convert.ToDouble(tableData.workingInHoursManual) +
+                Convert.ToDouble(tableData.workingInHoursRemote) +
+                Convert.ToDouble(tableData.workingInHoursScheduling))), 2);
+                tableData.nonWorkingInHours = Math.Round((tableData.totalHours - tableData.workingInHours), 2);
+                tableData.availableHours = Math.Round((getAvailableHours(dt, ParameterName)), 2);
+                tableData.nonAvailableHours = Math.Round((tableData.totalHours - tableData.availableHours), 2);
+                if (tableData.nonAvailableHours == 0.02 && tableData.availableHours > 1)
+                {
+                    tableData.nonAvailableHours = 0;
+                }
+                if (tableData.availableHours == 23.98)
+                {
+                    tableData.availableHours = 24;
+                }
+                double availableSum = 0;
+                double unavailableSum = 0;
+                int availableCount = 0;
+                int unavailableCount = 0;
+                List<double> valList = new List<double>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (Convert.ToInt32(dr["P1 Status"]) == 0)
+                    {
+                        unavailableSum += Convert.ToDouble(dr[ParameterName]);
+                        unavailableCount += 1;
+                        valList.Add(Convert.ToDouble(dr[ParameterName]));
+                    }
+                    else
+                    {
+                        availableSum += Convert.ToDouble(dr[ParameterName]);
+                        availableCount += 1;
+                        valList.Add(Convert.ToDouble(dr[ParameterName]));
+                    }
+                }
+                if (availableCount == 0)
+                {
+                    availableCount = 1;
+                }
+                if (unavailableCount == 0)
+                {
+                    unavailableCount = 1;
+                }
+                tableData.avgOfAvailableHours = Math.Round((availableSum / availableCount), 2);
+                tableData.avgOfNonAvailableHours = Math.Round((unavailableSum / unavailableCount), 2);
+
+
+                if (ParameterName == "WaterFlow(Cusec).")
+                {
+                    tableData.avgOfAvailableHours = Math.Round((tableData.avgOfAvailableHours / 101.94), 2);
+                    tableData.avgOfNonAvailableHours = Math.Round((tableData.avgOfNonAvailableHours / 101.94), 2);
+                }
+
+                tableData.minValue = Math.Round((valList.Min()), 2);
+                tableData.maxValue = Math.Round((valList.Max()), 2);
+                tableData.avgVale = Math.Round((valList.Average()), 2);
+
+                tableData.totalHoursString = minutesToTime(tableData.totalHours * 60);
+                tableData.workingInHoursString = minutesToTime(tableData.workingInHours * 60);
+                tableData.nonWorkingInHoursString = minutesToTime(tableData.nonWorkingInHours * 60);
+                tableData.workingInHoursRemoteString = minutesToTime(tableData.workingInHoursRemote * 60);
+                tableData.workingInHoursManualString = minutesToTime(tableData.workingInHoursManual * 60);
+                tableData.workingInHoursSchedulingString = minutesToTime(tableData.workingInHoursScheduling * 60);
+                tableData.availableHoursString = minutesToTime(tableData.availableHours * 60);
+                tableData.nonAvailableHoursString = minutesToTime(tableData.nonAvailableHours * 60);
+                tableData.parameterName = ParameterName;
+            }
+            return tableData;
+        }
+
+        public double getAvailableHours(DataTable dt, string ParameterName)
+        {
+            var tableData = new StorageParameterChartClass();
+            var spelldata = new StoragePump1SpellData();
+            //int resourceID = Convert.ToInt32(dt.Rows[0]["resourceID"]);
+            string location = dt.Rows[0]["Location"].ToString();
+            double currentMotorStatus = Math.Round((Convert.ToDouble(dt.Rows[0][ParameterName])), 2);
+            string currentTime = dt.Rows[0]["tim"].ToString();
+            bool S = false;
+            bool E = false;
+            bool T = true;
+            bool F = false;
+            int spell = 0;
+            List<StoragePump1SpellData> spellDataList = new List<StoragePump1SpellData>();
+            string curtm = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                double currValue = Math.Round((Convert.ToDouble(dr[ParameterName])), 2);
+                //double currValueRemote = Math.Round((Convert.ToDouble(dr["Remote."])), 2);
+                //double currValueManual = Math.Round((Convert.ToDouble(dr["Manual"])), 2);
+                //double currValueScheduling = Math.Round((Convert.ToDouble(dr["TimeSchedule."])), 2);
+                double FlowRate = Math.Round((Convert.ToDouble(dr[ParameterName])), 2);
+                string currTime = dr["tim"].ToString();
+                string clearaceTime = "";
+                //start scenario 3 (inactive)
+                if (0 > 1)
+                {
+
+                }
+                // end  scenario 3 (inactive)
+                else
+                {
+                    //start scenario 1 (No Ponding since many time/cleared/ zero received (find out what is the last ponding time if any))
+                    if (currentMotorStatus == 0)
+                    {
+                        if (E == F && S == F)
+                        {
+                            if (currValue == 0)
+                            {
+                                if (spelldata.SpellDataArray.Count > 0)
+                                {
+                                    string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                    double lastvalue = spelldata.SpellDataArray.LastOrDefault();
+                                    E = T;
+                                    S = T;
+                                    spelldata.SpellDataArray.Add(lastvalue);
+                                    spelldata.SpellTimeArray.Add(lastTime);
+                                    spelldata.SpellEndTime = currTime;
+                                    clearaceTime = currTime;
+                                }
+
+                            }
+                            else
+                            {
+                                E = T;
+                                spell = spell + 1;
+                                spelldata.SpellNumber = spell;
+                                spelldata.SpellDataArray.Add(FlowRate);
+                                spelldata.SpellTimeArray.Add(currTime);
+                                spelldata.SpellEndTime = currTime;
+                                clearaceTime = currTime;
+
+                            }
+                        }
+                        else if (E == T && S == F)
+                        {
+                            if (currValue == 0 || dr == dt.Rows[dt.Rows.Count - 1])
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = lastTime;
+                                    S = T;
+                                }
+                                else
+                                {
+
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                            }
+                            else
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                                else
+                                {
+                                    spelldata.SpellDataArray.Add(FlowRate);
+                                    spelldata.SpellTimeArray.Add(currTime);
+                                }
+                            }
+                        }
+                        if (E == T && S == T)
+                        {
+                            E = F;
+                            S = F;
+                            if (spelldata.SpellDataArray.Count > 1 /*&& spelldata.SpellDataArray.Sum() > 0*/)
+                            {
+                                //int indexMax = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value > b.Value) ? a : b).Index;
+                                //int indexMin = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value < b.Value) ? a : b).Index;
+                                //spelldata.spellMaxTime = spelldata.SpellTimeArray.ElementAt(indexMax);
+                                //spelldata.spellMinTime = spelldata.SpellTimeArray.ElementAt(indexMin);
+                                //spelldata.SpellMax = spelldata.SpellDataArray.DefaultIfEmpty().Max();
+                                spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                                if (spelldata.spellPeriod == 0)
+                                {
+                                    spelldata.spellPeriod = 1;
+                                }
+                                //spelldata.spellFlowDown = Math.Round(spelldata.SpellMax / spelldata.spellPeriod, 2);
+                                //spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes), 2);
+                                spellDataList.Add(spelldata);
+                                spelldata = new StoragePump1SpellData();
+                                string s = JsonConvert.SerializeObject(spellDataList);
+                            }
+                        }
+                    }
+                    // end  scenario 1 (No Ponding since many time/cleared/ zero received)
+                    //////////////////////////////////////////////////////////////////////
+                    //start scenario 2 (uncleared/ ponding continues (find out when the ponding is started))
+                    else
+                    {
+                        if (E == F && S == F)
+                        {
+                            if (currValue == 0)
+                            {
+                                if (spelldata.SpellDataArray.Count > 0)
+                                {
+                                    string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                    double lastvalue = spelldata.SpellDataArray.LastOrDefault();
+                                    E = T;
+                                    S = T;
+                                    spelldata.SpellDataArray.Add(lastvalue);
+                                    spelldata.SpellTimeArray.Add(lastTime);
+                                    spelldata.SpellEndTime = currTime;
+                                    clearaceTime = currTime;
+                                }
+
+                            }
+                            else
+                            {
+                                E = T;
+                                spell = spell + 1;
+                                spelldata.SpellNumber = spell;
+                                spelldata.SpellDataArray.Add(FlowRate);
+                                spelldata.SpellTimeArray.Add(currTime);
+                                spelldata.SpellEndTime = currTime;
+                                clearaceTime = currTime;
+
+                            }
+                        }
+                        else if (E == T && S == F)
+                        {
+                            if (currValue == 0 || dr == dt.Rows[dt.Rows.Count - 1])
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = lastTime;
+                                    S = T;
+                                }
+                                else
+                                {
+
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                            }
+                            else
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                if (((Convert.ToDateTime(lastTime)) - (Convert.ToDateTime(currTime))).TotalMinutes > 10)
+                                {
+                                    spelldata.SpellStartTime = currTime;
+                                    S = T;
+                                }
+                                else
+                                {
+                                    spelldata.SpellDataArray.Add(FlowRate);
+                                    spelldata.SpellTimeArray.Add(currTime);
+                                }
+                            }
+                        }
+                        if (E == T && S == T)
+                        {
+                            E = F;
+                            S = F;
+                            if (spelldata.SpellDataArray.Count > 1 /*&& spelldata.SpellDataArray.Sum() > 0*/)
+                            {
+                                spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                                if (spelldata.spellPeriod == 0)
+                                {
+                                    spelldata.spellPeriod = 1;
+                                }
+                                spellDataList.Add(spelldata);
+                                spelldata = new StoragePump1SpellData();
+                                string s = JsonConvert.SerializeObject(spellDataList);
+                            }
+                        }
+                    }
+                }
+                curtm = currTime;
+            }
+            if (spellDataList.Count < 1)
+            {
+                if (spelldata.SpellDataArray.Count > 0)
+                {
+                    spelldata.SpellStartTime = curtm;
+                    spelldata.spellPeriod = Convert.ToDouble(Convert.ToInt32(Math.Abs((Convert.ToDateTime(spelldata.SpellStartTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes)));
+                    if (spelldata.spellPeriod == 0)
+                    {
+                        spelldata.spellPeriod = 1;
+                    }
+                    spellDataList.Add(spelldata);
+                }
+            }
+            string c = JsonConvert.SerializeObject(spellDataList);
+            if (spelldata.SpellDataArray.Count == 0)
+            {
+                spelldata.SpellDataArray.Add(currentMotorStatus);
+                spelldata.SpellTimeArray.Add(currentTime);
+                spelldata.SpellStartTime = currentTime;
+                spelldata.SpellEndTime = currentTime;
+            }
+            double availableHours = 0;
+            if (spelldata.SpellDataArray.Count == 0 || spellDataList.Count == 0)
+            {
+                availableHours = 0;
+            }
+            else
+            {
+                var pp = TimeSpan.FromMinutes(Convert.ToDouble(spellDataList.Sum(i => i.spellPeriod)));
+                availableHours = Convert.ToDouble(pp.TotalMinutes) / 60;
+            }
+            return availableHours;
         }
 
     }

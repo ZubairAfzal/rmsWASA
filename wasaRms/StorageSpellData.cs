@@ -7,6 +7,9 @@ namespace wasaRms
 {
     public class StoragePump1SpellData
     {
+
+        public int spellMode { get; set; }
+        public double spellPeriod { get; set; }
         public int SpellNumber { get; set; }
         public string SpellStartTime { get; set; }
         public string SpellEndTime { get; set; }
