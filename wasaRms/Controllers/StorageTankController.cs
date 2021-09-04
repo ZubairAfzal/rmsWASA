@@ -1166,17 +1166,17 @@ namespace wasaRms.Controllers
                 scriptString += "{ y: " + pkws + " , label: \"Power (KW)\" }";
                 scriptString += "]}]});";
                 chartdata += "[";
-                chartdata += "{\"category\":\"Pump 1 Hours\",\"value\":\"" + itom.P1WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 2 Hours\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 3 Hours\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 4 Hours\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"PF\",\"value\":\"" + pff + "\"},";
-                chartdata += "{\"category\":\"Avg. V\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
-                chartdata += "{\"category\":\"Avg. A\",\"value\":\"" + averageis + "\"},";
-                chartdata += "{\"category\":\"Freq.\",\"value\":\"" + freqs + "\"},";
-                chartdata += "{\"category\":\"Power (KVA)\",\"value\":\"" + pkvas + "\"},";
-                chartdata += "{\"category\":\"Power (KVAR)\",\"value\":\"" + pkvars + "\"},";
-                chartdata += "{\"category\":\"Power (KW)\",\"value\":\"" + pkws + "\"}]";
+                chartdata += "{\"category\":\"Pump 1 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP1 + "\",\"value\":\"" + itom.P1WorkingInHours + " Hours\"},";
+                chartdata += "{\"category\":\"Pump 2 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP2 + "\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
+                chartdata += "{\"category\":\"Pump 3 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP3 + "\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
+                chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"},";
+                chartdata += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
+                chartdata += "{\"category\":\"Avg. V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
+                chartdata += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
+                chartdata += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
+                chartdata += "{\"category\":\"Power (KVA)\",\"tooltip\":\"" + pkvas + "\",\"value\":\"" + pkvas + "\"},";
+                chartdata += "{\"category\":\"Power (KVAR)\",\"tooltip\":\"" + pkvars + "\",\"value\":\"" + pkvars + "\"},";
+                chartdata += "{\"category\":\"Power (KW)\",\"tooltip\":\"" + pkws + "\",\"value\":\"" + pkws + "\"}]";
                 ViewData["amChartData"] = chartdata;
             }
             else
@@ -1362,17 +1362,17 @@ namespace wasaRms.Controllers
                 scriptString += "{ y: " + pkws + " , label: \"Power (KW)\" }";
                 scriptString += "]}]});";
                 chartdata += "[";
-                chartdata += "{\"category\":\"Pump 1 Hours\",\"value\":\"" + itom.P1WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 2 Hours\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 3 Hours\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 4 Hours\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"PF\",\"value\":\"" + pff + "\"},";
-                chartdata += "{\"category\":\"Avg. V\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
-                chartdata += "{\"category\":\"Avg. A\",\"value\":\"" + averageis + "\"},";
-                chartdata += "{\"category\":\"Freq.\",\"value\":\"" + freqs + "\"},";
-                chartdata += "{\"category\":\"Power (KVA)\",\"value\":\"" + pkvas + "\"},";
-                chartdata += "{\"category\":\"Power (KVAR)\",\"value\":\"" + pkvars + "\"},";
-                chartdata += "{\"category\":\"Power (KW)\",\"value\":\"" + pkws + "\"}]";
+                chartdata += "{\"category\":\"Pump 1 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP1 + "\",\"value\":\"" + itom.P1WorkingInHours + " Hours\"},";
+                chartdata += "{\"category\":\"Pump 2 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP2 + "\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
+                chartdata += "{\"category\":\"Pump 3 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP3 + "\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
+                chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"},";
+                chartdata += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
+                chartdata += "{\"category\":\"Avg. V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
+                chartdata += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
+                chartdata += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
+                chartdata += "{\"category\":\"Power (KVA)\",\"tooltip\":\"" + pkvas + "\",\"value\":\"" + pkvas + "\"},";
+                chartdata += "{\"category\":\"Power (KVAR)\",\"tooltip\":\"" + pkvars + "\",\"value\":\"" + pkvars + "\"},";
+                chartdata += "{\"category\":\"Power (KW)\",\"tooltip\":\"" + pkws + "\",\"value\":\"" + pkws + "\"}]";
                 ViewData["amChartData"] = chartdata;
             }
             else

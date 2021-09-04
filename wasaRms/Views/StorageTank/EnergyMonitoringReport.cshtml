@@ -642,10 +642,11 @@
                 var series = chart.series.push(new am4charts.ConeSeries());
                 series.sequencedInterpolation = true;
                 series.dataFields.valueY = "value";
+                series.dataFields.tooltipText = "tooltip";
                 series.dataFields.categoryX = "category";
                 series.columns.template.strokeWidth = 0;
 
-                series.columns.template.tooltipText = "{categoryX}: {valueY}";
+                series.columns.template.tooltipText = "{categoryX}: {tooltipText}";
                 series.columns.template.tooltipY = 0;
                 series.tooltip.pointerOrientation = "vertical";
 
@@ -693,16 +694,6 @@
                 });
 
 
-                @*@Html.Raw(ViewData["chartData"])
-                chart1.render();
-                function toogleDataSeries(e) {
-                    if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-                        e.dataSeries.visible = false;
-                    } else {
-                        e.dataSeries.visible = true;
-                    }
-                    chart1.render();
-                }*@
             }
         </script>
     </section>
