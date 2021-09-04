@@ -3960,7 +3960,7 @@ namespace wasaRms.Controllers
                 tableData.avgOfAvailableHours = 0;
                 tableData.avgOfNonAvailableHours = 0;
             }
-            else
+            if(0==0)
             {
                 tableData.locationName = location;
                 if (timeTo > DateTime.Now)
@@ -3985,7 +3985,7 @@ namespace wasaRms.Controllers
                 {
                     tableData.nonAvailableHours = 0;
                 }
-                if (tableData.availableHours == 23.98)
+                if (tableData.availableHours >= 23.97)
                 {
                     tableData.availableHours = 24;
                 }
@@ -4374,7 +4374,7 @@ namespace wasaRms.Controllers
                 tableData.avgOfAvailableHours = 0;
                 tableData.avgOfNonAvailableHours = 0;
             }
-            else
+            if(0==0)
             {
                 tableData.locationName = location;
                 if (timeTo > DateTime.Now)
@@ -4399,7 +4399,7 @@ namespace wasaRms.Controllers
                 {
                     tableData.nonAvailableHours = 0;
                 }
-                if (tableData.availableHours == 23.98)
+                if (tableData.availableHours >= 23.97)
                 {
                     tableData.availableHours = 24;
                 }
@@ -4410,7 +4410,7 @@ namespace wasaRms.Controllers
                 List<double> valList = new List<double>();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (Convert.ToInt32(dr["P1 Status"]) == 0)
+                    if (Math.Round((Convert.ToDouble(dr["P1 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P2 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P3 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P4 Status"])), 2) == 0)
                     {
                         unavailableSum += Convert.ToDouble(dr[ParameterName]);
                         unavailableCount += 1;
