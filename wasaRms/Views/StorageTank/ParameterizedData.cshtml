@@ -573,14 +573,14 @@
                                             </div>
                                             <div style="opacity: 0.99; margin: 0px !important; background: white; min-height: 525px !important;">
                                                 <center>
-                                                    @if (Model.First().parameterName == "P1 Status" ||
-                                                        Model.First().parameterName == "P2 Status" ||
-                                                        Model.First().parameterName == "P3 Status" ||
-                                                        Model.First().parameterName == "P4 Status" ||
-                                                        Model.First().parameterName == "P1 Mode" ||
-                                                        Model.First().parameterName == "P2 Mode" ||
-                                                        Model.First().parameterName == "P3 Mode" ||
-                                                        Model.First().parameterName == "P4 Mode")
+                                                    @if (Model.First().parameterName == "Pump No. 1 Status" ||
+                                                        Model.First().parameterName == "Pump No. 2 Status" ||
+                                                        Model.First().parameterName == "Pump No. 3 Status" ||
+                                                        Model.First().parameterName == "Pump No. 4 Status" ||
+                                                        Model.First().parameterName == "Pump No. 1 Mode" ||
+                                                        Model.First().parameterName == "Pump No. 2 Mode" ||
+                                                        Model.First().parameterName == "Pump No. 3 Mode" ||
+                                                        Model.First().parameterName == "Pump No. 4 Mode")
                                                     {
 
 
@@ -610,23 +610,23 @@
                                                         <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9" style="display:none !important"></div>
 
                                                     }
-                                                    else if (Model.First().parameterName == "V12 (V)" ||
-                                                        Model.First().parameterName == "V13 (V)" ||
-                                                        Model.First().parameterName == "V23 (V)" ||
-                                                        Model.First().parameterName == "V1N (V)" ||
-                                                        Model.First().parameterName == "V2N (V)" ||
-                                                        Model.First().parameterName == "V3N (V)" ||
-                                                        Model.First().parameterName == "I1 (A)" ||
-                                                        Model.First().parameterName == "I2 (A)" ||
-                                                        Model.First().parameterName == "I3 (A)" ||
-                                                        Model.First().parameterName == "Power Factor" ||
-                                                        Model.First().parameterName == "PKVA" ||
-                                                        Model.First().parameterName == "PKW" ||
-                                                        Model.First().parameterName == "PKVAR" ||
-                                                        Model.First().parameterName == "VA-SM" ||
-                                                        Model.First().parameterName == "V1 THD (%)" ||
-                                                        Model.First().parameterName == "V1 THD (%)" ||
-                                                        Model.First().parameterName == "V1 THD (%)")
+                                                    else if (Model.First().parameterName == "Line Voltage (V12)" ||
+                                                        Model.First().parameterName == "Line Voltage (V13)" ||
+                                                        Model.First().parameterName == "Line Voltage (V23)" ||
+                                                        Model.First().parameterName == "Phase Voltage (V1N)" ||
+                                                        Model.First().parameterName == "Phase Voltage (V2N)" ||
+                                                        Model.First().parameterName == "Phase Voltage (V3N)" ||
+                                                        Model.First().parameterName == "Current (I1)" ||
+                                                        Model.First().parameterName == "Current (I2)" ||
+                                                        Model.First().parameterName == "Current (I3)" ||
+                                                        Model.First().parameterName == "Power Factor (PF)" ||
+                                                        Model.First().parameterName == "Power (KVA)" ||
+                                                        Model.First().parameterName == "Power (KW)" ||
+                                                        Model.First().parameterName == "Power (KVAR)" ||
+                                                        Model.First().parameterName == "Power (VA-SM)" ||
+                                                        Model.First().parameterName == "V1 Total Harmonics Distortion (%)" ||
+                                                        Model.First().parameterName == "V2 Total Harmonics Distortion (%)" ||
+                                                        Model.First().parameterName == "V3 Total Harmonics Distortion (%)")
                                                     {
                                                         <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1" style="display:none !important"></div>
                                                         <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2" style="display:none !important"></div>
@@ -700,7 +700,7 @@
                                                         <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8" style="display:none !important"></div>
                                                         <div class="col-md-12 col-sm-12 col-lg-12 chartdiv" id="chartdiv9"></div>
                                                     }
-                                                    else if (Model.First().parameterName == "Frequency" || Model.First().parameterName == "Tank Level (ft)")
+                                                    else if (Model.First().parameterName == "Frequency (Hz)" || Model.First().parameterName == "Tank Level (ft)")
                                                     {
                                                         <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv1" style="display:none !important"></div>
                                                         <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv2" style="display:none !important"></div>

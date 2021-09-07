@@ -1436,7 +1436,7 @@ namespace wasaRms.Controllers
             ViewBag.ParameterList = parameterList;
             ResourceAndRangeSelector rs = new ResourceAndRangeSelector();
             rs.resourceID = "Lawrence Road Storage Tank";
-            rs.parameterID = "P1 Status";
+            rs.parameterID = "Pump No. 1 Status";
             ////////////////////////////////////////////////////////////////
             string scriptString = "";
             using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
@@ -1455,11 +1455,11 @@ namespace wasaRms.Controllers
                         string getParamsFromRes = "";
                         if (Convert.ToInt32(Session["CompanyID"]) == 1)
                         {
-                            getParamsFromRes = "select r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterName = '"+ rs.parameterID + "'  order by cast(r.resourceNumber as int) asc";
+                            getParamsFromRes = "select r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterDescription = '"+ rs.parameterID + "'  order by cast(r.resourceNumber as int) asc";
                         }
                         else
                         {
-                            getParamsFromRes = "select r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterName = '"+ rs.parameterID + "'  and r.managedBy = " + Convert.ToInt32(Session["UserID"]) + " order by cast(r.resourceNumber as int) asc";
+                            getParamsFromRes = "select r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterDescription = '" + rs.parameterID + "'  and r.managedBy = " + Convert.ToInt32(Session["UserID"]) + " order by cast(r.resourceNumber as int) asc";
                         }
                         SqlDataAdapter sdaPar = new SqlDataAdapter(getParamsFromRes, conn);
                         DataTable dtPar = new DataTable();
@@ -1514,7 +1514,7 @@ namespace wasaRms.Controllers
                             aquery += " (";
                             aquery += " SUM(pVal) FOR pID";
                             aquery += " IN";
-                            aquery += " ( [P1 Status],[P2 Status],[P3 Status],[P4 Status],[P1 Mode],[P2 Mode],[P3 Mode],[P4 Mode]";
+                            aquery += " ( [Pump No. 1 Status],[Pump No. 2 Status],[Pump No. 3 Status],[Pump No. 4 Status],[Pump No. 1 Mode],[Pump No. 2 Mode],[Pump No. 3 Mode],[Pump No. 4 Mode]";
                             aquery += " )";
                             aquery += " )";
                             aquery += " AS PivotTable";
@@ -1558,20 +1558,20 @@ namespace wasaRms.Controllers
                                 {
                                     if (Convert.ToDateTime(drVal["tim"]).Subtract(dt).TotalSeconds < 6000)
                                     {
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["P1 Status"]) / 1), 1)));
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["Pump No. 1 Status"]) / 1), 1)));
                                         dt = Convert.ToDateTime(drVal["tim"]);
                                     }
                                     else
                                     {
                                         dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(dt).AddHours(-5).AddMinutes(1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
                                         dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5).AddMinutes(-1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["P1 Status"]) / 1), 1)));
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["Pump No. 1 Status"]) / 1), 1)));
                                         dt = Convert.ToDateTime(drVal["tim"]);
                                     }
                                 }
                                 else
                                 {
-                                    dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal["P1 Status"]) / 1));
+                                    dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["tim"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Convert.ToDouble(drVal["Pump No. 1 Status"]) / 1));
                                     dt = Convert.ToDateTime(drVal["tim"]);
                                 }
 
@@ -1596,11 +1596,11 @@ namespace wasaRms.Controllers
             ////////////////////////////////////////////////////////////////
             var storageDataList = new List<StorageParameterChartClass>();
             StorageParameterChartClass tableData = new StorageParameterChartClass();
-            string parameterName = "P1 Status";
+            string parameterName = "Pump No. 1 Status";
             DateTime FinalTimeFrom = fromDt;
             DateTime FinalTimeTo = toDt;
             string resources = "Lawrence Road Storage Tank";
-            string parameter = "P1 Status";
+            string parameter = "Pump No. 1 Status";
             if (dtVal.Rows.Count > 0)
             {
                 try
@@ -1745,12 +1745,12 @@ namespace wasaRms.Controllers
                         //scriptString += "axisY: {suffix: \" \",labelFontSize: 15, minimum: 0 },";
                         //scriptString += "axisY: {includeZero: false, prefix: \"\", labelFormatter: function(e){if(e.value == NaN){return \"No Data\";}else{return e.value;}} },";
                         //P1 Auto/Mannual
-                        if (rs.parameterID == "P1 Status" || rs.parameterID == "P2 Status" || rs.parameterID == "P3 Status" || rs.parameterID == "P4 Status")
+                        if (rs.parameterID == "Pump No. 1 Status" || rs.parameterID == "Pump No. 2 Status" || rs.parameterID == "Pump No. 3 Status" || rs.parameterID == "Pump No. 4 Status")
                         {
                             scriptString += "axisY: {labelFontSize: 10, labelFormatter: function(){ return \" \"; }},";
                             scriptString += "toolTip: { shared: false , contentFormatter: function(e){ var str = \" \" ; for (var i = 0; i < e.entries.length; i++){ var utcSeconds = e.entries[i].dataPoint.x; var d = new Date(utcSeconds); if(e.entries[i].dataPoint.y == 0){ var temp = e.entries[i].dataSeries.name + \" \" +\"<b>: OFF</b> at  \" + d.toLocaleString('en-IN'); str = str+temp; } else { var temp = e.entries[i].dataSeries.name + \" \" +\"<b>: ON</b> at \" + d.toLocaleString('en-IN'); str = str+temp; } } return (str); }},";
                         }
-                        else if (rs.parameterID == "P1 Mode" || rs.parameterID == "P2 Mode" || rs.parameterID == "P3 Mode" || rs.parameterID == "P4 Mode")
+                        else if (rs.parameterID == "Pump No. 1 Mode" || rs.parameterID == "Pump No. 2 Mode" || rs.parameterID == "Pump No. 3 Mode" || rs.parameterID == "Pump No. 4 Mode")
                         {
                             scriptString += "axisY: {labelFontSize: 10, labelFormatter: function(){ return \" \"; }},";
                             scriptString += "toolTip: { shared: false , contentFormatter: function(e){ var str = \" \" ; for (var i = 0; i < e.entries.length; i++){ var utcSeconds = e.entries[i].dataPoint.x; var d = new Date(utcSeconds); if(e.entries[i].dataPoint.y == 0){ var temp = e.entries[i].dataSeries.name + \" \" +\"<b>: MANUAL</b> at  \" + d.toLocaleString('en-IN'); str = str+temp; } else { var temp = e.entries[i].dataSeries.name + \" \" +\"<b>: AUTO</b> at \" + d.toLocaleString('en-IN'); str = str+temp; } } return (str); }},";
@@ -1787,8 +1787,8 @@ namespace wasaRms.Controllers
                             aquery += " (";
                             aquery += " SUM(pVal) FOR pID";
                             aquery += " IN ( ";
-                            aquery += "[P1 Status],[P2 Status],[P3 Status],[P4 Status],[P1 Mode],[P2 Mode],[P3 Mode],[P4 Mode]";
-                            if (rs.parameterID == "P1 Status" || rs.parameterID == "P2 Status" || rs.parameterID == "P3 Status" || rs.parameterID == "P4 Status" || rs.parameterID == "P1 Mode" || rs.parameterID == "P2 Mode" || rs.parameterID == "P3 Mode" || rs.parameterID == "P4 Mode")
+                            aquery += "[Pump No. 1 Status],[Pump No. 2 Status],[Pump No. 3 Status],[Pump No. 4 Status],[Pump No. 1 Mode],[Pump No. 2 Mode],[Pump No. 3 Mode],[Pump No. 4 Mode]";
+                            if (rs.parameterID == "Pump No. 1 Status" || rs.parameterID == "Pump No. 2 Status" || rs.parameterID == "Pump No. 3 Status" || rs.parameterID == "Pump No. 4 Status" || rs.parameterID == "Pump No. 1 Mode" || rs.parameterID == "Pump No. 2 Mode" || rs.parameterID == "Pump No. 3 Mode" || rs.parameterID == "Pump No. 4 Mode")
                             {
 
                             }
@@ -1807,7 +1807,7 @@ namespace wasaRms.Controllers
                             SqlDataAdapter sdaVal = new SqlDataAdapter(theQuery, conn);
                            
                             sdaVal.Fill(dtVal);
-                            if (rs.parameterID == "P1 Status" || rs.parameterID == "P2 Status" || rs.parameterID == "P3 Status" || rs.parameterID == "P4 Status" || rs.parameterID == "P1 Mode" || rs.parameterID == "P2 Mode" || rs.parameterID == "P3 Mode" || rs.parameterID == "P4 Mode")
+                            if (rs.parameterID == "Pump No. 1 Status" || rs.parameterID == "Pump No. 2 Status" || rs.parameterID == "Pump No. 3 Status" || rs.parameterID == "Pump No. 4 Status" || rs.parameterID == "Pump No. 1 Mode" || rs.parameterID == "Pump No. 2 Mode" || rs.parameterID == "Pump No. 3 Mode" || rs.parameterID == "Pump No. 4 Mode")
                             {
                                 if (rs.parameterID == "P1 Auto/Mannual" || rs.parameterID == "P2 Auto/Mannual" || rs.parameterID == "P3 Auto/Mannual" || rs.parameterID == "P4 Auto/Mannual")
                                 {
@@ -1874,21 +1874,21 @@ namespace wasaRms.Controllers
             {
                 try
                 {
-                    if (rs.parameterID == "P1 Status" || rs.parameterID == "P2 Status" || rs.parameterID == "P3 Status" || rs.parameterID == "P4 Status" || rs.parameterID == "P1 Mode" || rs.parameterID == "P2 Mode" || rs.parameterID == "P3 Mode" || rs.parameterID == "P4 Mode")
+                    if (rs.parameterID == "Pump No. 1 Status" || rs.parameterID == "Pump No. 2 Status" || rs.parameterID == "Pump No. 3 Status" || rs.parameterID == "Pump No. 4 Status" || rs.parameterID == "Pump No. 1 Mode" || rs.parameterID == "Pump No. 2 Mode" || rs.parameterID == "Pump No. 3 Mode" || rs.parameterID == "Pump No. 4 Mode")
                     {
-                        if (rs.parameterID == "P1 Status" || rs.parameterID == "P1 Mode")
+                        if (rs.parameterID == "Pump No. 1 Status" || rs.parameterID == "Pump No. 1 Mode")
                         {
                             tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 1);
                         }
-                        else if (rs.parameterID == "P2 Status" || rs.parameterID == "P2 Mode")
+                        else if (rs.parameterID == "Pump No. 2 Status" || rs.parameterID == "Pump No. 2 Mode")
                         {
                             tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 2);
                         }
-                        else if (rs.parameterID == "P3 Status" || rs.parameterID == "P3 Mode")
+                        else if (rs.parameterID == "Pump No. 3 Status" || rs.parameterID == "Pump No. 3 Mode")
                         {
                             tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 3);
                         }
-                        else if (rs.parameterID == "P4 Status" || rs.parameterID == "P4 Mode")
+                        else if (rs.parameterID == "Pump No. 4 Status" || rs.parameterID == "Pump No. 4 Mode")
                         {
                             tableData = getAllSpellsForStorageParameterizedChartPumps(dtVal, parameterName, FinalTimeFrom, FinalTimeTo, 4);
                         }
@@ -3650,23 +3650,23 @@ namespace wasaRms.Controllers
             string location = dt.Rows[0]["Location"].ToString();
             if (pumpNumber == 1)
             {
-                pumpNumberName = "P1 Status";
-                pumpModeName = "P1 Mode";
+                pumpNumberName = "Pump No. 1 Status";
+                pumpModeName = "Pump No. 1 Mode";
             }
             else if (pumpNumber == 2)
             {
-                pumpNumberName = "P2 Status";
-                pumpModeName = "P2 Mode";
+                pumpNumberName = "Pump No. 2 Status";
+                pumpModeName = "Pump No. 2 Mode";
             }
             else if (pumpNumber == 3)
             {
-                pumpNumberName = "P3 Status";
-                pumpModeName = "P3 Mode";
+                pumpNumberName = "Pump No. 3 Status";
+                pumpModeName = "Pump No. 3 Mode";
             }
             else 
             {
-                pumpNumberName = "P4 Status";
-                pumpModeName = "P4 Mode";
+                pumpNumberName = "Pump No. 4 Status";
+                pumpModeName = "Pump No. 4 Mode";
             }
             var cms = dt.Rows[0][pumpNumberName];
             double currentMotorStatus = 0;
@@ -4050,10 +4050,10 @@ namespace wasaRms.Controllers
             var spelldata = new StoragePump1SpellData();
             
             string location = dt.Rows[0]["Location"].ToString();
-            var cms1 = dt.Rows[0]["P1 Status"];
-            var cms2 = dt.Rows[0]["P2 Status"];
-            var cms3 = dt.Rows[0]["P3 Status"];
-            var cms4 = dt.Rows[0]["P4 Status"];
+            var cms1 = dt.Rows[0]["Pump No. 1 Status"];
+            var cms2 = dt.Rows[0]["Pump No. 2 Status"];
+            var cms3 = dt.Rows[0]["Pump No. 3 Status"];
+            var cms4 = dt.Rows[0]["Pump No. 4 Status"];
             double currentMotorStatus = 0;
             double currentMotorStatus1 = 0;
             double currentMotorStatus2 = 0;
@@ -4065,7 +4065,7 @@ namespace wasaRms.Controllers
             }
             else
             {
-                currentMotorStatus1 = Math.Round((Convert.ToDouble(dt.Rows[0]["P1 Status"])), 2);
+                currentMotorStatus1 = Math.Round((Convert.ToDouble(dt.Rows[0]["Pump No. 1 Status"])), 2);
             }
             if (cms2 == DBNull.Value)
             {
@@ -4073,7 +4073,7 @@ namespace wasaRms.Controllers
             }
             else
             {
-                currentMotorStatus2 = Math.Round((Convert.ToDouble(dt.Rows[0]["P2 Status"])), 2);
+                currentMotorStatus2 = Math.Round((Convert.ToDouble(dt.Rows[0]["Pump No. 2 Status"])), 2);
             }
             if (cms3 == DBNull.Value)
             {
@@ -4081,7 +4081,7 @@ namespace wasaRms.Controllers
             }
             else
             {
-                currentMotorStatus3 = Math.Round((Convert.ToDouble(dt.Rows[0]["P3 Status"])), 2);
+                currentMotorStatus3 = Math.Round((Convert.ToDouble(dt.Rows[0]["Pump No. 3 Status"])), 2);
             }
             if (cms4 == DBNull.Value)
             {
@@ -4089,7 +4089,7 @@ namespace wasaRms.Controllers
             }
             else
             {
-                currentMotorStatus4 = Math.Round((Convert.ToDouble(dt.Rows[0]["P4 Status"])), 2);
+                currentMotorStatus4 = Math.Round((Convert.ToDouble(dt.Rows[0]["Pump No. 4 Status"])), 2);
             }
             currentMotorStatus = currentMotorStatus1 + currentMotorStatus2 + currentMotorStatus3 + currentMotorStatus4;
             string currentTime = dt.Rows[0]["tim"].ToString();
@@ -4105,8 +4105,8 @@ namespace wasaRms.Controllers
             string curtm = "";
             foreach (DataRow dr in dt.Rows)
             {
-                var currV = dr["P1 Status"];
-                var currVR = dr["P1 Mode"];
+                var currV = dr["Pump No. 1 Status"];
+                var currVR = dr["Pump No. 1 Mode"];
                 var wf = dr[ParameterName];
                 double currValue = 0;
                 double currValueRemote = 0;
@@ -4115,13 +4115,13 @@ namespace wasaRms.Controllers
                 { }
                 else
                 {
-                    currValue = Math.Round((Convert.ToDouble(dr["P1 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P2 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P3 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P4 Status"])), 2);
+                    currValue = Math.Round((Convert.ToDouble(dr["Pump No. 1 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 2 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 3 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 4 Status"])), 2);
                 }
                 if (currVR == DBNull.Value)
                 { }
                 else
                 {
-                    currValueRemote = Math.Round((Convert.ToDouble(dr["P1 Mode"])), 2);
+                    currValueRemote = Math.Round((Convert.ToDouble(dr["Pump No. 1 Mode"])), 2);
                 }
                 if (wf == DBNull.Value)
                 { }
@@ -4410,7 +4410,7 @@ namespace wasaRms.Controllers
                 List<double> valList = new List<double>();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (Math.Round((Convert.ToDouble(dr["P1 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P2 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P3 Status"])), 2) + Math.Round((Convert.ToDouble(dr["P4 Status"])), 2) == 0)
+                    if (Math.Round((Convert.ToDouble(dr["Pump No. 1 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 2 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 3 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 4 Status"])), 2) == 0)
                     {
                         unavailableSum += Convert.ToDouble(dr[ParameterName]);
                         unavailableCount += 1;

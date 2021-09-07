@@ -10,7 +10,7 @@
             @using (SqlConnection con1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 string query = "";
-                query += ";WITH cte AS ( SELECT* FROM ( SELECT DISTINCT r.resourceName AS Location, r.resourceID, p.parameterName AS pID, s.parameterValue AS pVal, s.sheetInsertionDateTime as tim , DATEDIFF(minute, s.sheetInsertionDateTime, DATEADD(hour, 10,GETDATE ())) as DeltaMinutes FROM tblSheet s inner join tblResource r on s.resourceID = r.resourceID inner join tblParameter p on s.parameterID = p.parameterID inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID where r.resourceID = 1085 and sheetInsertionDateTime >= CONVERT(CHAR(24), CONVERT(DATETIME, '" + DateTime.Now.AddHours(9).Date + "', 103), 121)  ) AS SourceTable PIVOT ( SUM(pVal) FOR pID IN ( [V1N (V)],[V2N (V)],[V3N (V)],[I1 (A)],[I2 (A)],[I3 (A)],[W (kwatt)],[VAR (kvar)],[VA (kva)],[VA-SUM (kva)],[PF],[Freq (Hz)],[V12 (v)],[V23 (v)],[V13 (v)],[V1 THD (%)],[V2 THD (%)],[V3 THD (%)],[P1 Status],[P2 Status],[P3 Status],[P4 Status],[P1 Auto/Mannual],[P2 Auto/Mannual],[P3 Auto/Mannual],[P4 Auto/Mannual],[Tank Level1 (ft)] ) ) AS PivotTable ) SELECT* FROM cte order by cast(resourceID as INT) ASC, tim DESC ";
+                query += ";WITH cte AS ( SELECT* FROM ( SELECT DISTINCT r.resourceName AS Location, r.resourceID, p.parameterName AS pID, s.parameterValue AS pVal, s.sheetInsertionDateTime as tim , DATEDIFF(minute, s.sheetInsertionDateTime, DATEADD(hour, 0,GETDATE ())) as DeltaMinutes FROM tblSheet s inner join tblResource r on s.resourceID = r.resourceID inner join tblParameter p on s.parameterID = p.parameterID inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID where r.resourceID = 1085 and sheetInsertionDateTime >= CONVERT(CHAR(24), CONVERT(DATETIME, '" + DateTime.Now.AddHours(0).Date + "', 103), 121)  ) AS SourceTable PIVOT ( SUM(pVal) FOR pID IN ( [V1N (V)],[V2N (V)],[V3N (V)],[I1 (A)],[I2 (A)],[I3 (A)],[W (kwatt)],[VAR (kvar)],[VA (kva)],[VA-SUM (kva)],[PF],[Freq (Hz)],[V12 (v)],[V23 (v)],[V13 (v)],[V1 THD (%)],[V2 THD (%)],[V3 THD (%)],[P1 Status],[P2 Status],[P3 Status],[P4 Status],[P1 Auto/Mannual],[P2 Auto/Mannual],[P3 Auto/Mannual],[P4 Auto/Mannual],[Tank Level1 (ft)] ) ) AS PivotTable ) SELECT* FROM cte order by cast(resourceID as INT) ASC, tim DESC ";
                 using (SqlCommand cmd = new SqlCommand(query))
                 {
                     cmd.Connection = con1;
@@ -21,14 +21,14 @@
                         sda.Fill(dt);
                         if (dt.Rows.Count > 1)
                         {
-                            var abc = Math.Round(((Convert.ToDouble(dt.Rows[0][29])) - (Convert.ToDouble(dt.Rows[1][30])) / 3), 2);
-                            double a = Convert.ToDouble(dt.Rows[0][29]);
-                            double b = Convert.ToDouble(dt.Rows[1][29]);
+                            var abc = Math.Round(((Convert.ToDouble(dt.Rows[0][30])) - (Convert.ToDouble(dt.Rows[1][30])) / 3), 2);
+                            double a = Convert.ToDouble(dt.Rows[0][30]);
+                            double b = Convert.ToDouble(dt.Rows[1][30]);
                             double in_out = (-1) * Math.Round(((b - a) / 3), 3);
                             <table class="table table-striped table-bordered table-hover" id="sample_1" style="text-align:center">
                                 <thead style="font-weight:bold">
                                     <tr style="background-color: #a8c9cd;">
-                                        <th>Sr</th>
+                                        <th>Sr. No.</th>
                                         <th>Location</th>
                                         <th>Current Level (ft)</th>
                                         <th>Water Storage (Imp. Gallon)</th>
@@ -41,9 +41,9 @@
                                     <tr>
                                         <td>1</td>
                                         <td>@(dt.Rows[0][0])</td>
-                                        <td>@Math.Round((Convert.ToDouble(dt.Rows[0][29])), 1)  </td>
-                                        <td>@Math.Round((Convert.ToDouble(dt.Rows[0][29]) * 89695.23), 2)</td>
-                                        <td>@Math.Round((Convert.ToDouble(dt.Rows[0][29]) * 89695.23)/13394.2846, 0) %</td>
+                                        <td>@Math.Round((Convert.ToDouble(dt.Rows[0][30])), 1)  </td>
+                                        <td>@(String.Format("{0:n0}", Math.Round((Convert.ToDouble(dt.Rows[0][30]) * 89695.23), 2))) Gallons / 1,345,428 Gallons</td>
+                                        <td>@Math.Round((Convert.ToDouble(dt.Rows[0][30]) * 89695.23) / 13394.2846, 0) %</td>
                                         <td>@(dt.Rows[0][2])</td>
                                         <td>@in_out (ft/min)</td>
                                     </tr>
