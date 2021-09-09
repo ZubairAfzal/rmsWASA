@@ -102,7 +102,7 @@ namespace wasaRms.Controllers
                             }
                             else if (sdr1["parameterName"].ToString() == "P1 Auto/Mannual")
                             {
-                                parameterValuesString += "P1 Mode" + ": ";
+                                parameterValuesString += "Pump No. 1 Mode" + ": ";
                                 if (sdr1["parameterValue"].ToString() == "0")
                                 {
                                     valuee = "Manual";
@@ -114,7 +114,7 @@ namespace wasaRms.Controllers
                             }
                             else if (sdr1["parameterName"].ToString() == "P2 Auto/Mannual")
                             {
-                                parameterValuesString += "P2 Mode" + ": ";
+                                parameterValuesString += "Pump No. 2 Mode" + ": ";
                                 if (sdr1["parameterValue"].ToString() == "0")
                                 {
                                     valuee = "Manual";
@@ -126,7 +126,7 @@ namespace wasaRms.Controllers
                             }
                             else if (sdr1["parameterName"].ToString() == "P3 Auto/Mannual")
                             {
-                                parameterValuesString += "P3 Mode" + ": ";
+                                parameterValuesString += "Pump No. 3 Mode" + ": ";
                                 if (sdr1["parameterValue"].ToString() == "0")
                                 {
                                     valuee = "Manual";
@@ -138,7 +138,7 @@ namespace wasaRms.Controllers
                             }
                             else if (sdr1["parameterName"].ToString() == "P4 Auto/Mannual")
                             {
-                                parameterValuesString += "P4 Mode" + ": ";
+                                parameterValuesString += "Pump No. 4 Mode" + ": ";
                                 if (sdr1["parameterValue"].ToString() == "0")
                                 {
                                     valuee = "Manual";
@@ -150,92 +150,92 @@ namespace wasaRms.Controllers
                             }
                             else if (sdr1["ParameterName"].ToString() == "V12 (v)")
                             {
-                                parameterValuesString += "V12 (V) " + ": ";
+                                parameterValuesString += "Line Voltage (V12) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "V13 (v)")
                             {
-                                parameterValuesString += "V13 (V) " + ": ";
+                                parameterValuesString += "Line Voltage (V13) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "V23 (v)")
                             {
-                                parameterValuesString += "V23 (V) " + ": ";
+                                parameterValuesString += "Line Voltage (V23) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "V1N (V)")
                             {
-                                parameterValuesString += "V1N (V) " + ": ";
+                                parameterValuesString += "Phase Voltage (V1N) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "V2N (V)")
                             {
-                                parameterValuesString += "V2N (V) " + ": ";
+                                parameterValuesString += "Phase Voltage (V2N) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "V3N (V)")
                             {
-                                parameterValuesString += "V3N (V) " + ": ";
+                                parameterValuesString += "Phase Voltage (V3N) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "I1 (A)")
                             {
-                                parameterValuesString += "I1 (A)" + ": ";
+                                parameterValuesString += "Current (I1) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "I2 (A)")
                             {
-                                parameterValuesString += "I2 (A)" + ": ";
+                                parameterValuesString += "Current (I2) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "I3 (A)")
                             {
-                                parameterValuesString += "I3 (A)" + ": ";
+                                parameterValuesString += "Current (I3) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "PF")
                             {
-                                parameterValuesString += "Power Factor " + ": ";
+                                parameterValuesString += "Power Factor (PF) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "Freq (Hz)")
                             {
-                                parameterValuesString += "Frequency " + ": ";
+                                parameterValuesString += "Frequency (Hz) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "VA (kva)")
                             {
-                                parameterValuesString += "PKVA " + ": ";
+                                parameterValuesString += "Power (KVA) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "W (kwatt)")
                             {
-                                parameterValuesString += "PKW " + ": ";
+                                parameterValuesString += "Power (KW) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "VAR (kvar)")
                             {
-                                parameterValuesString += "PKVAR  " + ": ";
+                                parameterValuesString += "Power (KVAR)  " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "VA-SUM (kva)")
                             {
-                                parameterValuesString += "VA-SM " + ": ";
+                                parameterValuesString += "Power (VA-SM) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "V1 THD (%)")
                             {
-                                parameterValuesString += "V1 THD (%) " + ": ";
+                                parameterValuesString += "V1 Total Harmonics Distortion (%) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "V2 THD (%)")
                             {
-                                parameterValuesString += "V2 THD (%) " + ": ";
+                                parameterValuesString += "V2 Total Harmonics Distortion (%) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "V3 THD (%)")
                             {
-                                parameterValuesString += "V3 THD (%) " + ": ";
+                                parameterValuesString += "V3 Total Harmonics Distortion (%) " + ": ";
                                 valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
                             }
                             else if (sdr1["ParameterName"].ToString() == "Tank Level1 (ft)")
@@ -4040,6 +4040,20 @@ namespace wasaRms.Controllers
                 tableData.availableHoursString = minutesToTime(tableData.availableHours*60);
                 tableData.nonAvailableHoursString = minutesToTime(tableData.nonAvailableHours*60);
                 tableData.parameterName = ParameterName;
+                if (tableData.workingInHoursString == "23 Hours, 58 Minutes" || tableData.workingInHoursString == "23 Hours, 57 Minutes") { tableData.workingInHoursString = "24 Hours, 0 Minutes"; }
+                if (tableData.totalHoursString == "23 Hours, 58 Minutes" || tableData.totalHoursString == "23 Hours, 57 Minutes") { tableData.totalHoursString = "24 Hours, 0 Minutes"; }
+                if (tableData.workingInHoursManualString == "23 Hours, 58 Minutes" || tableData.workingInHoursManualString == "23 Hours, 57 Minutes") { tableData.workingInHoursManualString = "24 Hours, 0 Minutes"; }
+                if (tableData.workingInHoursRemoteString == "23 Hours, 58 Minutes" || tableData.workingInHoursRemoteString == "23 Hours, 57 Minutes") { tableData.workingInHoursRemoteString = "24 Hours, 0 Minutes"; }
+                if (tableData.availableHoursString == "23 Hours, 58 Minutes" || tableData.availableHoursString == "23 Hours, 57 Minutes") { tableData.availableHoursString = "24 Hours, 0 Minutes"; }
+                if (tableData.nonAvailableHoursString == "23 Hours, 58 Minutes" || tableData.nonAvailableHoursString == "23 Hours, 57 Minutes") { tableData.nonAvailableHoursString = "24 Hours, 0 Minutes"; }
+                if (tableData.nonWorkingInHoursString == "23 Hours, 58 Minutes" || tableData.nonWorkingInHoursString == "23 Hours, 57 Minutes") { tableData.nonWorkingInHoursString = "24 Hours, 0 Minutes"; }
+                if (tableData.workingInHours >= 23.95 && tableData.workingInHours <= 24) { tableData.workingInHours = 24; }
+                if (tableData.nonWorkingInHours >= 23.95 && tableData.nonWorkingInHours <= 24) { tableData.nonWorkingInHours = 24; }
+                if (tableData.totalHours >= 23.95 && tableData.totalHours <= 24) { tableData.totalHours = 24; }
+                if (tableData.workingInHoursManual >= 23.95 && tableData.workingInHoursManual <= 24) { tableData.workingInHoursManual = 24; }
+                if (tableData.workingInHoursRemote >= 23.95 && tableData.workingInHoursRemote <= 24) { tableData.workingInHoursRemote = 24; }
+                if (tableData.availableHours >= 23.95 && tableData.availableHours <= 24) { tableData.availableHours = 24; }
+                if (tableData.nonAvailableHours >= 23.95 && tableData.nonAvailableHours <= 24) { tableData.nonAvailableHours = 24; }
             }
             return tableData;
         }
