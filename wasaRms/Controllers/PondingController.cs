@@ -1451,7 +1451,7 @@ namespace wasaRms.Controllers
                         }
                         else if (E == T && S == F)
                         {
-                            if (currValue < 1 || dr == dt.Rows[dt.Rows.Count - 1])
+                            if (currValue < 1.19 || dr == dt.Rows[dt.Rows.Count - 1])
                             {
                                 string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
                                 spelldata.SpellStartTime = currTime;
@@ -1551,7 +1551,7 @@ namespace wasaRms.Controllers
                         }
                         else if (E == T && S == F)
                         {
-                            if (currValue < 1 || dr == dt.Rows[dt.Rows.Count - 1])
+                            if (currValue < 1.19 || dr == dt.Rows[dt.Rows.Count - 1])
                             {
                                 string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
                                 spelldata.SpellStartTime = currTime;
@@ -1907,7 +1907,7 @@ namespace wasaRms.Controllers
                         }
                         else if (E == T && S == F)
                         {
-                            if (currValue < 1 || dr == dt.Rows[dt.Rows.Count - 1])
+                            if (currValue < 1.19 || dr == dt.Rows[dt.Rows.Count - 1])
                             {
                                 string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
                                 spelldata.SpellStartTime = currTime;
@@ -1980,7 +1980,7 @@ namespace wasaRms.Controllers
                         }
                         else if (E == T && S == F)
                         {
-                            if (currValue < 1 || dr == dt.Rows[dt.Rows.Count - 1])
+                            if (currValue < 1.19 || dr == dt.Rows[dt.Rows.Count - 1])
                             {
                                 string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
                                 spelldata.SpellStartTime = currTime;
