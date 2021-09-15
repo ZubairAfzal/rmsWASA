@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -500,7 +501,9 @@ namespace wasaRms.Controllers
                         {
                             newMode = 0;
                         }
-                        string UpdateGetAutoRemoteModeQ = "update tblResource set modeStatus = "+newMode+" where resourceID = 1085"; 
+                        string UpdateGetAutoRemoteModeQ = "update tblResource set modeStatus = "+newMode+" where resourceID = 1085";
+                        SqlCommand cmd = new SqlCommand(UpdateGetAutoRemoteModeQ, conn);
+                        cmd.ExecuteNonQuery();
                         conn.Close();
                     }
                     catch (Exception ex)
@@ -531,6 +534,8 @@ namespace wasaRms.Controllers
                             newP1BtnStatus = 0;
                         }
                         string UpdateButtonStatusQ = "update tblParameter set paramButtonStatus = " + newP1BtnStatus + " where parameterID = 1026";
+                        SqlCommand cmd = new SqlCommand(UpdateButtonStatusQ, conn);
+                        cmd.ExecuteNonQuery();
                         conn.Close();
                     }
                     catch (Exception ex)
@@ -561,6 +566,8 @@ namespace wasaRms.Controllers
                             newP2BtnStatus = 0;
                         }
                         string UpdateButtonStatusQ = "update tblParameter set paramButtonStatus = " + newP2BtnStatus + " where parameterID = 1027";
+                        SqlCommand cmd = new SqlCommand(UpdateButtonStatusQ, conn);
+                        cmd.ExecuteNonQuery();
                         conn.Close();
                     }
                     catch (Exception ex)
@@ -591,6 +598,8 @@ namespace wasaRms.Controllers
                             newP3BtnStatus = 0;
                         }
                         string UpdateButtonStatusQ = "update tblParameter set paramButtonStatus = " + newP3BtnStatus + " where parameterID = 1028";
+                        SqlCommand cmd = new SqlCommand(UpdateButtonStatusQ, conn);
+                        cmd.ExecuteNonQuery();
                         conn.Close();
                     }
                     catch (Exception ex)
@@ -622,6 +631,8 @@ namespace wasaRms.Controllers
                             newP4BtnStatus = 0;
                         }
                         string UpdateButtonStatusQ = "update tblParameter set paramButtonStatus = " + newP4BtnStatus + " where parameterID = 1029";
+                        SqlCommand cmd = new SqlCommand(UpdateButtonStatusQ, conn);
+                        cmd.ExecuteNonQuery();
                         conn.Close();
                     }
                     catch (Exception ex)
@@ -1120,7 +1131,7 @@ namespace wasaRms.Controllers
             pkvars = Math.Round((pkvars / counter), 2);
             pkws = Math.Round((pkws / counter), 2);
             double averageis = Math.Round(((i1s + i2s + i3s) / 3), 2);
-
+            double units = Math.Round((pkws * (itom.P1WorkingInHours + itom.P2WorkingInHours + itom.P3WorkingInHours + itom.P4WorkingInHours)), 2);
             v1ns = Math.Round((v1ns / counter), 2);
             v2ns = Math.Round((v2ns / counter), 2);
             v3ns = Math.Round((v3ns / counter), 2);
@@ -1138,16 +1149,19 @@ namespace wasaRms.Controllers
             ViewData["Pump4Working"] = Math.Round(itom.P4WorkingInHours, 2);
             ViewData["PF"] = pff;
             ViewData["AverageVoltage"] = Math.Round(((v1ns + v2ns + v3ns) / 3), 2);
+            ViewData["AverageLineVoltage"] = Math.Round(((v12s + v13s + v23s) / 3), 2);
             ViewData["AverageCurrent"] = averageis;
             ViewData["Frequency"] = freqs;
             ViewData["PKVA"] = pkvas;
             ViewData["PKVAR"] = pkvars;
             ViewData["PKW"] = pkws;
+            ViewData["Units"] = units;
 
             /////////////////////////////////
             ///
             string scriptString = "";
             string chartdata = "";
+            string chartdata1 = "";
             //scriptString = "var chart1 = new CanvasJS.Chart(\"chartContainer1\", { theme: \"light2\", animationEnabled: true, title:{ text: \"Energy Monitoring Stats\" }, data: [ { type: \"stackedColumn\", dataPoints: [";
             scriptString = "var chart1 = new CanvasJS.Chart(\"chartContainer1\", { theme: \"light2\", animationEnabled: true, title:{ text: \"Energy Monitoring Stats\" }, exportEnabled: true, dataPointWidth: 30, subtitles: [{text: \" Energy Data Fetched from Storage Tank Today  \" }], axisY:{labelFontSize: 10,includeZero: true },axisX:{labelFontSize: 10, title: \"All Energy Data (Effective Energy Stats)\",titleFontSize: 12,labelAngle: 45}, legend: { cursor: \"pointer\", itemclick: toogleDataSeries, fontSize: 11, horizontalAlign: \"center\"}, toolTip: {fontSize: 12, fontWeight: \"bold\", shared: true, content: \"{label}: {y}\" }, data: [ { type: \"stackedColumn\", dataPoints: [";
             if (itom.pumpStatus1 != null)
@@ -1169,19 +1183,25 @@ namespace wasaRms.Controllers
                 chartdata += "{\"category\":\"Pump 1 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP1 + "\",\"value\":\"" + itom.P1WorkingInHours + " Hours\"},";
                 chartdata += "{\"category\":\"Pump 2 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP2 + "\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
                 chartdata += "{\"category\":\"Pump 3 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP3 + "\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
-                chartdata += "{\"category\":\"Avg. V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
-                chartdata += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
-                chartdata += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
-                chartdata += "{\"category\":\"Power (KVA)\",\"tooltip\":\"" + pkvas + "\",\"value\":\"" + pkvas + "\"},";
-                chartdata += "{\"category\":\"Power (KVAR)\",\"tooltip\":\"" + pkvars + "\",\"value\":\"" + pkvars + "\"},";
-                chartdata += "{\"category\":\"Power (KW)\",\"tooltip\":\"" + pkws + "\",\"value\":\"" + pkws + "\"}]";
+                chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"}]";
                 ViewData["amChartData"] = chartdata;
+
+                chartdata1 += "[";
+                chartdata1 += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
+                chartdata1 += "{\"category\":\"Avg. Phase V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
+                chartdata1 += "{\"category\":\"Avg. Line V\",\"tooltip\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\",\"value\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\"},";
+                chartdata1 += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
+                chartdata1 += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
+                chartdata1 += "{\"category\":\"Power (KVA)\",\"tooltip\":\"" + pkvas + "\",\"value\":\"" + pkvas + "\"},";
+                chartdata1 += "{\"category\":\"Power (KVAR)\",\"tooltip\":\"" + pkvars + "\",\"value\":\"" + pkvars + "\"},";
+                chartdata1 += "{\"category\":\"Power (KW)\",\"tooltip\":\"" + pkws + "\",\"value\":\"" + pkws + "\"},";
+                chartdata1 += "{\"category\":\"Units Consumed\",\"tooltip\":\"" + units + "\",\"value\":\"" + units + "\"}]";
+                ViewData["amChartData1"] = chartdata1;
             }
             else
             {
                 ViewData["amChartData"] = chartdata;
+                ViewData["amChartData1"] = chartdata1;
             }
             /// 
             /////////////////////////////////////////////////////////////////////////////////////////
@@ -1274,7 +1294,7 @@ namespace wasaRms.Controllers
             double v23s = 0;
             double freqs = 0;
             double averageis = 0;
-            if (itoms.FirstOrDefault().pumpStatus1!=null)
+            if (itoms.FirstOrDefault().pumpStatus1 != null)
             {
                 for (int i = 0; i < itom.pumpStatus1.Count; i++)
                 {
@@ -1315,6 +1335,7 @@ namespace wasaRms.Controllers
                 pkvars = Math.Round((pkvars / counter), 2);
                 pkws = Math.Round((pkws / counter), 2);
                 averageis = Math.Round(((i1s + i2s + i3s) / 3), 2);
+                double units = Math.Round((pkws * (itom.P1WorkingInHours + itom.P2WorkingInHours + itom.P3WorkingInHours + itom.P4WorkingInHours)), 2);
 
                 v1ns = Math.Round((v1ns / counter), 2);
                 v2ns = Math.Round((v2ns / counter), 2);
@@ -1333,60 +1354,68 @@ namespace wasaRms.Controllers
                 ViewData["Pump4Working"] = Math.Round(itom.P4WorkingInHours, 2);
                 ViewData["PF"] = pff;
                 ViewData["AverageVoltage"] = Math.Round(((v1ns + v2ns + v3ns) / 3), 2);
+                ViewData["AverageLineVoltage"] = Math.Round(((v12s + v13s + v23s) / 3), 2);
                 ViewData["AverageCurrent"] = averageis;
                 ViewData["Frequency"] = freqs;
                 ViewData["PKVA"] = pkvas;
                 ViewData["PKVAR"] = pkvars;
                 ViewData["PKW"] = pkws;
+                ViewData["Units"] = units;
+
+                /////////////////////////////////
+                ///
+                string scriptString = "";
+                string chartdata = "";
+                string chartdata1 = "";
+                //scriptString = "var chart1 = new CanvasJS.Chart(\"chartContainer1\", { theme: \"light2\", animationEnabled: true, title:{ text: \"Energy Monitoring Stats\" }, data: [ { type: \"stackedColumn\", dataPoints: [";
+                scriptString = "var chart1 = new CanvasJS.Chart(\"chartContainer1\", { theme: \"light2\", animationEnabled: true, title:{ text: \"Energy Monitoring Stats\" }, exportEnabled: true, dataPointWidth: 30, subtitles: [{text: \" Energy Data Fetched from Storage Tank Today  \" }], axisY:{labelFontSize: 10,includeZero: true },axisX:{labelFontSize: 10, title: \"All Energy Data (Effective Energy Stats)\",titleFontSize: 12,labelAngle: 45}, legend: { cursor: \"pointer\", itemclick: toogleDataSeries, fontSize: 11, horizontalAlign: \"center\"}, toolTip: {fontSize: 12, fontWeight: \"bold\", shared: true, content: \"{label}: {y}\" }, data: [ { type: \"stackedColumn\", dataPoints: [";
+                if (itom.pumpStatus1 != null)
+                {
+                    //scriptString += "{ type: \"stackedColumn\", name: \"Storage Tank\", showInLegend: true, dataPoints: [";
+                    scriptString += "{ y: " + itom.P1WorkingInHours + " , label: \"Pump 1 Hours\" },";
+                    scriptString += "{ y: " + itom.P2WorkingInHours + " , label: \"Pump 2 Hours\" },";
+                    scriptString += "{ y: " + itom.P3WorkingInHours + " , label: \"Pump 3 Hours\" },";
+                    scriptString += "{ y: " + itom.P4WorkingInHours + " , label: \"Pump 4 Hours\" },";
+                    scriptString += "{ y: " + pff + " , label: \"PF\" },";
+                    scriptString += "{ y: " + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + " , label: \"Avg. V\" },";
+                    scriptString += "{ y: " + averageis + " , label: \"Avg. A\" },";
+                    scriptString += "{ y: " + freqs + " , label: \"Freq.\" },";
+                    scriptString += "{ y: " + pkvas + " , label: \"Power (KVA)\" },";
+                    scriptString += "{ y: " + pkvars + " , label: \"Power (KVAR)\" },";
+                    scriptString += "{ y: " + pkws + " , label: \"Power (KW)\" }";
+                    scriptString += "]}]});";
+                    chartdata += "[";
+                    chartdata += "{\"category\":\"Pump 1 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP1 + "\",\"value\":\"" + itom.P1WorkingInHours + " Hours\"},";
+                    chartdata += "{\"category\":\"Pump 2 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP2 + "\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
+                    chartdata += "{\"category\":\"Pump 3 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP3 + "\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
+                    chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"}]";
+                    ViewData["amChartData"] = chartdata;
+
+                    chartdata1 += "[";
+                    chartdata1 += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
+                    chartdata1 += "{\"category\":\"Avg. Phase V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
+                    chartdata1 += "{\"category\":\"Avg. Line V\",\"tooltip\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\",\"value\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\"},";
+                    chartdata1 += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
+                    chartdata1 += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
+                    chartdata1 += "{\"category\":\"Power (KVA)\",\"tooltip\":\"" + pkvas + "\",\"value\":\"" + pkvas + "\"},";
+                    chartdata1 += "{\"category\":\"Power (KVAR)\",\"tooltip\":\"" + pkvars + "\",\"value\":\"" + pkvars + "\"},";
+                    chartdata1 += "{\"category\":\"Power (KW)\",\"tooltip\":\"" + pkws + "\",\"value\":\"" + pkws + "\"},";
+                    chartdata1 += "{\"category\":\"Units Consumed\",\"tooltip\":\"" + units + "\",\"value\":\"" + units + "\"}]";
+                    ViewData["amChartData1"] = chartdata1;
+                }
+                else
+                {
+                    ViewData["amChartData"] = chartdata;
+                    ViewData["amChartData1"] = chartdata1;
+                }
+                /// 
+                /////////////////////////////////////////////////////////////////////////////////////////
+
+
+
             }
-
-            /////////////////////////////////
-            ///
-            string scriptString = "";
-            string chartdata = "";
-            //scriptString = "var chart1 = new CanvasJS.Chart(\"chartContainer1\", { theme: \"light2\", animationEnabled: true, title:{ text: \"Energy Monitoring Stats\" }, data: [ { type: \"stackedColumn\", dataPoints: [";
-            scriptString = "var chart1 = new CanvasJS.Chart(\"chartContainer1\", { theme: \"light2\", animationEnabled: true, title:{ text: \"Energy Monitoring Stats\" }, exportEnabled: true, dataPointWidth: 30, subtitles: [{text: \" Energy Data Fetched from Storage Tank between "+FinalTimeFrom+" to "+FinalTimeTo+ "  \" }], axisY:{labelFontSize: 10,includeZero: true },axisX:{labelFontSize: 10, title: \"All Energy Data (Effective Energy Stats)\",titleFontSize: 12,labelAngle: 45}, legend: { cursor: \"pointer\", itemclick: toogleDataSeries, fontSize: 11, horizontalAlign: \"center\"}, toolTip: {fontSize: 12, fontWeight: \"bold\", shared: true, content: \"{label}: {y}\" }, data: [ { type: \"stackedColumn\", dataPoints: [";
-            if (itom.pumpStatus1 != null)
-            {
-                //scriptString += "{ type: \"stackedColumn\", name: \"Storage Tank\", showInLegend: true, dataPoints: [";
-                scriptString += "{ y: " + itom.P1WorkingInHours + " , label: \"Pump 1 Hours\" },";
-                scriptString += "{ y: " + itom.P2WorkingInHours + " , label: \"Pump 2 Hours\" },";
-                scriptString += "{ y: " + itom.P3WorkingInHours + " , label: \"Pump 3 Hours\" },";
-                scriptString += "{ y: " + itom.P4WorkingInHours + " , label: \"Pump 4 Hours\" },";
-                scriptString += "{ y: " + pff + " , label: \"PF\" },";
-                scriptString += "{ y: " + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + " , label: \"Avg. V\" },";
-                scriptString += "{ y: " + averageis + " , label: \"Avg. A\" },";
-                scriptString += "{ y: " + freqs + " , label: \"Freq.\" },";
-                scriptString += "{ y: " + pkvas + " , label: \"Power (KVA)\" },";
-                scriptString += "{ y: " + pkvars + " , label: \"Power (KVAR)\" },";
-                scriptString += "{ y: " + pkws + " , label: \"Power (KW)\" }";
-                scriptString += "]}]});";
-                chartdata += "[";
-                chartdata += "{\"category\":\"Pump 1 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP1 + "\",\"value\":\"" + itom.P1WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 2 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP2 + "\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 3 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP3 + "\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
-                chartdata += "{\"category\":\"Avg. V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
-                chartdata += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
-                chartdata += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
-                chartdata += "{\"category\":\"Power (KVA)\",\"tooltip\":\"" + pkvas + "\",\"value\":\"" + pkvas + "\"},";
-                chartdata += "{\"category\":\"Power (KVAR)\",\"tooltip\":\"" + pkvars + "\",\"value\":\"" + pkvars + "\"},";
-                chartdata += "{\"category\":\"Power (KW)\",\"tooltip\":\"" + pkws + "\",\"value\":\"" + pkws + "\"}]";
-                ViewData["amChartData"] = chartdata;
-            }
-            else
-            {
-                ViewData["amChartData"] = chartdata;
-            }
-            /// 
-            /////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-            //var tablList = getStorageTankTableList(fromDt, toDt, "All");
-            //return View(tablList);
+                //var tablList = getStorageTankTableList(fromDt, toDt, "All");
+                //return View(tablList);
             ViewBag.SelectedResource = resource;
             ViewBag.SelectedTimeFrom = TF;
             ViewBag.SelectedTimeTo = TT;
@@ -1396,7 +1425,7 @@ namespace wasaRms.Controllers
             ViewBag.timeTo = TT;
             ViewBag.dateFrom = df_date;
             ViewBag.dateTo = dt_date;
-            string NewscripString = scriptString;
+            string NewscripString = "";
             ViewData["chartData"] = NewscripString;
             return View(dtabc);
         }
@@ -1752,7 +1781,7 @@ namespace wasaRms.Controllers
                         }
                         else if (rs.parameterID == "Pump No. 1 Mode" || rs.parameterID == "Pump No. 2 Mode" || rs.parameterID == "Pump No. 3 Mode" || rs.parameterID == "Pump No. 4 Mode")
                         {
-                            scriptString += "axisY: {labelFontSize: 10, labelFormatter: function(){ return \" \"; }},";
+                            scriptString += "axisY: {minimum: -1, maximum: 2, labelFontSize: 10, labelFormatter: function(){ return \" \"; }},";
                             scriptString += "toolTip: { shared: false , contentFormatter: function(e){ var str = \" \" ; for (var i = 0; i < e.entries.length; i++){ var utcSeconds = e.entries[i].dataPoint.x; var d = new Date(utcSeconds); if(e.entries[i].dataPoint.y == 0){ var temp = e.entries[i].dataSeries.name + \" \" +\"<b>: MANUAL</b> at  \" + d.toLocaleString('en-IN'); str = str+temp; } else { var temp = e.entries[i].dataSeries.name + \" \" +\"<b>: AUTO</b> at \" + d.toLocaleString('en-IN'); str = str+temp; } } return (str); }},";
                         }
                         else
@@ -2024,14 +2053,14 @@ namespace wasaRms.Controllers
                                 {
                                     if (Convert.ToDateTime(drVal["sheetInsertionDateTime"]).Subtract(dt).TotalSeconds < 6000)
                                     {
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1),1)));
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1),3)));
                                         dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
                                     }
                                     else
                                     {
                                         dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(dt).AddHours(-5).AddMinutes(1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
                                         dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5).AddMinutes(-1) - new DateTime(1970, 1, 1)).TotalMilliseconds), double.NaN));
-                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1), 1)));
+                                        dataPoints.Add(new DataPoint(Convert.ToDouble((long)(Convert.ToDateTime(drVal["sheetInsertionDateTime"]).AddHours(-5) - new DateTime(1970, 1, 1)).TotalMilliseconds), Math.Round((Convert.ToDouble(drVal["parameterValue"]) / 1), 3)));
                                         dt = Convert.ToDateTime(drVal["sheetInsertionDateTime"]);
                                     }
                                 }
@@ -2059,8 +2088,10 @@ namespace wasaRms.Controllers
             var dtabc = getStorageTankTableList(fromDt, toDt, "");
             string NewscripString = scriptString;
             ViewData["chartData"] = NewscripString;
+            dynamic mymodel = new ExpandoObject();
             ////////////////////////////////////////////////////////////////////////////////////////////
-
+            mymodel.SummaryList = dtabc;
+            mymodel.DaywiseList = ViewData["tableData"];
             //var tablList = getStorageTankTableList(fromDt, toDt, "All");
             //return View(tablList);
             return View(dtabc);
@@ -2289,13 +2320,533 @@ namespace wasaRms.Controllers
             abc.P2WorkingInHours = bca.P2WorkingInHours;
             abc.P3WorkingInHours = pump3Data.P3WorkingInHours;
             abc.P4WorkingInHours = pump4Data.P4WorkingInHours;
-
-
-
+            var tablList = new List<PondingSpellClass>();
             var abclist = new List<StorageTankTableData>();
+            if (dt.Rows.Count > 0)
+            {
+                var tablList2 = getAllSpells(dt, Convert.ToInt32(dt.Rows[0]["resourceID"]), fromDT);
+                //PondingSpellClass sd = getAllSpells(Dashdt, Convert.ToInt32(drRes["resourceNumber"]));
+                //tablList.Add(sd);
+                tablList.AddRange(tablList2);
+
+                double maxxxx = tablList[0].SpellDataArray.Max();
+                int maxIndex = tablList[0].SpellDataArray.ToList().IndexOf(maxxxx);
+                string timeOfMaxxxx = tablList[0].SpellTimeArray[maxIndex].ToString();
+
+                double minsMaxToEnd = Convert.ToDouble(tablList[0].NoPondingComment);
+                double levelAtStart = Convert.ToDouble(tablList[0].minThr);
+                double minsStartToMax = Convert.ToDouble(tablList[0].maxThr);
+                double levelAtEnd = Convert.ToDouble(tablList[0].currLevel);
+                double MaxLevel = tablList[0].SpellMax;
+                double spellRateUp = 0;
+                double spellRateDown = 0;
+                if (MaxLevel == levelAtStart)
+                {
+                    spellRateUp = 0;
+                }
+                else
+                {
+                    spellRateUp = Math.Round((MaxLevel - levelAtStart) / minsStartToMax, 5);
+                }
+                if (MaxLevel == levelAtEnd)
+                {
+                    spellRateDown = 0;
+                }
+                else
+                {
+                    spellRateDown = Math.Round((MaxLevel - levelAtEnd) / minsMaxToEnd, 5);
+                }
+
+                //double waterIncreaseInFt = spellRateUp * minsStartToMax;
+                //double waterDecreaseInFt = spellRateDown * minsMaxToEnd;
+
+                double waterIncreaseInFt = MaxLevel - levelAtStart;
+                double waterDecreaseInFt = MaxLevel - levelAtEnd;
+
+                double waterInGallon = waterIncreaseInFt * 89695.23;
+                double waterInCubFt = waterIncreaseInFt * 14400;
+                double waterInLit = waterIncreaseInFt * 407762.6;
+
+                double waterOutGallon = waterDecreaseInFt * 89695.23;
+                double waterOutCubFt = waterDecreaseInFt * 14400;
+                double waterOutLit = waterDecreaseInFt * 407762.6;
+
+                double netFlowRate = Math.Round(((levelAtEnd - levelAtStart) / (minsStartToMax + minsMaxToEnd)), 5);
+
+
+                ViewData["waterInGallon"] = Math.Round(waterIncreaseInFt * 89695.23, 2);
+                ViewData["waterInCubFt"] = Math.Round(waterIncreaseInFt * 14400);
+                ViewData["waterInLit"] = Math.Round(waterIncreaseInFt * 407762.6);
+
+                ViewData["waterOutGallon"] = Math.Round(waterDecreaseInFt * 89695.23);
+                ViewData["waterOutCubFt"] = Math.Round(waterDecreaseInFt * 14400);
+                ViewData["waterOutLit"] = Math.Round(waterDecreaseInFt * 407762.6);
+
+                Decimal RateUP = 0;
+                Decimal.TryParse(spellRateUp.ToString(), out RateUP);
+
+                Decimal RateDown = 0;
+                Decimal.TryParse(spellRateDown.ToString(), out RateDown);
+
+
+                Decimal netRate = 0;
+                Decimal.TryParse(netFlowRate.ToString(), out netRate);
+                string netRateString = "";
+                string rateUpString = "";
+                string rateDownString = "";
+                if (netRate == 0)
+                {
+                    netRateString = "≈ 0";
+                }
+                else
+                {
+                    netRateString = netRate.ToString();
+                }
+
+                if (RateUP == 0)
+                {
+                    rateUpString = "≈ 0";
+                }
+                else
+                {
+                    rateUpString = RateUP.ToString();
+                }
+
+                if (RateDown == 0)
+                {
+                    rateDownString = "≈ 0";
+                }
+                else
+                {
+                    rateDownString = RateDown.ToString();
+                }
+
+                ViewData["NetFlowRate"] = netRateString;
+                ViewData["SpellRateUp"] = rateUpString;
+                ViewData["SpellRateDown"] = rateDownString;
+
+
+                string printTitle = "Storm Water Storage Tank at " + dt.Rows[0]["Location"].ToString() + " Water In/Out Report between " + fromDT + " to " + toDt + "";
+                Session["ReportTitle"] = printTitle;
+            }
+            
             abclist.Add(abc);
             return abclist;
         }
+
+        public List<PondingSpellClass> getAllSpells(DataTable dt, int order, DateTime td)
+        {
+            var tableData = new PondingSpellClass();
+            var spelldata = new SpellData();
+            //int resourceID = Convert.ToInt32(dt.Rows[0]["resourceID"]);
+            string location = dt.Rows[0]["Location"].ToString();
+            double currentPonding = Math.Round((Convert.ToDouble(dt.Rows[0]["Tank Level1 (ft)"]) / 1), 2);
+            string currentTime = dt.Rows[0]["tim"].ToString();
+            double minutes = (Convert.ToDateTime(currentTime) - DateTime.Now.AddHours(10)).TotalMinutes;
+            double DeltaMinutes = Convert.ToDouble(dt.Rows[0]["DeltaMinutes"]);
+            bool S = false;
+            bool E = false;
+            bool T = true;
+            bool F = false;
+            int spell = 0;
+            List<PondingSpellClass> tableDataList = new List<PondingSpellClass>();
+            List<SpellData> spellDataList = new List<SpellData>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                double currValue = Math.Round((Convert.ToDouble(dr["Tank Level1 (ft)"]) / 1), 2);
+                string currTime = dr["tim"].ToString();
+                string clearaceTime = "";
+                //start scenario 3 (inactive)
+                if (DeltaMinutes > 28800)
+                {
+
+                }
+                // end  scenario 3 (inactive)
+                else
+                {
+                    //start scenario 1 (No Ponding since many time/cleared/ zero received (find out what is the last ponding time if any))
+                    if (currentPonding < 1)
+                    {
+                        if (E == F && S == F)
+                        {
+                            if (currValue < 1.19)
+                            {
+                                if (spelldata.SpellDataArray.Count > 0)
+                                {
+                                    string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                    double lastvalue = spelldata.SpellDataArray.LastOrDefault();
+                                    E = T;
+                                    S = T;
+                                    spelldata.SpellDataArray.Add(lastvalue);
+                                    spelldata.SpellTimeArray.Add(lastTime);
+                                    spelldata.SpellEndTime = currTime;
+                                    clearaceTime = currTime;
+                                }
+
+                            }
+                            else
+                            {
+                                E = T;
+                                spell = spell + 1;
+                                spelldata.SpellNumber = spell;
+                                spelldata.SpellDataArray.Add(currValue);
+                                spelldata.SpellTimeArray.Add(currTime);
+                                spelldata.SpellEndTime = currTime;
+                                clearaceTime = currTime;
+
+                            }
+                        }
+                        else if (E == T && S == F)
+                        {
+                            if (currValue < 1.19 || dr == dt.Rows[dt.Rows.Count - 1])
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                spelldata.SpellStartTime = currTime;
+                                S = T;
+                            }
+                            else
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                spelldata.SpellDataArray.Add(currValue);
+                                spelldata.SpellTimeArray.Add(currTime);
+                            }
+                        }
+                        if (E == T && S == T)
+                        {
+                            E = F;
+                            S = F;
+                            if (spelldata.SpellDataArray.Count > 1 && spelldata.SpellDataArray.Sum() > 0)
+                            {
+                                int indexMax = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value > b.Value) ? a : b).Index;
+                                int indexMin = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value < b.Value) ? a : b).Index;
+                                spelldata.spellMaxTime = spelldata.SpellTimeArray.ElementAt(indexMax);
+                                spelldata.spellMinTime = spelldata.SpellTimeArray.ElementAt(indexMin);
+                                spelldata.SpellMax = spelldata.SpellDataArray.DefaultIfEmpty().Max();
+                                if (spelldata.SpellMax == currentPonding)
+                                {
+                                    spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes);
+                                    if (spelldata.spellPeriod == 0)
+                                    {
+                                        spelldata.spellPeriod = 1;
+                                    }
+                                    double diffMinutes = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes);
+                                    if (diffMinutes == 0)
+                                    {
+                                        diffMinutes = 1;
+                                    }
+                                    spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / diffMinutes, 5);
+                                    spelldata.spellFlowDown = 0;
+                                }
+                                else
+                                {
+                                    spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                                    if (spelldata.spellPeriod == 0)
+                                    {
+                                        spelldata.spellPeriod = 1;
+                                    }
+                                    double diffMinutes = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes);
+                                    if (diffMinutes == 0)
+                                    {
+                                        diffMinutes = 1;
+                                    }
+                                    spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / diffMinutes, 5);
+                                    spelldata.spellFlowDown = Math.Round(spelldata.SpellMax / spelldata.spellPeriod, 5);
+                                }
+                                //spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes),2);
+                                if (spelldata.spellPeriod > 1)
+                                {
+                                    spellDataList.Add(spelldata);
+                                    spelldata = new SpellData();
+                                    string s = JsonConvert.SerializeObject(spellDataList);
+                                }
+                            }
+                        }
+                    }
+                    // end  scenario 1 (No Ponding since many time/cleared/ zero received)
+                    //////////////////////////////////////////////////////////////////////
+                    //start scenario 2 (uncleared/ ponding continues (find out when the ponding is started))
+                    else
+                    {
+                        if (E == F && S == F)
+                        {
+                            if (currValue < 1.19)
+                            {
+                                if (spelldata.SpellDataArray.Count > 0)
+                                {
+                                    string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                    double lastvalue = spelldata.SpellDataArray.LastOrDefault();
+                                    E = T;
+                                    S = T;
+                                    spelldata.SpellDataArray.Add(lastvalue);
+                                    spelldata.SpellTimeArray.Add(lastTime);
+                                    spelldata.SpellEndTime = currTime;
+                                    clearaceTime = currTime;
+                                }
+
+                            }
+                            else
+                            {
+                                E = T;
+                                spell = spell + 1;
+                                spelldata.SpellNumber = spell;
+                                spelldata.SpellDataArray.Add(currValue);
+                                spelldata.SpellTimeArray.Add(currTime);
+                                spelldata.SpellEndTime = currTime;
+                                clearaceTime = currTime;
+
+                            }
+                        }
+                        else if (E == T && S == F)
+                        {
+                            if (currValue < 1.19 || dr == dt.Rows[dt.Rows.Count - 1])
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                spelldata.SpellStartTime = currTime;
+                                S = T;
+                            }
+                            else
+                            {
+                                string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
+                                spelldata.SpellDataArray.Add(currValue);
+                                spelldata.SpellTimeArray.Add(currTime);
+                            }
+                        }
+                        if (E == T && S == T)
+                        {
+                            E = F;
+                            S = F;
+                            if (spelldata.SpellDataArray.Count > 1 && spelldata.SpellDataArray.Sum() > 0)
+                            {
+                                int indexMax = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value > b.Value) ? a : b).Index;
+                                int indexMin = !spelldata.SpellDataArray.Any() ? 0 : spelldata.SpellDataArray.Select((value, index) => new { Value = value, Index = index }).Aggregate((a, b) => (a.Value < b.Value) ? a : b).Index;
+                                spelldata.spellMaxTime = spelldata.SpellTimeArray.ElementAt(indexMax);
+                                spelldata.spellMinTime = spelldata.SpellTimeArray.ElementAt(indexMin);
+                                spelldata.SpellMax = spelldata.SpellDataArray.DefaultIfEmpty().Max();
+                                if (spelldata.SpellMax == currentPonding)
+                                {
+                                    spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes);
+                                    if (spelldata.spellPeriod == 0)
+                                    {
+                                        spelldata.spellPeriod = 1;
+                                    }
+                                    double diffMinutes = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes);
+                                    if (diffMinutes == 0)
+                                    {
+                                        diffMinutes = 1;
+                                    }
+                                    spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / diffMinutes, 5);
+                                    spelldata.spellFlowDown = 0;
+                                }
+                                else
+                                {
+                                    spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellEndTime)).TotalMinutes);
+                                    if (spelldata.spellPeriod == 0)
+                                    {
+                                        spelldata.spellPeriod = 1;
+                                    }
+                                    double diffMinutes = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes);
+                                    if (diffMinutes == 0)
+                                    {
+                                        diffMinutes = 1;
+                                    }
+                                    spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / diffMinutes, 5);
+                                    spelldata.spellFlowDown = Math.Round(spelldata.SpellMax / spelldata.spellPeriod, 5);
+                                }
+                                //spelldata.spellPeriod = Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes);
+                                //if (spelldata.spellPeriod == 0)
+                                //{
+                                //    spelldata.spellPeriod = 1;
+                                //}
+                                //spelldata.spellFlowDown = Math.Round(spelldata.SpellMax / spelldata.spellPeriod, 2);
+                                //spelldata.spellFlowUp = Math.Round(spelldata.SpellMax / Math.Abs((Convert.ToDateTime(spelldata.spellMaxTime) - Convert.ToDateTime(spelldata.SpellStartTime)).TotalMinutes), 2);
+                                if (spelldata.spellPeriod > 1)
+                                {
+                                    spellDataList.Add(spelldata);
+                                    spelldata = new SpellData();
+                                    string s = JsonConvert.SerializeObject(spellDataList);
+                                }
+                                //currentPonding = currValue;
+                            }
+                        }
+                    }
+                    // end  scenario 2 (uncleared/ ponding continues)
+                }
+
+            }
+            string c = JsonConvert.SerializeObject(spellDataList);
+            if (spelldata.SpellDataArray.Count == 0)
+            {
+                spelldata.SpellDataArray.Add(currentPonding);
+                spelldata.SpellTimeArray.Add(currentTime);
+                spelldata.SpellStartTime = currentTime;
+                spelldata.SpellEndTime = currentTime;
+            }
+            if (/*DeltaMinutes > 1440 || */spelldata.SpellDataArray.Count == 0 || spellDataList.Count == 0)
+            {
+                tableData.date = td.ToShortDateString();
+                tableData.pondingLocation = location;
+                tableData.SpellNumber = 0;
+                tableData.currLevel = "-";
+                tableData.currTime = "-";
+                tableData.SpellMax = 0;
+                tableData.spellMaxTime = "-";
+                tableData.spellFlowUp = "-";
+                tableData.spellFlowDown = "-";
+                tableData.SpellEndTime = "-";
+                tableData.spellPeriod = "-";
+                tableData.srNo = order.ToString();
+                if (currentPonding < 1 /*&& DeltaMinutes < 2000*/)
+                {
+                    if (dt.Rows.Count > 1)
+                    {
+                        tableData.estSpellClearanceTime = "No Ponding";
+                        tableData.spellPeriod = "No Ponding";
+                        tableData.SpellEndTime = "No Ponding";
+                        tableData.comment = "No Ponding";
+                        tableData.NoPondingComment = "No Ponding Till " + currentTime + "";
+                        tableData.date = Convert.ToDateTime(currentTime).Date.ToShortDateString();
+                    }
+                    else
+                    {
+                        tableData.estSpellClearanceTime = "-";
+                        tableData.spellPeriod = "-";
+                        tableData.SpellEndTime = "-";
+                        tableData.comment = "Inactive";
+                    }
+                }
+                else
+                {
+                    tableData.estSpellClearanceTime = "-";
+                    tableData.spellPeriod = "-";
+                    tableData.SpellEndTime = "-";
+                }
+                tableDataList.Add(tableData);
+            }
+            else
+            {
+                int spelNo = 0;
+                spellDataList.Reverse();
+                foreach (var item in spellDataList)
+                {
+                    int spells = spellDataList.Count;
+                    tableData = new PondingSpellClass();
+                    tableData.date = Convert.ToDateTime(item.SpellStartTime).Date.ToShortDateString();
+                    tableData.pondingLocation = location;
+                    tableData.srNo = order.ToString();
+                    tableData.currLevel = currentPonding.ToString();
+                    tableData.currTime = currentTime;
+                    spelNo = spelNo + 1;
+                    tableData.SpellNumber = spelNo;
+                    tableData.SpellStartTime = item.SpellStartTime;
+                    tableData.SpellEndTime = item.SpellEndTime;
+                    tableData.SpellDataArray = item.SpellDataArray;
+                    tableData.SpellTimeArray = item.SpellTimeArray;
+                    tableData.SpellMax = item.SpellMax;
+                    tableData.spellMaxTime = item.spellMaxTime;
+                    tableData.SpellMin = item.SpellMin;
+                    if (Convert.ToDateTime(tableData.SpellEndTime) <= (Convert.ToDateTime(tableData.spellMaxTime)))
+                    {
+                        tableData.SpellEndTime = Convert.ToDateTime(tableData.spellMaxTime).AddMinutes(1).ToString();
+                    }
+                    tableData.spellMinTime = item.spellMinTime;
+                    tableData.spellFlowDown = Math.Round(item.spellFlowDown, 5).ToString();
+                    tableData.spellFlowUp = Math.Round(item.spellFlowUp, 5).ToString();
+                    tableData.flowRateUp = Math.Round(item.spellFlowUp, 5).ToString();
+                    double pondingPer = Math.Abs((Convert.ToDateTime(tableData.spellMaxTime) - Convert.ToDateTime(tableData.SpellEndTime)).TotalMinutes);
+                    TimeSpan pp = TimeSpan.FromMinutes(Convert.ToDouble(pondingPer));
+                    int phour = pp.Hours;
+                    int pmin = pp.Minutes;
+                    int psec = pp.Seconds;
+                    string pstr = " " + phour.ToString() + " Hours, " + pmin.ToString() + " Minutes";
+                    tableData.spellPeriod = pstr;
+                    if (currentPonding < 1)
+                    {
+                        tableData.estSpellClearanceTime = "Cleared";
+                        tableData.comment = "Cleared";
+                    }
+                    else
+                    {
+                        tableData.comment = "Continue...";
+                        //tableData.clearanceTime = "-";
+                        if (tableData.SpellDataArray.LastOrDefault() < Convert.ToDouble(tableData.SpellMax))
+                        {
+                            if (Convert.ToDouble(tableData.spellFlowDown) == 0)
+                            {
+                                tableData.spellFlowDown = "1";
+                            }
+                            double minutesToClear = (tableData.SpellDataArray.LastOrDefault() / Convert.ToDouble(tableData.spellFlowDown));
+                            TimeSpan runningTime = TimeSpan.FromMinutes(Convert.ToDouble(minutesToClear));
+                            int hour = runningTime.Hours;
+                            int min = runningTime.Minutes;
+                            int sec = runningTime.Seconds;
+                            string str = " " + hour.ToString() + " Hours, " + min.ToString() + " Minutes";
+                            tableData.estSpellClearanceTime = str;
+                        }
+                        else
+                        {
+                            tableData.estSpellClearanceTime = "In Progress";
+                        }
+                    }
+                    if (tableData.SpellDataArray.LastOrDefault() < 1)
+                    {
+                        tableData.clearanceTime = item.SpellEndTime.ToString();
+                    }
+                    else
+                    {
+                        tableData.clearanceTime = "-";
+                    }
+                    if (DeltaMinutes > 10)
+                    {
+                        //tableData.estSpellClearanceTime = "-";
+                    }
+                    if (tableData.SpellDataArray.LastOrDefault() > 1)
+                    {
+                        //tableData.estSpellClearanceTime = "-";
+                    }
+                    if (tableData.SpellNumber < spells)
+                    {
+                        tableData.estSpellClearanceTime = "-";
+                        tableData.comment = "Cleared";
+                        if (Convert.ToDouble(tableData.spellFlowUp) > 0 && Convert.ToDouble(tableData.spellFlowDown) == 0)
+                        {
+                            tableData.spellFlowDown = tableData.spellFlowUp;
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                    if (tableData.estSpellClearanceTime == "0 Hours, 0 Minutes" || tableData.estSpellClearanceTime == "In Progress")
+                    {
+                        tableData.estSpellClearanceTime = "In Progress";
+                        tableData.spellFlowDown = "-";
+                        tableData.comment = "In Progress";
+                    }
+                    if (tableData.comment == "Continue...")
+                    {
+                        double DiffForSpellDown = Math.Abs(tableData.SpellMax - tableData.SpellDataArray.LastOrDefault());
+                        double TimeDifference = Math.Abs(((Convert.ToDateTime(tableData.SpellEndTime)) - (Convert.ToDateTime(tableData.spellMaxTime))).TotalMinutes);
+                        if (TimeDifference == 0)
+                        {
+                            TimeDifference = 1;
+                        }
+                        tableData.spellFlowDown = Math.Round((DiffForSpellDown / TimeDifference), 5).ToString();
+                        tableData.flowRateDown = Math.Round((DiffForSpellDown / TimeDifference), 5).ToString();
+                        tableData.SpellEndTime = "-";
+                    }
+                    if (tableData.spellPeriod != "0 Hours, 1 Minutes")
+                    {
+                        tableDataList.Add(tableData);
+                    }
+                    tableData.NoPondingComment = pondingPer.ToString();
+                    tableData.minThr = tableData.SpellDataArray.LastOrDefault().ToString();
+                    tableData.maxLevelTime = tableData.SpellTimeArray.LastOrDefault().ToString();
+                    tableData.maxThr = Math.Abs((Convert.ToDateTime(tableData.spellMaxTime) - Convert.ToDateTime(tableData.maxLevelTime)).TotalMinutes).ToString();
+                }
+            }
+            return tableDataList;
+        }
+
         public string getPump1WorkingHoursManual(DateTime fromDT, DateTime toDt, string res)
         {
             return "";
@@ -2790,6 +3341,7 @@ namespace wasaRms.Controllers
             var spelldata = new StoragePump1SpellData();
             if (dt.Rows.Count > 1)
             {
+                dt.Rows.RemoveAt(0);
                 string location = dt.Rows[0]["Location"].ToString();
                 double currentMotorStatus = Math.Round((Convert.ToDouble(dt.Rows[0]["P1 Status"])), 2);
                 string currentTime = dt.Rows[0]["tim"].ToString();

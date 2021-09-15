@@ -87,5 +87,7 @@ namespace wasaRms
         public string chartString { get; set; }
         public List<string> SpellTimeArray = new List<string>();
         public string tankLevelAverage { get; set; }
+
+
     }
 }

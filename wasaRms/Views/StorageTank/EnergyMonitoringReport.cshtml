@@ -386,16 +386,50 @@
                                                 <!-- END EXAMPLE TABLE PORTLET-->
                                             </div>
                                         </div>
-                                        <div class="widget-content">
-                                            <div>
-                                                <center>
-                                                    <div id="chartContainer1" style="width: 95%; height: 500px"></div>
-                                                </center>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-xs-12 col-sm-12">
+                                    <div class="portlet light bordered">
+                                        <div class="tabbable-line boxless tabbable-reversed">
+                                            <div class="tab-content from-data ">
+                                                <div class="tab-pane active">
+                                                    <div class="widget-content">
+                                                        <div>
+                                                            <center>
+                                                                <div id="chartContainer1" style="width: 95%; height: 300px"></div>
+                                                            </center>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-xs-12 col-sm-12">
+                                    <div class="portlet light bordered">
+                                        <div class="tabbable-line boxless tabbable-reversed">
+                                            <div class="tab-content from-data ">
+                                                <div class="tab-pane active">
+                                                    <div class="widget-content">
+                                                        <div>
+                                                            <center>
+                                                                <div id="chartContainer2" style="width: 95%; height: 500px"></div>
+                                                            </center>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <div class="row">
                                 <div class="col-lg-12 col-xs-12 col-sm-12">
                                     <div class="portlet light ">
@@ -426,12 +460,14 @@
                                                                         <th>Pump 3 Working Hours</th>
                                                                         <th>Pump 4 Working Hours</th>
                                                                         <th>PF</th>
-                                                                        <th>Avg. V</th>
+                                                                        <th>Avg Phase V</th>
+                                                                        <th>Avg Line V</th>
                                                                         <th>Avg. A</th>
                                                                         <th>Freq.</th>
                                                                         <th>Power KVA)</th>
                                                                         <th>Power (KVAR)</th>
                                                                         <th>Power (KW)</th>
+                                                                        <th>Units Consumed</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -513,12 +549,13 @@
                                                                                 <td>@item.workingHoursTodayP4</td>
                                                                                 <td>@pff</td>
                                                                                 <td>@(Math.Round(((v1ns + v2ns + v3ns) / 3), 2))</td>
+                                                                                <td>@(Math.Round(((v12s + v13s + v23s) / 3), 2))</td>
                                                                                 <td>@averageis</td>
                                                                                 <td>@freqs</td>
                                                                                 <td>@pkvas</td>
                                                                                 <td>@pkvars</td>
                                                                                 <td>@pkws</td>
-
+                                                                                <td>@ViewData["Units"].ToString()</td>
                                                                             </tr>
                                                                         }
                                                                         else
@@ -537,13 +574,13 @@
                                                                                 <td>Inactive</td>
                                                                                 <td>Inactive</td>
                                                                                 <td>Inactive</td>
-
+                                                                                <td>Inactive</td>
+                                                                                <td>Inactive</td>
                                                                             </tr>
                                                                         }
                                                                     }
                                                                 </tbody>
                                                             </table>
-
                                                         </div>
                                                     </div>
                                                     <!-- END EXAMPLE TABLE PORTLET-->
@@ -623,8 +660,11 @@
                 // Add data
                 chart.angle = 35;
                 chart.data = @Html.Raw(ViewData["amChartData"]);
-
                 // Create axes
+                var title = chart.titles.create();
+                title.text = "All Pumps Working Hours";
+                title.fontSize = 25;
+                title.marginBottom = 10;
                 var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
                 categoryAxis.dataFields.category = "category";
                 //categoryAxis.renderer.grid.template.location = 0;
@@ -657,7 +697,7 @@
                 var legend = new am4charts.Legend();
                 legend.parent = chart.chartContainer;
                 //legend.itemContainers.template.togglable = false;
-                legend.marginTop = 20;
+                legend.marginTop = 50;
                 legend.fontSize = 10;
                 //legend.labels.template.rotation = -45;
 
@@ -692,6 +732,91 @@
                     ev.target.dataItem.dataContext.columnDataItem.column.isHover = false;
                     ev.target.dataItem.dataContext.columnDataItem.column.hideTooltip();
                 });
+
+
+
+
+                var chart1 = am4core.create("chartContainer2", am4charts.XYChart3D);
+                //chart.scrollbarX = new am4core.Scrollbar();
+
+                // Add data
+                chart1.angle = 35;
+                chart1.data = @Html.Raw(ViewData["amChartData1"]);
+                chart1.paddingTop = 50;
+                var title = chart1.titles.create();
+                title.text = "All Energy Parameters Data";
+                title.fontSize = 25;
+                title.marginBottom = 10;
+                // Create axes
+                var categoryAxis1 = chart1.xAxes.push(new am4charts.CategoryAxis());
+                categoryAxis1.dataFields.category = "category";
+                //categoryAxis1.renderer.grid.template.location = 0;
+                categoryAxis1.renderer.minGridDistance = 30;
+                //categoryAxis1.renderer.labels.template.rotation = -90;
+                categoryAxis1.renderer.inside = true;
+                categoryAxis1.renderer.labels.template.valign = "top";
+                categoryAxis1.tooltip.disabled = true;
+                categoryAxis1.renderer.grid.template.strokeWidth = 0;
+                categoryAxis1.renderer.labels.template.fontSize = 0;
+                var valueAxis1 = chart1.yAxes.push(new am4charts.ValueAxis());
+                valueAxis1.renderer.grid.template.strokeWidth = 0;
+                valueAxis1.min = 0;
+                valueAxis1.extraMax = 0.05;
+                // Create series
+                var series1 = chart1.series.push(new am4charts.ConeSeries());
+                series1.sequencedInterpolation = true;
+                series1.dataFields.valueY = "value";
+                series1.dataFields.tooltipText = "tooltip";
+                series1.dataFields.categoryX = "category";
+                series1.columns.template.strokeWidth = 0;
+
+                series1.columns.template.tooltipText = "{categoryX}: {tooltipText}";
+                series1.columns.template.tooltipY = 0;
+                series1.tooltip.pointerOrientation = "vertical";
+
+                series1.columns.template.adapter.add("fill", function (fill, target) {
+                    return chart1.colors.getIndex(target.dataItem.index);
+                })
+
+                var legend1 = new am4charts.Legend();
+                legend1.parent = chart1.chartContainer;
+                //legend1.itemContainers.template.togglable = false;
+                legend1.marginTop = 20;
+                legend1.fontSize = 10;
+                //legend1.labels.template.rotation = -45;
+
+                series1.events.on("ready", function (ev) {
+                    var legenddata = [];
+                    series1.columns.each(function (column) {
+                        legenddata.push({
+                            name: column.dataItem.categoryX,
+                            fill: column.fill,
+                            columnDataItem: column.dataItem
+                        });
+                    });
+                    legend1.data = legenddata;
+                });
+
+                legend1.itemContainers.template.events.on("hit", function (ev) {
+                    //console.log("Clicked on ", ev.target.dataItem.className);
+                    if (!ev.target.isActive) {
+                        ev.target.dataItem.dataContext.columnDataItem.hide();
+                    }
+                    else {
+                        ev.target.dataItem.dataContext.columnDataItem.show();
+                    }
+                });
+
+                legend1.itemContainers.template.events.on("over", function (ev) {
+                    ev.target.dataItem.dataContext.columnDataItem.column.isHover = true;
+                    ev.target.dataItem.dataContext.columnDataItem.column.showTooltip();
+                });
+
+                legend1.itemContainers.template.events.on("out", function (ev) {
+                    ev.target.dataItem.dataContext.columnDataItem.column.isHover = false;
+                    ev.target.dataItem.dataContext.columnDataItem.column.hideTooltip();
+                });
+
 
 
             }

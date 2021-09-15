@@ -190,6 +190,44 @@
                 opacity: 0.5;
                 background: #ddd;
             }
+
+
+
+    #legend10 {
+        width: 330px;
+        height: 450px;
+        margin-left: 10px;
+        float: left;
+        text-align: left;
+    }
+
+        #legend10 .legend10-item {
+            margin: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 330px !important;
+            text-align: left;
+        }
+
+            #legend10 .legend10-item .legend10-value {
+                font-size: 11px;
+                font-weight: normal;
+                margin-left: 10px;
+            }
+
+            #legend10 .legend10-item .legend10-marker {
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                border: 1px solid #ccc;
+                margin-right: 10px;
+            }
+
+            #legend10 .legend10-item.disabled .legend10-marker {
+                opacity: 0.5;
+                background: #ddd;
+            }
 </style>
 
 @{
@@ -576,11 +614,7 @@
                                                     @if (Model.First().parameterName == "Pump No. 1 Status" ||
                                                         Model.First().parameterName == "Pump No. 2 Status" ||
                                                         Model.First().parameterName == "Pump No. 3 Status" ||
-                                                        Model.First().parameterName == "Pump No. 4 Status" ||
-                                                        Model.First().parameterName == "Pump No. 1 Mode" ||
-                                                        Model.First().parameterName == "Pump No. 2 Mode" ||
-                                                        Model.First().parameterName == "Pump No. 3 Mode" ||
-                                                        Model.First().parameterName == "Pump No. 4 Mode")
+                                                        Model.First().parameterName == "Pump No. 4 Status")
                                                     {
 
 
@@ -602,6 +636,37 @@
                                                             <div id="legend3" style="display:block !important; height:100px !important"></div>
                                                         </div>
 
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv4" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv5" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv6" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv7" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv8" style="display:none !important"></div>
+                                                        <div class="col-md-3 col-sm-12 col-lg-3 chartdiv" id="chartdiv9" style="display:none !important"></div>
+
+                                                    }
+                                                    else if (
+                                                        Model.First().parameterName == "Pump No. 1 Mode" ||
+                                                        Model.First().parameterName == "Pump No. 2 Mode" ||
+                                                        Model.First().parameterName == "Pump No. 3 Mode" ||
+                                                        Model.First().parameterName == "Pump No. 4 Mode")
+                                                    {
+
+
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv">
+
+                                                            <div id="chartdiv1" style="display:block !important; height:300px !important; width: auto"></div>
+                                                            <div id="legend1" style="display:block !important; height:100px !important"></div>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv">
+
+                                                            <div id="chartdiv10" style="display:block !important; height:300px !important; width: auto"></div>
+                                                            <div id="legend10" style="display:block !important; height:100px !important"></div>
+                                                        </div>
+
+
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv2" style="display:none !important"></div>
+                                                        <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv3" style="display:none !important"></div>
                                                         <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv4" style="display:none !important"></div>
                                                         <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv5" style="display:none !important"></div>
                                                         <div class="col-md-6 col-sm-12 col-lg-6 chartdiv" id="chartdiv6" style="display:none !important"></div>
@@ -805,6 +870,8 @@
 
         var chart8 = am4core.create("chartdiv8", am4charts.PieChart);
         var chart9 = am4core.create("chartdiv9", am4charts.PieChart);
+
+        var chartMM = am4core.create("chartdiv10", am4charts.PieChart);
 
 		chart1.data = [{
 		"mode": "Working Hours",
@@ -1276,9 +1343,44 @@
             "mode": "Average @Model.First().parameterName of Non-Working Hours: ",
             "Hours": @Math.Round((Model.First().avgOfNonAvailableHours / 0.3), 2)
         }];
+          
+         chartMM.data = [{
+            "mode": "Manual Mode",
+             "Hours": @Model.First().nonAvailableHours
+        }, {
+            "mode": "Remote Mode",
+            "Hours": @Model.First().availableHours
+        }, {
+		"mode": "Total Hours",
+		"Hours": @Model.First().totalHours
+		}];
 
 
 
+        var pieSeries10 = chartMM.series.push(new am4charts.PieSeries());
+        pieSeries10.dataFields.value = "Hours";
+        pieSeries10.dataFields.category = "mode";
+        //pieSeries10.labels.template.disabled = true;
+        pieSeries10.alignLabels = false;
+        pieSeries10.labels.template.bent = true;
+        pieSeries10.labels.template.radius = 3;
+        pieSeries10.labels.template.padding(0, 0, 0, 0);
+        //pieSeries2.ticks.template.disabled = true;
+        pieSeries10.labels.template.text = "{category}: {value.value}";
+        pieSeries10.slices.template.tooltipText = "{category}: {value.value}";
+        chartMM.innerRadius = am4core.percent(30);
+
+        // Create custom legend
+        chartMM.events.on("ready", function (event) {
+            // populate our custom legend when chart renders
+            chartMM.customLegend = document.getElementById('legend10');
+            pieSeries10.dataItems.each(function (row, i) {
+                var color = chartMM.colors.getIndex(i);
+                var percent = Math.round(row.values.value.percent * 100) / 100;
+                var value = row.value;
+                legend10.innerHTML += '<div class="legend10-item" id="legend10-item-' + i + '" onclick="toggleSlice(' + i + ');" onmouseover="hoverSlice(' + i + ');" onmouseout="blurSlice(' + i + ');" style="color: ' + color + ';"><div class="legend1-marker" style="background: ' + color + '"></div>' + row.category + ': ' + hoursToTime(value) + ' </div>';
+            });
+        });
 
 
     }); // end am4core.ready()
