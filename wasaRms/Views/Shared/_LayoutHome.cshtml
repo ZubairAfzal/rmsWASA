@@ -873,6 +873,10 @@ else
                         "scrollX": true,
                         bPaginate: false,
                         dom: 'Bfrtip',
+                        'columnDefs': [
+                            //hide the second & fourth column
+                            { 'visible': false, 'targets': [0] }
+                        ],
                         buttons: [
                             $.extend(true, {}, buttonCommon, {
                                 extend: 'excelHtml5',

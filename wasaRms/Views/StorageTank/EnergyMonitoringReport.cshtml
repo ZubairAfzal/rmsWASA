@@ -459,11 +459,11 @@
                                                                         <th>Pump 2 Working Hours</th>
                                                                         <th>Pump 3 Working Hours</th>
                                                                         <th>Pump 4 Working Hours</th>
-                                                                        <th>PF</th>
                                                                         <th>Avg Phase V</th>
                                                                         <th>Avg Line V</th>
                                                                         <th>Avg. A</th>
                                                                         <th>Freq.</th>
+                                                                        <th>PF</th>
                                                                         <th>Power KVA)</th>
                                                                         <th>Power (KVAR)</th>
                                                                         <th>Power (KW)</th>
@@ -540,23 +540,23 @@
                                                                             v23s = Math.Round((v23s / counter), 2);
 
                                                                             freqs = Math.Round((freqs / counter), 2);
-                                                                            <tr>
-                                                                                <td>1</td>
-                                                                                <td>@item.locationName</td>
-                                                                                <td>@item.workingHoursTodayP1</td>
-                                                                                <td>@item.workingHoursTodayP2</td>
-                                                                                <td>@item.workingHoursTodayP3</td>
-                                                                                <td>@item.workingHoursTodayP4</td>
-                                                                                <td>@pff</td>
-                                                                                <td>@(Math.Round(((v1ns + v2ns + v3ns) / 3), 2))</td>
-                                                                                <td>@(Math.Round(((v12s + v13s + v23s) / 3), 2))</td>
-                                                                                <td>@averageis</td>
-                                                                                <td>@freqs</td>
-                                                                                <td>@pkvas</td>
-                                                                                <td>@pkvars</td>
-                                                                                <td>@pkws</td>
-                                                                                <td>@ViewData["Units"].ToString()</td>
-                                                                            </tr>
+                                                                    <tr>
+                                                                        <td>1</td>
+                                                                        <td>@item.locationName</td>
+                                                                        <td>@item.workingHoursTodayP1</td>
+                                                                        <td>@item.workingHoursTodayP2</td>
+                                                                        <td>@item.workingHoursTodayP3</td>
+                                                                        <td>@item.workingHoursTodayP4</td>
+                                                                        <td>@(Math.Round(((v1ns + v2ns + v3ns) / 3), 2))</td>
+                                                                        <td>@(Math.Round(((v12s + v13s + v23s) / 3), 2))</td>
+                                                                        <td>@averageis</td>
+                                                                        <td>@freqs</td>
+                                                                        <td>@pff</td>
+                                                                        <td>@pkvas</td>
+                                                                        <td>@pkvars</td>
+                                                                        <td>@pkws</td>
+                                                                        <td>@ViewData["Units"].ToString()</td>
+                                                                    </tr>
                                                                         }
                                                                         else
                                                                         {

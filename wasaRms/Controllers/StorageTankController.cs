@@ -1187,11 +1187,12 @@ namespace wasaRms.Controllers
                 ViewData["amChartData"] = chartdata;
 
                 chartdata1 += "[";
-                chartdata1 += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
+                
                 chartdata1 += "{\"category\":\"Avg. Phase V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
                 chartdata1 += "{\"category\":\"Avg. Line V\",\"tooltip\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\",\"value\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\"},";
                 chartdata1 += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
                 chartdata1 += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
+                chartdata1 += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
                 chartdata1 += "{\"category\":\"Power (KVA)\",\"tooltip\":\"" + pkvas + "\",\"value\":\"" + pkvas + "\"},";
                 chartdata1 += "{\"category\":\"Power (KVAR)\",\"tooltip\":\"" + pkvars + "\",\"value\":\"" + pkvars + "\"},";
                 chartdata1 += "{\"category\":\"Power (KW)\",\"tooltip\":\"" + pkws + "\",\"value\":\"" + pkws + "\"},";
@@ -1392,11 +1393,12 @@ namespace wasaRms.Controllers
                     ViewData["amChartData"] = chartdata;
 
                     chartdata1 += "[";
-                    chartdata1 += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
+                    
                     chartdata1 += "{\"category\":\"Avg. Phase V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
                     chartdata1 += "{\"category\":\"Avg. Line V\",\"tooltip\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\",\"value\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\"},";
                     chartdata1 += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
                     chartdata1 += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
+                    chartdata1 += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
                     chartdata1 += "{\"category\":\"Power (KVA)\",\"tooltip\":\"" + pkvas + "\",\"value\":\"" + pkvas + "\"},";
                     chartdata1 += "{\"category\":\"Power (KVAR)\",\"tooltip\":\"" + pkvars + "\",\"value\":\"" + pkvars + "\"},";
                     chartdata1 += "{\"category\":\"Power (KW)\",\"tooltip\":\"" + pkws + "\",\"value\":\"" + pkws + "\"},";
@@ -4976,7 +4978,7 @@ namespace wasaRms.Controllers
                 List<double> valList = new List<double>();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (Math.Round((Convert.ToDouble(dr["Pump No. 1 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 2 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 3 Status"])), 2) + Math.Round((Convert.ToDouble(dr["Pump No. 4 Status"])), 2) == 0)
+                    if ((Convert.ToDouble(dr[3])) + (Convert.ToDouble(dr[4])) + (Convert.ToDouble(dr[5])) + (Convert.ToDouble(dr[6])) == 0)
                     {
                         unavailableSum += Convert.ToDouble(dr[ParameterName]);
                         unavailableCount += 1;
@@ -5023,6 +5025,8 @@ namespace wasaRms.Controllers
             }
             return tableData;
         }
+
+        
 
         public double getAvailableHours(DataTable dt, string ParameterName)
         {

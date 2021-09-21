@@ -21,6 +21,7 @@
                         sda.Fill(dt);
                         if (dt.Rows.Count > 1)
                         {
+                            dt.Rows.RemoveAt(0);
                             var abc = Math.Round(((Convert.ToDouble(dt.Rows[0][30])) - (Convert.ToDouble(dt.Rows[1][30])) / 3), 2);
                             double a = Convert.ToDouble(dt.Rows[0][30]);
                             double b = Convert.ToDouble(dt.Rows[1][30]);

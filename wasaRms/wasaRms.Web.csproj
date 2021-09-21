@@ -6680,6 +6680,7 @@
     <Content Include="Views\StorageTank\ParameterizedData.cshtml" />
     <Content Include="Views\StorageTank\TankThreshold.cshtml" />
     <Content Include="Views\StorageTank\Switch.cshtml" />
+    <Content Include="Views\StorageTank\_Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
