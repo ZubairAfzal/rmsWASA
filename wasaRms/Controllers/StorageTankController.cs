@@ -7,6 +7,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using wasaRms.Models;
 
 namespace wasaRms.Controllers
@@ -14,17 +15,12 @@ namespace wasaRms.Controllers
     public class StorageTankController : Controller
     {
         // GET: StorageTank
+        
         public ActionResult Dashboard()
         {
             int pumpsRunning = 0;
             double tankLevel = 0;
-            string tempName = "";
-            string parameterValuesString = "";
-            string datetimed = "";
-            string markers = "[";
-            //string queryP1Status = "select top (1) parameterValue from tblSheet where parameterID = 1026 order by sheetInsertionDateTime DESC";
-            //string queryP2Status = "select top (1) parameterValue from tblSheet where parameterID = 1027 order by sheetInsertionDateTime DESC";
-            //string queryTankLevel = "select top (1) parameterValue from tblSheet where parameterID = 1034 order by sheetInsertionDateTime DESC";
+            
             string S13query = "select count( DISTINCT r.resourceID )from tblSheet s ";
             S13query += "inner join tblResource r on s.resourceID = r.resourceID ";
             S13query += "inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID ";
@@ -39,240 +35,6 @@ namespace wasaRms.Controllers
                     int workingStorageTanks = Convert.ToInt32(cmd1.ExecuteScalar());
                     ViewBag.ActiveStorageTank = workingStorageTanks;
                     ViewBag.InactiveStorageTank = 1 - workingStorageTanks;
-                    string q1 = "";
-                    q1 += "select top(28)  r.resourceLocationName,  t.resourceTypeName, p.ParameterName, e.parameterValue, e.sheetInsertionDateTime  from tblSheet e ";
-                    q1 += "left join tblParameter p on e.parameterID = p.parameterID ";
-                    q1 += "left join tblResource r on e.resourceID = r.resourceID ";
-                    q1 += "left join tblResourceType t on r.resourceTypeID = t.resourceTypeID ";
-                    q1 += "where e.sheetInsertionDateTime = (select max(sheetInsertionDateTime) from tblSheet where ResourceID = 1085) ";
-                    q1 += "and r.resourceID = 1085 order by p.parameterMaxThr";
-                    SqlCommand cmd = new SqlCommand(q1, conn);
-                    using (SqlDataReader sdr1 = cmd.ExecuteReader())
-                    {
-                        while (sdr1.Read())
-                        {
-                            string valuee = "";
-                            parameterValuesString += "";
-                            if (sdr1["parameterName"].ToString() == "P1 Status")
-                            {
-                                parameterValuesString += "Pump No. 1 " + ": ";
-                                if (sdr1["parameterValue"].ToString() == "0")
-                                {
-                                    valuee = "OFF";
-                                }
-                                else
-                                {
-                                    valuee = "ON";
-                                }
-                            }
-                            else if (sdr1["parameterName"].ToString() == "P2 Status")
-                            {
-                                parameterValuesString += "Pump No. 2 " + ": ";
-                                if (sdr1["parameterValue"].ToString() == "0")
-                                {
-                                    valuee = "OFF";
-                                }
-                                else
-                                {
-                                    valuee = "ON";
-                                }
-                            }
-                            else if (sdr1["parameterName"].ToString() == "P3 Status")
-                            {
-                                parameterValuesString += "Pump No. 3 " + ": ";
-                                if (sdr1["parameterValue"].ToString() == "0")
-                                {
-                                    valuee = "OFF";
-                                }
-                                else
-                                {
-                                    valuee = "ON";
-                                }
-                            }
-                            else if (sdr1["parameterName"].ToString() == "P4 Status")
-                            {
-                                parameterValuesString += "Pump No. 4 " + ": ";
-                                if (sdr1["parameterValue"].ToString() == "0")
-                                {
-                                    valuee = "OFF";
-                                }
-                                else
-                                {
-                                    valuee = "ON";
-                                }
-                            }
-                            else if (sdr1["parameterName"].ToString() == "P1 Auto/Mannual")
-                            {
-                                parameterValuesString += "Pump No. 1 Mode" + ": ";
-                                if (sdr1["parameterValue"].ToString() == "0")
-                                {
-                                    valuee = "Manual";
-                                }
-                                else
-                                {
-                                    valuee = "Auto";
-                                }
-                            }
-                            else if (sdr1["parameterName"].ToString() == "P2 Auto/Mannual")
-                            {
-                                parameterValuesString += "Pump No. 2 Mode" + ": ";
-                                if (sdr1["parameterValue"].ToString() == "0")
-                                {
-                                    valuee = "Manual";
-                                }
-                                else
-                                {
-                                    valuee = "Auto";
-                                }
-                            }
-                            else if (sdr1["parameterName"].ToString() == "P3 Auto/Mannual")
-                            {
-                                parameterValuesString += "Pump No. 3 Mode" + ": ";
-                                if (sdr1["parameterValue"].ToString() == "0")
-                                {
-                                    valuee = "Manual";
-                                }
-                                else
-                                {
-                                    valuee = "Auto";
-                                }
-                            }
-                            else if (sdr1["parameterName"].ToString() == "P4 Auto/Mannual")
-                            {
-                                parameterValuesString += "Pump No. 4 Mode" + ": ";
-                                if (sdr1["parameterValue"].ToString() == "0")
-                                {
-                                    valuee = "Manual";
-                                }
-                                else
-                                {
-                                    valuee = "Auto";
-                                }
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V12 (v)")
-                            {
-                                parameterValuesString += "Line Voltage (V12) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V13 (v)")
-                            {
-                                parameterValuesString += "Line Voltage (V13) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V23 (v)")
-                            {
-                                parameterValuesString += "Line Voltage (V23) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V1N (V)")
-                            {
-                                parameterValuesString += "Phase Voltage (V1N) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V2N (V)")
-                            {
-                                parameterValuesString += "Phase Voltage (V2N) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V3N (V)")
-                            {
-                                parameterValuesString += "Phase Voltage (V3N) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "I1 (A)")
-                            {
-                                parameterValuesString += "Current (I1) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "I2 (A)")
-                            {
-                                parameterValuesString += "Current (I2) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "I3 (A)")
-                            {
-                                parameterValuesString += "Current (I3) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "PF")
-                            {
-                                parameterValuesString += "Power Factor (PF) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "Freq (Hz)")
-                            {
-                                parameterValuesString += "Frequency (Hz) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "VA (kva)")
-                            {
-                                parameterValuesString += "Power (KVA) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "W (kwatt)")
-                            {
-                                parameterValuesString += "Power (KW) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "VAR (kvar)")
-                            {
-                                parameterValuesString += "Power (KVAR)  " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "VA-SUM (kva)")
-                            {
-                                parameterValuesString += "Power (VA-SM) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V1 THD (%)")
-                            {
-                                parameterValuesString += "V1 Total Harmonics Distortion (%) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V2 THD (%)")
-                            {
-                                parameterValuesString += "V2 Total Harmonics Distortion (%) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "V3 THD (%)")
-                            {
-                                parameterValuesString += "V3 Total Harmonics Distortion (%) " + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            else if (sdr1["ParameterName"].ToString() == "Tank Level1 (ft)")
-                            {
-                                parameterValuesString += "Tank Level (ft)" + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 1).ToString();
-                            }
-                            else
-                            {
-                                parameterValuesString += sdr1["ParameterName"].ToString() + ": ";
-                                valuee = Math.Round(Convert.ToDouble(sdr1["parameterValue"]), 2).ToString();
-                            }
-                            parameterValuesString += valuee;
-                            parameterValuesString += "<br />";
-                            datetimed = sdr1["sheetInsertionDateTime"].ToString();
-                        }
-                    }
-                    tempName = "S";
-                    string newstring = "<b>Storm Water Storage Tank</b>";
-                    newstring += "<br />";
-                    newstring += "<b>Lawrence Road</b>";
-                    newstring += "<br />";
-                    newstring += datetimed;
-                    newstring += "<br />";
-                    newstring += parameterValuesString;
-                    TimeSpan duration = (Convert.ToDateTime(TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Pakistan Standard Time").ToString()) - Convert.ToDateTime(datetimed.ToString()));
-                    double minu = Math.Abs(duration.TotalMinutes);
-                    parameterValuesString = "";
-                    markers += "{";
-                    markers += string.Format("'Template': '{0}',", tempName);
-                    markers += string.Format("'title': '{0}',", "Lawrence Road");
-                    markers += string.Format("'lat':'{0}',", "31.55407167");
-                    markers += string.Format("'lnt':'{0}',", "74.32604167");
-                    markers += string.Format("'Delta': '{0}',", minu.ToString());
-                    markers += string.Format("'description': '{0}'", newstring);
-                    markers += "},";
                     conn.Close();
                 }
                 catch (Exception ex)
@@ -280,12 +42,9 @@ namespace wasaRms.Controllers
 
                 }
             }
-            markers = markers.Remove(markers.Length - 1, 1);
-            markers += "]";
             var data = new { status = "Success" };
             ViewBag.PumpsRunning = pumpsRunning.ToString();
             ViewBag.TankLevel = tankLevel.ToString();
-            ViewBag.MapMarkers = markers;
             return View();
         }
 
@@ -680,10 +439,6 @@ namespace wasaRms.Controllers
             //return Json(new { data = slots }, JsonRequestBehavior.AllowGet);
             return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
         }
-
-
-
-
 
         public JsonResult LoadStorageChartData()
         {
@@ -1180,11 +935,13 @@ namespace wasaRms.Controllers
                 scriptString += "{ y: " + pkws + " , label: \"Power (KW)\" }";
                 scriptString += "]}]});";
                 chartdata += "[";
-                chartdata += "{\"category\":\"Pump 1 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP1 + "\",\"value\":\"" + itom.P1WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 2 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP2 + "\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 3 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP3 + "\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
-                chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"}]";
-                ViewData["amChartData"] = chartdata;
+                chartdata += "{\"category\":\"Pump 1 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP1 + "\",\"value\":\"" + itom.P1WorkingInHours + " Hours\", \"category\":\"Pump 1 Hours\"},";
+                chartdata += "{\"category\":\"Pump 2 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP2 + "\",\"value\":\"" + itom.P2WorkingInHours + " Hours\", \"category\":\"Pump 1 Hours\"},";
+                chartdata += "{\"category\":\"Pump 3 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP3 + "\",\"value\":\"" + itom.P3WorkingInHours + " Hours\", \"category\":\"Pump 1 Hours\"},";
+                chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\", \"category\":\"Pump 1 Hours\"}]";
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                string outputString = serializer.Serialize(itom).ToString();
+                ViewData["amChartData"] = outputString;
 
                 chartdata1 += "[";
                 
@@ -1390,7 +1147,10 @@ namespace wasaRms.Controllers
                     chartdata += "{\"category\":\"Pump 2 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP2 + "\",\"value\":\"" + itom.P2WorkingInHours + " Hours\"},";
                     chartdata += "{\"category\":\"Pump 3 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP3 + "\",\"value\":\"" + itom.P3WorkingInHours + " Hours\"},";
                     chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"}]";
-                    ViewData["amChartData"] = chartdata;
+
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    string outputString = serializer.Serialize(itom).ToString();
+                    ViewData["amChartData"] = outputString;
 
                     chartdata1 += "[";
                     
@@ -2088,6 +1848,11 @@ namespace wasaRms.Controllers
                 }
             }
             var dtabc = getStorageTankTableList(fromDt, toDt, "");
+            IEnumerable<StorageTankTableData> itoms = (IEnumerable<StorageTankTableData>)dtabc;
+            StorageTankTableData itom = itoms.FirstOrDefault();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string outputString = serializer.Serialize(itom).ToString();
+            ViewData["amChartData"] = outputString;
             string NewscripString = scriptString;
             ViewData["chartData"] = NewscripString;
             dynamic mymodel = new ExpandoObject();
@@ -2257,6 +2022,11 @@ namespace wasaRms.Controllers
                 }
             }
             var dtabc = getStorageTankTableList(fromDt, toDt, "");
+            IEnumerable<StorageTankTableData> itoms = (IEnumerable<StorageTankTableData>)dtabc;
+            StorageTankTableData itom = itoms.FirstOrDefault();
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string outputString = serializer.Serialize(itom).ToString();
+            ViewData["amChartData"] = outputString;
             string NewscripString = scriptString;
             ViewData["chartData"] = NewscripString;
             ////////////////////////////////////////////////////////////////////////////////////////////
@@ -2274,7 +2044,7 @@ namespace wasaRms.Controllers
             ViewBag.dateTo = dt_date;
             return View(dtabc);
         }
-
+        //getStorageTankTableList
         public List<StorageTankTableData> getStorageTankTableList(DateTime fromDT, DateTime toDt, string res)
         {
             DataTable dt = new DataTable();
@@ -2428,7 +2198,7 @@ namespace wasaRms.Controllers
                 ViewData["SpellRateDown"] = rateDownString;
 
 
-                string printTitle = "Storm Water Storage Tank at " + dt.Rows[0]["Location"].ToString() + " Water In/Out Report between " + fromDT + " to " + toDt + "";
+                string printTitle = "Water Tank Report of Storm Water Storage Tank at " + dt.Rows[0]["Location"].ToString() + " between " + fromDT + " to " + toDt + "";
                 Session["ReportTitle"] = printTitle;
             }
             
@@ -2467,11 +2237,11 @@ namespace wasaRms.Controllers
                 else
                 {
                     //start scenario 1 (No Ponding since many time/cleared/ zero received (find out what is the last ponding time if any))
-                    if (currentPonding < 1)
+                    if (currentPonding < 0)
                     {
                         if (E == F && S == F)
                         {
-                            if (currValue < 1.19)
+                            if (currValue < 0)
                             {
                                 if (spelldata.SpellDataArray.Count > 0)
                                 {
@@ -2500,7 +2270,7 @@ namespace wasaRms.Controllers
                         }
                         else if (E == T && S == F)
                         {
-                            if (currValue < 1.19 || dr == dt.Rows[dt.Rows.Count - 1])
+                            if (currValue < 0 || dr == dt.Rows[dt.Rows.Count - 1])
                             {
                                 string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
                                 spelldata.SpellStartTime = currTime;
@@ -2571,7 +2341,7 @@ namespace wasaRms.Controllers
                     {
                         if (E == F && S == F)
                         {
-                            if (currValue < 1.19)
+                            if (currValue < 0)
                             {
                                 if (spelldata.SpellDataArray.Count > 0)
                                 {
@@ -2600,7 +2370,7 @@ namespace wasaRms.Controllers
                         }
                         else if (E == T && S == F)
                         {
-                            if (currValue < 1.19 || dr == dt.Rows[dt.Rows.Count - 1])
+                            if (currValue < 0 || dr == dt.Rows[dt.Rows.Count - 1])
                             {
                                 string lastTime = spelldata.SpellTimeArray.LastOrDefault().ToString();
                                 spelldata.SpellStartTime = currTime;
@@ -2697,7 +2467,7 @@ namespace wasaRms.Controllers
                 tableData.SpellEndTime = "-";
                 tableData.spellPeriod = "-";
                 tableData.srNo = order.ToString();
-                if (currentPonding < 1 /*&& DeltaMinutes < 2000*/)
+                if (currentPonding < 0 /*&& DeltaMinutes < 2000*/)
                 {
                     if (dt.Rows.Count > 1)
                     {
@@ -2761,7 +2531,7 @@ namespace wasaRms.Controllers
                     int psec = pp.Seconds;
                     string pstr = " " + phour.ToString() + " Hours, " + pmin.ToString() + " Minutes";
                     tableData.spellPeriod = pstr;
-                    if (currentPonding < 1)
+                    if (currentPonding < 0)
                     {
                         tableData.estSpellClearanceTime = "Cleared";
                         tableData.comment = "Cleared";
@@ -2789,7 +2559,7 @@ namespace wasaRms.Controllers
                             tableData.estSpellClearanceTime = "In Progress";
                         }
                     }
-                    if (tableData.SpellDataArray.LastOrDefault() < 1)
+                    if (tableData.SpellDataArray.LastOrDefault() < 0)
                     {
                         tableData.clearanceTime = item.SpellEndTime.ToString();
                     }
@@ -4950,7 +4720,7 @@ namespace wasaRms.Controllers
                     timeTo = DateTime.Now;
                 }
                 tableData.totalHours = Math.Round((((timeTo - timeFrom).TotalMinutes) / 60), 2);
-                if (tableData.totalHours == 23.98)
+                if (tableData.totalHours >= 23.95 && tableData.totalHours < 24)
                 {
                     tableData.totalHours = 24;
                 }
@@ -5007,6 +4777,11 @@ namespace wasaRms.Controllers
                 {
                     tableData.avgOfAvailableHours = Math.Round((tableData.avgOfAvailableHours / 101.94), 2);
                     tableData.avgOfNonAvailableHours = Math.Round((tableData.avgOfNonAvailableHours / 101.94), 2);
+                }
+
+                if (ParameterName == "Current (I1)" || ParameterName == "Current (I2)" || ParameterName == "Current (I3)")
+                {
+                    tableData.avgOfNonAvailableHours = 0;
                 }
 
                 tableData.minValue = Math.Round((valList.Min()), 2);

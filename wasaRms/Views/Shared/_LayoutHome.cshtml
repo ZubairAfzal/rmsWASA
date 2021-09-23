@@ -878,10 +878,6 @@ else
                             { 'visible': false, 'targets': [0] }
                         ],
                         buttons: [
-                            $.extend(true, {}, buttonCommon, {
-                                extend: 'excelHtml5',
-                                title: '@Session["ReportTitle"]',
-                            }),
                             {
                                 extend: 'print',
                                 customize: function (win) {
@@ -896,6 +892,19 @@ else
                                         .css('font-size', 'inherit');
                                 }
                             },
+                            {
+                                extend: 'csv',
+                                text: 'CSV',
+                                exportOptions: {
+                                    modifier: {
+                                        search: 'none'
+                                    }
+                                }
+                            },
+                            $.extend(true, {}, buttonCommon, {
+                                extend: 'excelHtml5',
+                                title: '@Session["ReportTitle"]',
+                            }),
                             $.extend(true, {}, buttonCommon, {
                                 extend: 'pdfHtml5',
                                 title: 'Storm Water Storage Tank Water In/Out Report',
@@ -931,7 +940,7 @@ else
                                                 {
                                                     width: 500,
                                                     fontSize: 8,
-                                                    text: '@Session["ReportTitle"] \n Create on: ' + jsDate.toString() + '',
+                                                    text: '@Session["ReportTitle"] ',
                                                     margin: [0, 20],
                                                     border: 1
                                                 }
@@ -945,7 +954,7 @@ else
                                                 {
                                                     margin: [50, 0],
                                                     alignment: 'left',
-                                                    text: ['']
+                                                    text: ['Created on: ' + jsDate.toString() + '']
                                                 },
                                                 {
                                                     margin: [0, 0],

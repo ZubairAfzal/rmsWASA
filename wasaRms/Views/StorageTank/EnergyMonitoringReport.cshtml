@@ -636,101 +636,118 @@
     <section class="scripts">
 
         <script type="text/javascript">
-            window.onload = function () {
+            window.onload = function ()
+            {
+                var jsonObj = @Html.Raw(ViewData["amChartData"]);
+                am4core.ready(function () {
+                    am4core.useTheme(am4themes_animated);
+                    var chart = am4core.create("chartContainer1", am4charts.XYChart);
+                    chart.paddingRight = 20;
+                    let title = chart.titles.create();
+                    title.text = "All Pumps Working Timeline";
+                    title.fontSize = 25;
+                    title.marginBottom = 30;
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.baseInterval = {
+                        "timeUnit": "minute",
+                        "count": 1
+                    };
+                    dateAxis.tooltipDateFormat = " d-MM-yyyy hh:mm:ss a";
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    valueAxis.tooltip.disabled = true;
+                    valueAxis.renderer.labels.template.disabled = true;
+                    valueAxis.min = -1;
+                    valueAxis.max = 2;
 
-                /**
- * ---------------------------------------
- * This demo was created using amCharts 4.
- *
- * For more information visit:
- * https://www.amcharts.com/
- *
- * Documentation is available at:
- * https://www.amcharts.com/docs/v4/
- * ---------------------------------------
- */
+                    if (jsonObj.pumpStatus1.length === 0) { }
+                    else
+                    {
+                        var series1 = chart.series.push(new am4charts.LineSeries());
+                        var series2 = chart.series.push(new am4charts.LineSeries());
+                        var series3 = chart.series.push(new am4charts.LineSeries());
+                        var series4 = chart.series.push(new am4charts.LineSeries());
+                        var data1 = [];
+                        var data2 = [];
+                        var data3 = [];
+                        var data4 = [];
+                        //console.log(jsonObj[j].locationName);
+                        for (var i = 0; i < jsonObj.SpellTimeArray.length; i++) {
+                            var Thedate = jsonObj.SpellTimeArray[i];
+                            var changeDate = moment(Thedate, 'DD/MM/YYYY HH:mm:ss A').format("MM/DD/YYYY HH:mm:ss");
+                            var dateObj = new Date((changeDate));
+                            var value = jsonObj.pumpStatus1[i];
+                            var location = jsonObj.locationName;
 
-                // Themes begin
-                am4core.useTheme(am4themes_animated);
+                            if (jsonObj.pumpStatus1[i] == 0) {
+                                data1.push({ location1: location, paramameter: 'Pump No. 1 Status', date1: dateObj, value1: value, status1: 'OFF' });
+                            }
+                            else {
+                                data1.push({ location1: location, paramameter: 'Pump No. 1 Status', date1: dateObj, value1: value, status1: 'ON' });
+                            }
 
-                // Create chart instance
-                var chart = am4core.create("chartContainer1", am4charts.XYChart3D);
-                //chart.scrollbarX = new am4core.Scrollbar();
+                            if (jsonObj.pumpStatus2[i] == 0) {
+                                data2.push({ location2: location, paramameter: 'Pump No. 2 Status', date2: dateObj, value2: value, status2: 'OFF' });
+                            }
+                            else {
+                                data2.push({ location2: location, paramameter: 'Pump No. 2 Status', date2: dateObj, value2: value, status2: 'ON' });
+                            }
 
-                // Add data
-                chart.angle = 35;
-                chart.data = @Html.Raw(ViewData["amChartData"]);
-                // Create axes
-                var title = chart.titles.create();
-                title.text = "All Pumps Working Hours";
-                title.fontSize = 25;
-                title.marginBottom = 10;
-                var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-                categoryAxis.dataFields.category = "category";
-                //categoryAxis.renderer.grid.template.location = 0;
-                categoryAxis.renderer.minGridDistance = 30;
-                //categoryAxis.renderer.labels.template.rotation = -90;
-                categoryAxis.renderer.inside = true;
-                categoryAxis.renderer.labels.template.valign = "top";
-                categoryAxis.tooltip.disabled = true;
-                categoryAxis.renderer.grid.template.strokeWidth = 0;
-                categoryAxis.renderer.labels.template.fontSize = 0;
-                var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-                valueAxis.renderer.grid.template.strokeWidth = 0;
-                valueAxis.min = 0;
-                // Create series
-                var series = chart.series.push(new am4charts.ConeSeries());
-                series.sequencedInterpolation = true;
-                series.dataFields.valueY = "value";
-                series.dataFields.tooltipText = "tooltip";
-                series.dataFields.categoryX = "category";
-                series.columns.template.strokeWidth = 0;
+                            if (jsonObj.P3Status[i] == 0) {
+                                data3.push({ location3: location, paramameter: 'Pump No. 3 Status', date3: dateObj, value3: value, status3: 'OFF' });
+                            }
+                            else {
+                                data3.push({ location3: location, paramameter: 'Pump No. 3 Status', date3: dateObj, value3: value, status3: 'ON' });
+                            }
 
-                series.columns.template.tooltipText = "{categoryX}: {tooltipText}";
-                series.columns.template.tooltipY = 0;
-                series.tooltip.pointerOrientation = "vertical";
+                            if (jsonObj.P4Status[i] == 0) {
+                                data4.push({ location4: location, paramameter: 'Pump No. 4 Status', date4: dateObj, value4: value, status4: 'OFF' });
+                            }
+                            else {
+                                data4.push({ location4: location, paramameter: 'Pump No. 4 Status', date4: dateObj, value4: value, status4: 'ON' });
+                            }
+                        }
+                        series1.data = data1;
+                        series1.dataFields.dateX = "date1";
+                        series1.dataFields.valueY = "value1";
+                        series1.dataFields.status1 = "status1";
+                        series1.dataFields.location = "location1";
+                        series1.tooltipText = " Pump No. 1 Status: [bold]{status1}[/] ";
+                        series1.name = 'Pump No. 1';
+                        series1.fillOpacity = 0.3;
 
-                series.columns.template.adapter.add("fill", function (fill, target) {
-                    return chart.colors.getIndex(target.dataItem.index);
-                })
 
-                var legend = new am4charts.Legend();
-                legend.parent = chart.chartContainer;
-                //legend.itemContainers.template.togglable = false;
-                legend.marginTop = 50;
-                legend.fontSize = 10;
-                //legend.labels.template.rotation = -45;
+                        series2.data = data2;
+                        series2.dataFields.dateX = "date2";
+                        series2.dataFields.valueY = "value2";
+                        series2.dataFields.status2 = "status2";
+                        series2.dataFields.location = "location2";
+                        series2.tooltipText = " Pump No. 2 Status: [bold]{status2}[/] ";
+                        series2.name = 'Pump No. 2';
+                        series2.fillOpacity = 0.3;
 
-                series.events.on("ready", function (ev) {
-                    var legenddata = [];
-                    series.columns.each(function (column) {
-                        legenddata.push({
-                            name: column.dataItem.categoryX,
-                            fill: column.fill,
-                            columnDataItem: column.dataItem
-                        });
-                    });
-                    legend.data = legenddata;
-                });
+                        series3.data = data3;
+                        series3.dataFields.dateX = "date3";
+                        series3.dataFields.valueY = "value3";
+                        series3.dataFields.status3 = "status3";
+                        series3.dataFields.location = "location3";
+                        series3.tooltipText = " Pump No. 3 Status: [bold]{status3}[/] ";
+                        series3.name = 'Pump No. 3';
+                        series3.fillOpacity = 0.3;
 
-                legend.itemContainers.template.events.on("hit", function (ev) {
-                    //console.log("Clicked on ", ev.target.dataItem.className);
-                    if (!ev.target.isActive) {
-                        ev.target.dataItem.dataContext.columnDataItem.hide();
+                        series4.data = data4;
+                        series4.dataFields.dateX = "date4";
+                        series4.dataFields.valueY = "value4";
+                        series4.dataFields.status4 = "status4";
+                        series4.dataFields.location = "location4";
+                        series4.tooltipText = " Pump No. 4 Status: [bold]{status4}[/] ";
+                        series4.name = 'Pump No. 4';
+                        series4.fillOpacity = 0.3;
+
                     }
-                    else {
-                        ev.target.dataItem.dataContext.columnDataItem.show();
-                    }
-                });
+                    chart.cursor = new am4charts.XYCursor();
+                    chart.cursor.lineY.opacity = 0;
 
-                legend.itemContainers.template.events.on("over", function (ev) {
-                    ev.target.dataItem.dataContext.columnDataItem.column.isHover = true;
-                    ev.target.dataItem.dataContext.columnDataItem.column.showTooltip();
-                });
-
-                legend.itemContainers.template.events.on("out", function (ev) {
-                    ev.target.dataItem.dataContext.columnDataItem.column.isHover = false;
-                    ev.target.dataItem.dataContext.columnDataItem.column.hideTooltip();
+                    chart.legend = new am4charts.Legend();
                 });
 
 
@@ -742,6 +759,7 @@
                 // Add data
                 chart1.angle = 35;
                 chart1.data = @Html.Raw(ViewData["amChartData1"]);
+                console.log(chart1.data);
                 chart1.paddingTop = 50;
                 var title = chart1.titles.create();
                 title.text = "All Energy Parameters Data";

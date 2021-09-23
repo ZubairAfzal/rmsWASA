@@ -599,6 +599,7 @@
     <Compile Include="Controllers\SubResourcesController.cs" />
     <Compile Include="Controllers\tblResourcesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="DashboardTableClass.cs" />
     <Compile Include="DataPoint.cs" />
     <Compile Include="PondingSpellClass.cs" />
     <Compile Include="PumpTableClass.cs" />
