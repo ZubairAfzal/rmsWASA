@@ -519,11 +519,11 @@ namespace wasaRms.Controllers
                         string getParamsFromRes = "";
                         if (Convert.ToInt32(Session["CompanyID"]) == 1)
                         {
-                            getParamsFromRes = "select p.parameterID, p.parameterName, r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterID IN (1026,1027,1028,1029) order by cast(r.resourceNumber as int) asc";
+                            getParamsFromRes = "select p.parameterID, p.parameterName, p.parameterDescription, r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterID IN (1026,1027,1028,1029) order by cast(r.resourceNumber as int) asc";
                         }
                         else
                         {
-                            getParamsFromRes = "select p.parameterID, p.parameterName, r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterID IN (1026,1027,1028,1029) and r.managedBy = " + Convert.ToInt32(Session["UserID"]) + " order by cast(r.resourceNumber as int) asc";
+                            getParamsFromRes = "select p.parameterID, p.parameterName, p.parameterDescription, r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterID IN (1026,1027,1028,1029) and r.managedBy = " + Convert.ToInt32(Session["UserID"]) + " order by cast(r.resourceNumber as int) asc";
                         }
                         SqlDataAdapter sdaPar = new SqlDataAdapter(getParamsFromRes, conn);
                         DataTable dtPar = new DataTable();
@@ -562,7 +562,7 @@ namespace wasaRms.Controllers
                             DataTable dtVal = new DataTable();
                             sdaVal.Fill(dtVal);
                             //scriptString += "{ type: \"line\", name: \"" + drPar["parameterName"].ToString() + "\", showInLegend: true,  markerSize: 0, xValueType: \"dateTime\", xValueFormatString: \"DD-MM-YYYY hh:mm:ss TT\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} </strong> at {x}\", ";
-                            scriptString += "{ type: \"area\", name: \"" + drPar["parameterName"].ToString() + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  ";
+                            scriptString += "{ type: \"area\", name: \"" + drPar["parameterDescription"].ToString().Replace(" Status", "") + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  ";
                             List<DataPoint> dataPoints = new List<DataPoint>();
                             DateTime dt = DateTime.Now;
                             foreach (DataRow drVal in dtVal.Rows)
@@ -691,11 +691,11 @@ namespace wasaRms.Controllers
                         string getParamsFromRes = "";
                         if (Convert.ToInt32(Session["CompanyID"]) == 1)
                         {
-                            getParamsFromRes = "select p.parameterID, p.parameterName, r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterID IN (1026,1027,1028,1029)  order by cast(r.resourceNumber as int) asc";
+                            getParamsFromRes = "select p.parameterID, p.parameterName, p.parameterDescription, r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterID IN (1026,1027,1028,1029)  order by cast(r.resourceNumber as int) asc";
                         }
                         else
                         {
-                            getParamsFromRes = "select p.parameterID, p.parameterName, r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterID IN (1026,1027,1028,1029)  and r.managedBy = " + Convert.ToInt32(Session["UserID"]) + " order by cast(r.resourceNumber as int) asc";
+                            getParamsFromRes = "select p.parameterID, p.parameterName, p.parameterDescription, r.resourceID, r.resourceLocationName, r.resourceNumber as resnum from tblResource r inner join tblResourceTypeParameter rtp on r.resourceTypeID = rtp.resourceTypeID inner join tblParameter p on rtp.parameterID = p.parameterID where p.parameterID IN (1026,1027,1028,1029)  and r.managedBy = " + Convert.ToInt32(Session["UserID"]) + " order by cast(r.resourceNumber as int) asc";
                         }
                         SqlDataAdapter sdaPar = new SqlDataAdapter(getParamsFromRes, conn);
                         DataTable dtPar = new DataTable();
@@ -734,7 +734,7 @@ namespace wasaRms.Controllers
                             DataTable dtVal = new DataTable();
                             sdaVal.Fill(dtVal);
                             //scriptString += "{ type: \"line\", name: \"" + drPar["parameterName"].ToString() + "\", showInLegend: true,  markerSize: 0, xValueType: \"dateTime\", xValueFormatString: \"DD-MM-YYYY hh:mm:ss TT\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} </strong> at {x}\", ";
-                            scriptString += "{ type: \"area\", name: \"" + drPar["parameterName"].ToString() + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  ";
+                            scriptString += "{ type: \"area\", name: \"" + drPar["parameterDescription"].ToString().Replace(" Status","") + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  ";
                             List<DataPoint> dataPoints = new List<DataPoint>();
                             DateTime dt = DateTime.Now;
                             foreach (DataRow drVal in dtVal.Rows)
@@ -1149,6 +1149,7 @@ namespace wasaRms.Controllers
                     chartdata += "{\"category\":\"Pump 4 Hours\",\"tooltip\":\"" + itom.workingHoursTodayP4 + "\",\"value\":\"" + itom.P4WorkingInHours + " Hours\"}]";
 
                     JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    serializer.MaxJsonLength = Int32.MaxValue;
                     string outputString = serializer.Serialize(itom).ToString();
                     ViewData["amChartData"] = outputString;
 
@@ -1458,9 +1459,9 @@ namespace wasaRms.Controllers
             DateTime timeTo = DateTime.Parse(TT);
             string tf_time = timeFrom.ToString("t");
             string tt_time = timeTo.ToString("t");
-            if (tt_time.ToUpper() == "12:00 AM")
+            if (tt_time.ToUpper() == "12:00 AM" || tt_time.ToUpper() == "11:59 PM")
             {
-                tt_time = "11:59 PM";
+                tt_time = "11:59:59 PM";
             }
 
             DateTime FinalTimeFrom = Convert.ToDateTime(df_date + " " + tf_time);
@@ -2025,6 +2026,7 @@ namespace wasaRms.Controllers
             IEnumerable<StorageTankTableData> itoms = (IEnumerable<StorageTankTableData>)dtabc;
             StorageTankTableData itom = itoms.FirstOrDefault();
             JavaScriptSerializer serializer = new JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;
             string outputString = serializer.Serialize(itom).ToString();
             ViewData["amChartData"] = outputString;
             string NewscripString = scriptString;

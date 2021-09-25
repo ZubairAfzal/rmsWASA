@@ -238,9 +238,9 @@
                                                                                 </div>
                                                                             </div>
                                                                             @*
-                                                                                <div class="col-md-1">
-                                                                                   <label class="form-control" style="border:0px">To</label>
-                                                                                </div>
+                                            <div class="col-md-1">
+                                               <label class="form-control" style="border:0px">To</label>
+                                            </div>
                                                                             *@
                                                                             <div class="col-md-2">
                                                                                 <div style="margin-bottom: 15px">
@@ -386,6 +386,13 @@
                                                 <!-- END EXAMPLE TABLE PORTLET-->
                                             </div>
                                         </div>
+                                        <div class="widget-content">
+                                            <div>
+                                                <center>
+                                                    <div id="chartContainer1" style="width: 95%; height: 500px"></div>
+                                                </center>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -411,11 +418,6 @@
                                                         <div class="portlet-body">
                                                             <table class="table table-striped table-bordered table-hover" id="tbl" style="width:100%; text-align:center; border:0px !important">
                                                                 <thead>
-                                                                    <tr>
-                                                                        <td colspan="7">
-                                                                            <div id="chartContainer1" style="width: 100%; height: 500px"></div>
-                                                                        </td>
-                                                                    </tr>
                                                                     <tr style="background-color: #a8c9cd;">
                                                                         <th>Sr. No.</th>
                                                                         <th>Location</th>
@@ -434,7 +436,7 @@
                                                                         {
                                                                             <tr>
                                                                                 <td>1</td>
-                                                                                <td rowspan="5">@item.locationName</td>
+                                                                                <td rowspan="5" style="padding-left:1em !important">@item.locationName</td>
                                                                                 <td>Current Storage / Total Capacity</td>
                                                                                 <td>@(String.Format("{0:n0}", Math.Round((Convert.ToDouble(item.TankLevel2ft.FirstOrDefault()) * 89695.23), 2))) Gallons / 1,345,428 Gallons</td>
                                                                                 <td>@(String.Format("{0:n0}", Math.Round((Convert.ToDouble(item.TankLevel2ft.FirstOrDefault()) * 14400), 2))) Cubic ft / 216,000 Cubic ft</td>
@@ -457,7 +459,7 @@
                                                                                 <td>@(String.Format("{0:n0}", Math.Round((Convert.ToDouble(ViewData["waterInGallon"])), 2))) Gallons</td>
                                                                                 <td>@(String.Format("{0:n0}", Math.Round((Convert.ToDouble(ViewData["waterInCubFt"])), 2))) Cubic ft</td>
                                                                                 <td>@(String.Format("{0:n0}", Math.Round((Convert.ToDouble(ViewData["waterInLit"])), 2))) Liters</td>
-                                                                                <td>@ViewData["SpellRateUp"]  @ViewData["SpellRateUp"]</td>
+                                                                                <td>@ViewData["SpellRateUp"]</td>
                                                                             </tr>
                                                                             <tr style="background-color: #a8c9cd;">
                                                                                 <td></td>
@@ -576,7 +578,7 @@
                             var Thedate = jsonObj.SpellTimeArray[i];
                             var changeDate = moment(Thedate, 'DD/MM/YYYY HH:mm:ss A').format("MM/DD/YYYY HH:mm:ss");
                             var dateObj = new Date((changeDate));
-                            var value = jsonObj.TankLevel2ft[i];
+                            var value = jsonObj.TankLevel2ft[i].toFixed(1);
                             var location = jsonObj.locationName;
                             data1.push({ location1: location, paramameter: 'Tank Level', date1: dateObj, value1: value });
                         }

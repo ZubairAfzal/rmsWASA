@@ -642,22 +642,23 @@
                 am4core.ready(function () {
                     am4core.useTheme(am4themes_animated);
                     var chart = am4core.create("chartContainer1", am4charts.XYChart);
-                    chart.paddingRight = 20;
+                    chart.paddingLeft = 30;
                     let title = chart.titles.create();
                     title.text = "All Pumps Working Timeline";
                     title.fontSize = 25;
-                    title.marginBottom = 30;
+                    title.marginBottom = 10;
                     var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
                     dateAxis.baseInterval = {
                         "timeUnit": "minute",
                         "count": 1
                     };
+                    dateAxis.dateFormats.setKey('hour', 'hh:mm a');
                     dateAxis.tooltipDateFormat = " d-MM-yyyy hh:mm:ss a";
                     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
                     valueAxis.tooltip.disabled = true;
                     valueAxis.renderer.labels.template.disabled = true;
-                    valueAxis.min = -1;
-                    valueAxis.max = 2;
+                    //valueAxis.min = -0.2;
+                    //valueAxis.max = 1.2;
 
                     if (jsonObj.pumpStatus1.length === 0) { }
                     else
@@ -675,35 +676,39 @@
                             var Thedate = jsonObj.SpellTimeArray[i];
                             var changeDate = moment(Thedate, 'DD/MM/YYYY HH:mm:ss A').format("MM/DD/YYYY HH:mm:ss");
                             var dateObj = new Date((changeDate));
-                            var value = jsonObj.pumpStatus1[i];
+                            var valuep1 = jsonObj.pumpStatus1[i];
+                            var valuep2 = jsonObj.pumpStatus2[i];
+                            var valuep3 = jsonObj.P3Status[i];
+                            var valuep4 = jsonObj.P4Status[i];
+
                             var location = jsonObj.locationName;
 
                             if (jsonObj.pumpStatus1[i] == 0) {
-                                data1.push({ location1: location, paramameter: 'Pump No. 1 Status', date1: dateObj, value1: value, status1: 'OFF' });
+                                data1.push({ location1: location, paramameter: 'Pump No. 1 Status', date1: dateObj, value1: valuep1, status1: 'OFF' });
                             }
                             else {
-                                data1.push({ location1: location, paramameter: 'Pump No. 1 Status', date1: dateObj, value1: value, status1: 'ON' });
+                                data1.push({ location1: location, paramameter: 'Pump No. 1 Status', date1: dateObj, value1: valuep1, status1: 'ON' });
                             }
 
                             if (jsonObj.pumpStatus2[i] == 0) {
-                                data2.push({ location2: location, paramameter: 'Pump No. 2 Status', date2: dateObj, value2: value, status2: 'OFF' });
+                                data2.push({ location2: location, paramameter: 'Pump No. 2 Status', date2: dateObj, value2: valuep2, status2: 'OFF' });
                             }
                             else {
-                                data2.push({ location2: location, paramameter: 'Pump No. 2 Status', date2: dateObj, value2: value, status2: 'ON' });
+                                data2.push({ location2: location, paramameter: 'Pump No. 2 Status', date2: dateObj, value2: valuep2, status2: 'ON' });
                             }
 
                             if (jsonObj.P3Status[i] == 0) {
-                                data3.push({ location3: location, paramameter: 'Pump No. 3 Status', date3: dateObj, value3: value, status3: 'OFF' });
+                                data3.push({ location3: location, paramameter: 'Pump No. 3 Status', date3: dateObj, value3: valuep3, status3: 'OFF' });
                             }
                             else {
-                                data3.push({ location3: location, paramameter: 'Pump No. 3 Status', date3: dateObj, value3: value, status3: 'ON' });
+                                data3.push({ location3: location, paramameter: 'Pump No. 3 Status', date3: dateObj, value3: valuep3, status3: 'ON' });
                             }
 
                             if (jsonObj.P4Status[i] == 0) {
-                                data4.push({ location4: location, paramameter: 'Pump No. 4 Status', date4: dateObj, value4: value, status4: 'OFF' });
+                                data4.push({ location4: location, paramameter: 'Pump No. 4 Status', date4: dateObj, value4: valuep4, status4: 'OFF' });
                             }
                             else {
-                                data4.push({ location4: location, paramameter: 'Pump No. 4 Status', date4: dateObj, value4: value, status4: 'ON' });
+                                data4.push({ location4: location, paramameter: 'Pump No. 4 Status', date4: dateObj, value4: valuep4, status4: 'ON' });
                             }
                         }
                         series1.data = data1;
