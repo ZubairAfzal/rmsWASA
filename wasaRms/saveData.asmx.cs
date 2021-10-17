@@ -48,7 +48,7 @@ namespace wasaRms
                         sda.Fill(dt);
                         if (dt.Rows.Count > 1) 
                         {
-                            dt.Rows.RemoveAt(0);
+                            //dt.Rows.RemoveAt(0);
                             var abc = Math.Round(((Convert.ToDouble(dt.Rows[0][30])) - (Convert.ToDouble(dt.Rows[1][30])) / 3), 2);
                             dtc.srNo = "1";
                             dtc.location = dt.Rows[0][0].ToString();
@@ -71,6 +71,7 @@ namespace wasaRms
                             dtc.waterPercentage = "Inactive";
                             dtc.currentTime = "Inactive";
                             dtc.inOutIntensity = "Inactive";
+                            list.Add(dtc);
                         }
                     }
                     con1.Close();

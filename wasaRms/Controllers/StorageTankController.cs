@@ -18,34 +18,34 @@ namespace wasaRms.Controllers
         
         public ActionResult Dashboard()
         {
-            int pumpsRunning = 0;
-            double tankLevel = 0;
+                int pumpsRunning = 0;
+                double tankLevel = 0;
             
-            string S13query = "select count( DISTINCT r.resourceID )from tblSheet s ";
-            S13query += "inner join tblResource r on s.resourceID = r.resourceID ";
-            S13query += "inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID ";
-            S13query += "where r.resourceTypeID = 1002 and sheetInsertionDateTime > DATEADD(MINUTE, -21, GETDATE()) ";
-            using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
-            {
-                try
+                string S13query = "select count( DISTINCT r.resourceID )from tblSheet s ";
+                S13query += "inner join tblResource r on s.resourceID = r.resourceID ";
+                S13query += "inner join tblResourceType rt on r.resourceTypeID = rt.resourceTypeID ";
+                S13query += "where r.resourceTypeID = 1002 and sheetInsertionDateTime > DATEADD(MINUTE, -21, GETDATE()) ";
+                using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
                 {
-                    conn.Open();
-                    SqlCommand cmd1 = new SqlCommand(S13query, conn);
-                    ViewBag.TotalStorageTank = 1;
-                    int workingStorageTanks = Convert.ToInt32(cmd1.ExecuteScalar());
-                    ViewBag.ActiveStorageTank = workingStorageTanks;
-                    ViewBag.InactiveStorageTank = 1 - workingStorageTanks;
-                    conn.Close();
-                }
-                catch (Exception ex)
-                {
+                    try
+                    {
+                        conn.Open();
+                        SqlCommand cmd1 = new SqlCommand(S13query, conn);
+                        ViewBag.TotalStorageTank = 1;
+                        int workingStorageTanks = Convert.ToInt32(cmd1.ExecuteScalar());
+                        ViewBag.ActiveStorageTank = workingStorageTanks;
+                        ViewBag.InactiveStorageTank = 1 - workingStorageTanks;
+                        conn.Close();
+                    }
+                    catch (Exception ex)
+                    {
 
+                    }
                 }
-            }
-            var data = new { status = "Success" };
-            ViewBag.PumpsRunning = pumpsRunning.ToString();
-            ViewBag.TankLevel = tankLevel.ToString();
-            return View();
+                var data = new { status = "Success" };
+                ViewBag.PumpsRunning = pumpsRunning.ToString();
+                ViewBag.TankLevel = tankLevel.ToString();
+                return View();
         }
 
         public ActionResult TankThreshold()
@@ -944,9 +944,9 @@ namespace wasaRms.Controllers
                 ViewData["amChartData"] = outputString;
 
                 chartdata1 += "[";
-                
-                chartdata1 += "{\"category\":\"Avg. Phase V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
+
                 chartdata1 += "{\"category\":\"Avg. Line V\",\"tooltip\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\",\"value\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\"},";
+                chartdata1 += "{\"category\":\"Avg. Phase V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
                 chartdata1 += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
                 chartdata1 += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
                 chartdata1 += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
@@ -1154,9 +1154,8 @@ namespace wasaRms.Controllers
                     ViewData["amChartData"] = outputString;
 
                     chartdata1 += "[";
-                    
-                    chartdata1 += "{\"category\":\"Avg. Phase V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
                     chartdata1 += "{\"category\":\"Avg. Line V\",\"tooltip\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\",\"value\":\"" + Math.Round(((v12s + v13s + v23s) / 3), 2) + "\"},";
+                    chartdata1 += "{\"category\":\"Avg. Phase V\",\"tooltip\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\",\"value\":\"" + Math.Round(((v1ns + v2ns + v3ns) / 3), 2) + "\"},";
                     chartdata1 += "{\"category\":\"Avg. A\",\"tooltip\":\"" + averageis + "\",\"value\":\"" + averageis + "\"},";
                     chartdata1 += "{\"category\":\"Freq.\",\"tooltip\":\"" + freqs + "\",\"value\":\"" + freqs + "\"},";
                     chartdata1 += "{\"category\":\"PF\",\"tooltip\":\"" + pff + "\",\"value\":\"" + pff + "\"},";
@@ -1260,9 +1259,9 @@ namespace wasaRms.Controllers
                         scriptString += "theme: \"light2\",";
                         scriptString += "animationEnabled: true,";
                         scriptString += "zoomEnabled: true, ";
-                        scriptString += "title: {text: \""+ rs.resourceID + "\" },";
+                        scriptString += "title: {text: \""+ rs.parameterID.Replace(" Status", "") + "\" },";
                         //Report of All Ponding Locations between " + fd + " to " + td + "
-                        scriptString += "subtitles: [{text: \" "+ rs.parameterID + " Data between " + fromDt + " to " + toDt + " \" }],";
+                        scriptString += "subtitles: [{text: \" "+ rs.parameterID.Replace(" Status", "") + " Data Fetched from "+rs.resourceID+" between " + fromDt + " to " + toDt + " \" }],";
                         //scriptString += "axisY: {suffix: \" \",labelFontSize: 15, minimum: 0 },";
                         //scriptString += "axisY: {includeZero: false, prefix: \"\", labelFormatter: function(e){if(e.value == NaN){return \"No Data\";}else{return e.value;}} },";
                         //scriptString += "toolTip: { shared: false },";
@@ -1320,7 +1319,7 @@ namespace wasaRms.Controllers
                             SqlDataAdapter sdaVal = new SqlDataAdapter(theQuery, conn);
                             sdaVal.Fill(dtVal);
                             //scriptString += "{ type: \"area\", name: \"" + rs.parameterID + "\", showInLegend: true,  markerSize: 0, xValueType: \"dateTime\", xValueFormatString: \"DD-MM-YYYY hh:mm:ss TT\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} </strong> at {x}\", ";
-                            scriptString += "{ type: \"area\", name: \"" + rs.parameterID + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  ";
+                            scriptString += "{ type: \"area\", name: \"" + rs.parameterID.Replace(" Status", "") + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  ";
                             List<DataPoint> dataPoints = new List<DataPoint>();
                             DateTime dt = DateTime.Now;
                             foreach (DataRow drVal in dtVal.Rows)
@@ -1531,9 +1530,9 @@ namespace wasaRms.Controllers
                         scriptString += "theme: \"light2\",";
                         scriptString += "animationEnabled: true,";
                         scriptString += "zoomEnabled: true, ";
-                        scriptString += "title: {text: \"" + rs.resourceID + "\" },";
+                        scriptString += "title: {text: \"" + rs.parameterID.Replace(" Status", "") + "\" },";
                         //Report of All Ponding Locations between " + fd + " to " + td + "
-                        scriptString += "subtitles: [{text: \" " + rs.parameterID + " Data between " + fromDt + " to " + toDt + " \" }],";
+                        scriptString += "subtitles: [{text: \" " + rs.parameterID.Replace(" Status", "") + " Data  Fetched from " + rs.resourceID + " between " + fromDt + " to " + toDt + " \" }],";
                         //scriptString += "axisY: {suffix: \" \",labelFontSize: 15, minimum: 0 },";
                         //scriptString += "axisY: {includeZero: false, prefix: \"\", labelFormatter: function(e){if(e.value == NaN){return \"No Data\";}else{return e.value;}} },";
                         //P1 Auto/Mannual
@@ -1607,12 +1606,12 @@ namespace wasaRms.Controllers
                                 }
                                 else 
                                 { 
-                                    scriptString += "{ type: \"area\", name: \"" + rs.parameterID + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  "; 
+                                    scriptString += "{ type: \"area\", name: \"" + rs.parameterID.Replace(" Status","") + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\",  "; 
                                 }
                             }
                             else
                             {
-                                scriptString += "{ type: \"line\", name: \"" + rs.parameterID + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} </strong> at {x}\", ";
+                                scriptString += "{ type: \"line\", name: \"" + rs.parameterID.Replace(" Status", "") + "\", showInLegend: true,  markerSize: 1, xValueType: \"dateTime\", xValueFormatString: \"hh:mm TT DD-MM-YYYY\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} </strong> at {x}\", ";
                             }
                             //scriptString += "{ type: \"area\", name: \"" + rs.parameterID + "\", showInLegend: true,  markerSize: 0, xValueType: \"dateTime\", xValueFormatString: \"DD-MM-YYYY hh:mm:ss TT\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} </strong> at {x}\", ";
                             List<DataPoint> dataPoints = new List<DataPoint>();
@@ -1807,7 +1806,7 @@ namespace wasaRms.Controllers
                             SqlDataAdapter sdaVal = new SqlDataAdapter(theQuery, conn);
                             DataTable dtVal = new DataTable();
                             sdaVal.Fill(dtVal);
-                            scriptString += "{ color: \"rgb(0, 167, 236)\", type: \"area\", name: \"" + drPar["resourceLocationName"].ToString() + "\", showInLegend: true,  markerSize: 0, xValueType: \"dateTime\", xValueFormatString: \"DD-MM-YYYY hh:mm:ss TT\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} ft</strong> at {x}\", ";
+                            scriptString += "{ color: \"rgb(0, 167, 236)\", type: \"area\", name: \"" + drPar["resourceLocationName"].ToString() + "\", showInLegend: true,  markerSize: 0, xValueType: \"dateTime\", xValueFormatString: \"DD-MM-YYYY hh:mm:ss TT\", yValueFormatString: \"#,##0.##\", toolTipContent: \"{label}<br/>{name}, <strong>{y} </strong> at {x}\", ";
                             List<DataPoint> dataPoints = new List<DataPoint>();
                             DateTime dt = DateTime.Now;
                             foreach (DataRow drVal in dtVal.Rows)
@@ -2102,18 +2101,29 @@ namespace wasaRms.Controllers
                 //PondingSpellClass sd = getAllSpells(Dashdt, Convert.ToInt32(drRes["resourceNumber"]));
                 //tablList.Add(sd);
                 tablList.AddRange(tablList2);
-
-                double maxxxx = tablList[0].SpellDataArray.Max();
-                int maxIndex = tablList[0].SpellDataArray.ToList().IndexOf(maxxxx);
-                string timeOfMaxxxx = tablList[0].SpellTimeArray[maxIndex].ToString();
-
-                double minsMaxToEnd = Convert.ToDouble(tablList[0].NoPondingComment);
-                double levelAtStart = Convert.ToDouble(tablList[0].minThr);
-                double minsStartToMax = Convert.ToDouble(tablList[0].maxThr);
-                double levelAtEnd = Convert.ToDouble(tablList[0].currLevel);
-                double MaxLevel = tablList[0].SpellMax;
+                double maxxxx = 0;
+                int maxIndex = 0;
+                string timeOfMaxxxx = "";
+                double minsMaxToEnd = 0;
+                double levelAtStart = 0;
+                double minsStartToMax = 0;
+                double levelAtEnd = 0;
+                double MaxLevel = 0;
                 double spellRateUp = 0;
                 double spellRateDown = 0;
+                if (tablList[0].SpellDataArray.Count > 0)
+                {
+                    maxxxx = tablList[0].SpellDataArray.Max();
+                    maxIndex = tablList[0].SpellDataArray.ToList().IndexOf(maxxxx);
+                    timeOfMaxxxx = tablList[0].SpellTimeArray[maxIndex].ToString();
+                    minsMaxToEnd = Convert.ToDouble(tablList[0].NoPondingComment);
+                    levelAtStart = Convert.ToDouble(tablList[0].minThr);
+                    minsStartToMax = Convert.ToDouble(tablList[0].maxThr);
+                    levelAtEnd = Convert.ToDouble(tablList[0].currLevel);
+                    MaxLevel = tablList[0].SpellMax;
+                    spellRateUp = 0;
+                    spellRateDown = 0;
+                }
                 if (MaxLevel == levelAtStart)
                 {
                     spellRateUp = 0;
@@ -2188,7 +2198,7 @@ namespace wasaRms.Controllers
 
                 if (RateDown == 0)
                 {
-                    rateDownString = "≈ 0";
+                    rateDownString = "0";
                 }
                 else
                 {
